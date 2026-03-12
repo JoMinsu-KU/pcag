@@ -1,0 +1,46 @@
+# Sensor source routing
+assets:
+  reactor_01:
+    source: "modbus"
+    mappings:
+      - field: temperature
+        register: 0
+        scale: 0.1
+      - field: pressure
+        register: 1
+        scale: 0.01
+      - field: heater_output
+        register: 2
+        scale: 1.0
+      - field: cooling_valve
+        register: 3
+        scale: 1.0
+      - field: reactor_status
+        register: 4
+        scale: 1.0
+
+  robot_arm_01:
+    source: "isaac"
+    mappings: []
+
+  agv_01:
+    source: "modbus"
+    mappings:
+      - field: position_x
+        register: 10
+        scale: 0.1
+      - field: position_y
+        register: 11
+        scale: 0.1
+      - field: heading
+        register: 12
+        scale: 0.1
+      - field: speed
+        register: 13
+        scale: 0.01
+
+# Modbus connection
+modbus:
+  host: "127.0.0.1"
+  port: 503
+

@@ -1,0 +1,20 @@
+[project]
+name = "pcag"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic>=2.0",
+    "pymodbus>=3.6.0",
+    "PyYAML>=6.0",
+
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

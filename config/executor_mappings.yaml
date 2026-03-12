@@ -1,0 +1,60 @@
+executors:
+  mock_executor:
+    type: "mock"
+    config: {}
+
+  modbus_local:
+    type: "modbus"
+    config:
+      host: "127.0.0.1"
+      port: 503
+      
+      # Action parameter → register write mappings (per asset, per action_type)
+      action_mappings:
+        reactor_01:
+          set_heater_output:
+            - param: "value"           # action param name
+              register: 2              # Modbus holding register
+              scale: 1.0               # multiply before writing (int conversion)
+          set_cooling_valve:
+            - param: "value"
+              register: 3
+              scale: 1.0
+        
+        agv_01:
+          move_to:
+            - param: "target_x"
+              register: 10
+              scale: 10.0              # position * 10 for integer register
+            - param: "target_y"
+              register: 11
+              scale: 10.0
+      
+      # Safe state actions (per asset) — written during ABORT/ESTOP
+      safe_state_actions:
+        reactor_01:
+          - type: "write_register"
+            register: 2
+            value: 0                   # heater OFF
+          - type: "write_register"
+            register: 3
+            value: 100                 # cooling valve 100%
+        
+        agv_01:
+          - type: "write_register"
+            register: 13
+            value: 0                   # speed = 0 (stop)
+
+  # Robot arm uses a different executor type (not Modbus)
+  isaac_executor:
+    type: "mock"                       # Placeholder — real implementation would use ROS/Isaac
+    config:
+      safe_state_actions:
+        robot_arm_01:
+          - type: "emergency_stop"     # Isaac Sim / ROS specific
+
+asset_map:
+  # default: "mock_executor" # REMOVED for production hardening
+  reactor_01: "modbus_local"
+  agv_01: "modbus_local"
+  robot_arm_01: "isaac_executor"       # Robot uses Isaac/ROS, not Modbus

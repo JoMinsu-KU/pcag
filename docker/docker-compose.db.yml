@@ -1,0 +1,32 @@
+# PCAG 데이터베이스 인프라 — PostgreSQL + pgAdmin
+# 실행: docker compose -f docker/docker-compose.db.yml up -d
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pcag-postgres
+    environment:
+      POSTGRES_DB: pcag
+      POSTGRES_USER: pcag_user
+      POSTGRES_PASSWORD: pcag_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pcag_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pcag-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: jms663100@kyungnam.ac.kr
+      PGADMIN_DEFAULT_PASSWORD: dufrns12@@
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  pcag_pgdata:

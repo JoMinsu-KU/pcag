@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# Database
+*.db
+
+# Logs
+logs/
+*.log
+server_log.txt
+
+# Test results (regeneratable)
+tests/e2e/results/
+scenario_b_results.txt
+test_results.txt
+
+# Diagnostic/temp files
+diag_*.py
+diag_*.json
+verify_*.py
+test_config_sub.py
+
+# Design documents (not for public repo)
+BaseDocs/
+plans/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Environment
+.env
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large binary
+*.pptx
+*.docx

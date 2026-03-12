@@ -1,0 +1,9 @@
+# Dependencies for pcag-isaac environment
+# Note: Isaac Sim libraries are assumed to be pre-installed in the environment.
+
+fastapi>=0.100.0
+uvicorn>=0.23.0
+pydantic>=2.0.0
+httpx>=0.24.0
+python-multipart
+pymodbus>=3.6.0  # If safety cluster needs to communicate with modbus or uses common code that imports it

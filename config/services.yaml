@@ -1,0 +1,40 @@
+# PCAG 서비스 URL 설정
+# 개발 환경: localhost + 포트 번호
+# Production: Docker 호스트명 또는 외부 URL로 변경
+services:
+  gateway:
+    url: "http://localhost:8000"
+  policy_store:
+    url: "http://localhost:8002"
+  sensor_gateway:
+    url: "http://localhost:8003"
+  safety_cluster:
+    url: "http://localhost:8001"
+  ot_interface:
+    url: "http://localhost:8004"
+  evidence_ledger:
+    url: "http://localhost:8005"
+  policy_admin:
+    url: "http://localhost:8006"
+
+logging:
+  level: INFO        # DEBUG/INFO/WARNING/ERROR
+  format: structured # structured or json
+  log_file: logs/pcag.log  # optional file output
+  max_body_log_size: 500   # max chars of request/response body to log
+  mask_fields:             # fields to mask in logs
+    - api_key
+    - X-API-Key
+
+auth:
+  # 런타임 API 키 — 에이전트가 사용
+  api_keys:
+    - "${PCAG_API_KEY_1:pcag-agent-key-001}"
+    - "${PCAG_API_KEY_2:pcag-agent-key-002}"
+  # 관리자 API 키 — 정책 관리용
+  admin_keys:
+    - "${PCAG_ADMIN_KEY:pcag-admin-key-001}"
+  # 내부 서비스 간 통신 키 (선택)
+  internal_key: "${PCAG_INTERNAL_KEY:pcag-internal-key}"
+  # 인증 활성화 여부
+  enabled: true
