@@ -24,6 +24,8 @@ def check_integrity(
     proof_sensor_snapshot: dict,
     current_sensor_snapshot: dict,
     divergence_thresholds: list[DivergenceThreshold],
+    proof_sensor_snapshot_hash: str | None = None,
+    current_sensor_snapshot_hash: str | None = None,
 ) -> Tuple[bool, Optional[str]]:
     """
     증명 패키지(Proof Package)에 대한 포괄적인 무결성 검사를 수행합니다.
@@ -42,13 +44,22 @@ def check_integrity(
         Tuple[bool, Optional[str]]: (통과 여부, 실패 사유 코드)
     """
     
-    # 1. 정책 버전 일치 확인 (Policy Version Match)
-    # 에이전트가 구버전 정책으로 증명을 생성했다면 거부
+    # 1. 정책 버전 일치 확인
+    # 에이전트가 예전 정책 기준으로 만든 증거 패키지를 재사용하는 것을 막는다.
     if proof_policy_version != active_policy_version:
         return False, "INTEGRITY_POLICY_MISMATCH"
+
+    # 1-1. Proof Package가 주장하는 센서 해시와 현재 센서 해시가 다르면
+    # 동일 상태에 대한 증거가 아니므로 L1에서 즉시 차단한다.
+    if (
+        proof_sensor_snapshot_hash is not None
+        and current_sensor_snapshot_hash is not None
+        and proof_sensor_snapshot_hash != current_sensor_snapshot_hash
+    ):
+        return False, "INTEGRITY_SENSOR_HASH_MISMATCH"
         
-    # 2. 타임스탬프 최신성 확인 (Timestamp Freshness)
-    # 너무 오래된 증명(Replay Attack 등) 방지
+    # 2. 타임스탬프 최신성 확인
+    # 너무 오래된 proof는 replay 가능성이 있으므로 거부한다.
     age = current_timestamp_ms - proof_timestamp_ms
     if age > timestamp_max_age_ms:
         return False, "INTEGRITY_TIMESTAMP_EXPIRED"
@@ -56,11 +67,12 @@ def check_integrity(
         return False, "INTEGRITY_TIMESTAMP_FUTURE" 
     
     # 3. 센서 데이터 발산(Divergence) 확인
-    # 증명 생성 시점의 데이터와 현재 실제 데이터 간의 차이가 허용 범위를 넘는지 확인
+    # proof 생성 시점과 현재 센서 상태가 충분히 비슷해야, 같은 상황에 대한 승인이라고 볼 수 있다.
     for thresh in divergence_thresholds:
         sensor_key = thresh.sensor_type
         
-        # 중첩 키 값 추출 헬퍼
+        # threshold가 reactor.temperature 같은 중첩 경로를 가리킬 수 있으므로
+        # dot path를 따라 값을 꺼내는 헬퍼를 내부에서 사용한다.
         def get_val(snap, key):
             keys = key.split('.')
             curr = snap

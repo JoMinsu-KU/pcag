@@ -56,7 +56,8 @@ def append_event(request: EvidenceAppendRequest, db: Session = Depends(get_db)):
     return EvidenceAppendResponse(
         transaction_id=record.transaction_id,
         sequence_no=record.sequence_no,
-        event_hash=record.event_hash
+        event_hash=record.event_hash,
+        created_at=record.created_at,
     )
 
 
@@ -81,6 +82,7 @@ def get_transaction(transaction_id: str, db: Session = Depends(get_db)):
             sequence_no=r.sequence_no,
             stage=r.stage,
             timestamp_ms=r.timestamp_ms,
+            created_at=r.created_at,
             payload=r.payload,
             input_hash=r.input_hash,
             prev_hash=r.prev_hash,

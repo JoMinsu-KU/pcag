@@ -1,0 +1,1309 @@
+{
+  "meta": {
+    "name": "document-conformance-e2e-30",
+    "version": "1.0",
+    "description": "Dataset-driven E2E evaluation for the document-conformance gateway changes."
+  },
+  "defaults": {
+    "asset_id": "reactor_01",
+    "headers": {
+      "X-API-Key": "pcag-agent-key-001"
+    },
+    "proof": {
+      "schema_version": "1.0",
+      "policy_version_id": "v2025-03-04",
+      "timestamp_offset_ms": 0,
+      "sensor_hash_mode": "match_first_sensor",
+      "sensor_reliability_index": 0.95,
+      "action_sequence_ref": "reactor_heat_up",
+      "safety_verification_summary": {
+        "checks": [],
+        "assumptions": [],
+        "warnings": []
+      }
+    },
+    "mock": {
+      "active_policy_version": "v2025-03-04",
+      "asset_profile_ref": "reactor_default",
+      "sensor_sequence_ref": "reactor_nominal_same",
+      "sensor_status_sequence": [
+        200,
+        200
+      ],
+      "safety_verdict": "SAFE",
+      "prepare_status": "LOCK_GRANTED",
+      "commit_status": "ACK",
+      "evidence_status_code": 200
+    },
+    "expected": {
+      "http_status": 200
+    }
+  },
+  "libraries": {
+    "action_sequences": {
+      "reactor_heat_up": [
+        {
+          "action_type": "set_heater_output",
+          "params": {
+            "value": 70
+          }
+        }
+      ],
+      "reactor_safe_cooldown": [
+        {
+          "action_type": "set_heater_output",
+          "params": {
+            "value": 0
+          }
+        },
+        {
+          "action_type": "set_cooling_valve",
+          "params": {
+            "value": 100
+          }
+        }
+      ],
+      "robot_home": [
+        {
+          "action_type": "move_joint",
+          "params": {
+            "joint_1": 0.0,
+            "joint_2": 0.0,
+            "joint_3": 0.0
+          }
+        }
+      ],
+      "agv_move_to_station": [
+        {
+          "action_type": "move_to",
+          "params": {
+            "agv_id": "agv_01",
+            "target_x": 5,
+            "target_y": 2
+          }
+        }
+      ]
+    },
+    "sensor_snapshots": {
+      "reactor_current": {
+        "temperature": 150.0,
+        "pressure": 1.5
+      },
+      "reactor_reverify_drift": {
+        "temperature": 151.0,
+        "pressure": 1.5
+      },
+      "reactor_abs_proof_near": {
+        "temperature": 149.0,
+        "pressure": 1.5
+      },
+      "reactor_abs_proof_far": {
+        "temperature": 144.0,
+        "pressure": 1.5
+      },
+      "reactor_pct_proof_far": {
+        "temperature": 150.0,
+        "pressure": 1.0
+      },
+      "reactor_missing_key_proof": {
+        "temperature": 150.0,
+        "pressure": 1.5
+      },
+      "robot_nominal": {
+        "joint_1": 0.1,
+        "joint_2": 0.2,
+        "tcp_z": 0.45
+      },
+      "agv_nominal": {
+        "x": 3,
+        "y": 1,
+        "battery": 87
+      }
+    },
+    "sensor_sequences": {
+      "reactor_nominal_same": [
+        {
+          "temperature": 150.0,
+          "pressure": 1.5
+        },
+        {
+          "temperature": 150.0,
+          "pressure": 1.5
+        }
+      ],
+      "reactor_reverify_drift": [
+        {
+          "temperature": 150.0,
+          "pressure": 1.5
+        },
+        {
+          "temperature": 151.0,
+          "pressure": 1.5
+        }
+      ],
+      "robot_nominal_same": [
+        {
+          "joint_1": 0.1,
+          "joint_2": 0.2,
+          "tcp_z": 0.45
+        },
+        {
+          "joint_1": 0.1,
+          "joint_2": 0.2,
+          "tcp_z": 0.45
+        }
+      ],
+      "agv_nominal_same": [
+        {
+          "x": 3,
+          "y": 1,
+          "battery": 87
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "battery": 87
+        }
+      ]
+    },
+    "asset_profiles": {
+      "reactor_default": {
+        "asset_id": "reactor_01",
+        "sil_level": 2,
+        "sensor_source": "modbus_sensor",
+        "ot_executor": "mock_executor",
+        "consensus": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "rules": 0.4,
+            "cbf": 0.35,
+            "sim": 0.25
+          },
+          "threshold": 0.5
+        },
+        "integrity": {
+          "timestamp_max_age_ms": 5000,
+          "sensor_divergence_thresholds": []
+        },
+        "ruleset": [],
+        "simulation": {
+          "engine": "none"
+        },
+        "execution": {
+          "lock_ttl_ms": 7000,
+          "commit_ack_timeout_ms": 3000,
+          "safe_state": [
+            {
+              "action_type": "set_heater_output",
+              "params": {
+                "value": 0
+              }
+            },
+            {
+              "action_type": "set_cooling_valve",
+              "params": {
+                "value": 100
+              }
+            }
+          ]
+        }
+      },
+      "reactor_strict_timestamp": {
+        "asset_id": "reactor_01",
+        "sil_level": 2,
+        "sensor_source": "modbus_sensor",
+        "ot_executor": "mock_executor",
+        "consensus": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "rules": 0.4,
+            "cbf": 0.35,
+            "sim": 0.25
+          },
+          "threshold": 0.5
+        },
+        "integrity": {
+          "timestamp_max_age_ms": 1200,
+          "sensor_divergence_thresholds": []
+        },
+        "ruleset": [],
+        "simulation": {
+          "engine": "none"
+        },
+        "execution": {
+          "lock_ttl_ms": 9000,
+          "commit_ack_timeout_ms": 3000,
+          "safe_state": [
+            {
+              "action_type": "set_heater_output",
+              "params": {
+                "value": 0
+              }
+            },
+            {
+              "action_type": "set_cooling_valve",
+              "params": {
+                "value": 100
+              }
+            }
+          ]
+        }
+      },
+      "reactor_abs_divergence": {
+        "asset_id": "reactor_01",
+        "sil_level": 2,
+        "sensor_source": "modbus_sensor",
+        "ot_executor": "mock_executor",
+        "consensus": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "rules": 0.4,
+            "cbf": 0.35,
+            "sim": 0.25
+          },
+          "threshold": 0.5
+        },
+        "integrity": {
+          "timestamp_max_age_ms": 5000,
+          "sensor_divergence_thresholds": [
+            {
+              "sensor_type": "temperature",
+              "method": "absolute",
+              "max_divergence": 2.0
+            }
+          ]
+        },
+        "ruleset": [],
+        "simulation": {
+          "engine": "none"
+        },
+        "execution": {
+          "lock_ttl_ms": 6500,
+          "commit_ack_timeout_ms": 3000,
+          "safe_state": [
+            {
+              "action_type": "set_heater_output",
+              "params": {
+                "value": 0
+              }
+            },
+            {
+              "action_type": "set_cooling_valve",
+              "params": {
+                "value": 100
+              }
+            }
+          ]
+        }
+      },
+      "reactor_pct_divergence": {
+        "asset_id": "reactor_01",
+        "sil_level": 2,
+        "sensor_source": "modbus_sensor",
+        "ot_executor": "mock_executor",
+        "consensus": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "rules": 0.4,
+            "cbf": 0.35,
+            "sim": 0.25
+          },
+          "threshold": 0.5
+        },
+        "integrity": {
+          "timestamp_max_age_ms": 5000,
+          "sensor_divergence_thresholds": [
+            {
+              "sensor_type": "pressure",
+              "method": "percentage",
+              "max_divergence": 10.0
+            }
+          ]
+        },
+        "ruleset": [],
+        "simulation": {
+          "engine": "none"
+        },
+        "execution": {
+          "lock_ttl_ms": 7000,
+          "commit_ack_timeout_ms": 3000,
+          "safe_state": [
+            {
+              "action_type": "set_heater_output",
+              "params": {
+                "value": 0
+              }
+            },
+            {
+              "action_type": "set_cooling_valve",
+              "params": {
+                "value": 100
+              }
+            }
+          ]
+        }
+      },
+      "reactor_missing_key_divergence": {
+        "asset_id": "reactor_01",
+        "sil_level": 2,
+        "sensor_source": "modbus_sensor",
+        "ot_executor": "mock_executor",
+        "consensus": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "rules": 0.4,
+            "cbf": 0.35,
+            "sim": 0.25
+          },
+          "threshold": 0.5
+        },
+        "integrity": {
+          "timestamp_max_age_ms": 5000,
+          "sensor_divergence_thresholds": [
+            {
+              "sensor_type": "humidity",
+              "method": "absolute",
+              "max_divergence": 0.1
+            }
+          ]
+        },
+        "ruleset": [],
+        "simulation": {
+          "engine": "none"
+        },
+        "execution": {
+          "lock_ttl_ms": 7000,
+          "commit_ack_timeout_ms": 3000,
+          "safe_state": [
+            {
+              "action_type": "set_heater_output",
+              "params": {
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "reactor_no_safe_state": {
+        "asset_id": "reactor_01",
+        "sil_level": 2,
+        "sensor_source": "modbus_sensor",
+        "ot_executor": "mock_executor",
+        "consensus": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "rules": 0.4,
+            "cbf": 0.35,
+            "sim": 0.25
+          },
+          "threshold": 0.5
+        },
+        "integrity": {
+          "timestamp_max_age_ms": 5000,
+          "sensor_divergence_thresholds": []
+        },
+        "ruleset": [],
+        "simulation": {
+          "engine": "none"
+        },
+        "execution": {
+          "lock_ttl_ms": 7000,
+          "commit_ack_timeout_ms": 3000,
+          "safe_state": []
+        }
+      },
+      "robot_default": {
+        "asset_id": "robot_arm_01",
+        "sil_level": 2,
+        "sensor_source": "isaac_sensor",
+        "ot_executor": "mock_executor",
+        "consensus": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "rules": 0.4,
+            "cbf": 0.35,
+            "sim": 0.25
+          },
+          "threshold": 0.5
+        },
+        "integrity": {
+          "timestamp_max_age_ms": 5000,
+          "sensor_divergence_thresholds": []
+        },
+        "ruleset": [],
+        "simulation": {
+          "engine": "isaac"
+        },
+        "execution": {
+          "lock_ttl_ms": 5000,
+          "commit_ack_timeout_ms": 3000,
+          "safe_state": [
+            {
+              "action_type": "move_joint",
+              "params": {
+                "joint_1": 0.0,
+                "joint_2": 0.0,
+                "joint_3": 0.0
+              }
+            }
+          ]
+        }
+      },
+      "agv_default": {
+        "asset_id": "agv_01",
+        "sil_level": 2,
+        "sensor_source": "agv_sensor",
+        "ot_executor": "mock_executor",
+        "consensus": {
+          "mode": "WEIGHTED",
+          "weights": {
+            "rules": 0.4,
+            "cbf": 0.35,
+            "sim": 0.25
+          },
+          "threshold": 0.5
+        },
+        "integrity": {
+          "timestamp_max_age_ms": 5000,
+          "sensor_divergence_thresholds": []
+        },
+        "ruleset": [],
+        "simulation": {
+          "engine": "discrete_event"
+        },
+        "execution": {
+          "lock_ttl_ms": 5500,
+          "commit_ack_timeout_ms": 3000,
+          "safe_state": [
+            {
+              "action_type": "move_to",
+              "params": {
+                "agv_id": "agv_01",
+                "target_x": 0,
+                "target_y": 0
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "case_id": "reactor_happy_path_committed",
+      "category": "happy_path",
+      "description": "Reactor request commits successfully.",
+      "expected": {
+        "http_status": 200,
+        "status": "COMMITTED",
+        "must_include_stages": [
+          "RECEIVED",
+          "SCHEMA_VALIDATED",
+          "INTEGRITY_PASSED",
+          "SAFETY_PASSED",
+          "PREPARE_LOCK_GRANTED",
+          "REVERIFY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit",
+          "/events/append"
+        ],
+        "response_has_evidence_ref": true,
+        "verify_evidence_chain": true
+      }
+    },
+    {
+      "case_id": "robot_happy_path_committed",
+      "category": "happy_path",
+      "description": "Robot request commits successfully.",
+      "asset_id": "robot_arm_01",
+      "proof": {
+        "action_sequence_ref": "robot_home"
+      },
+      "mock": {
+        "asset_profile_ref": "robot_default",
+        "sensor_sequence_ref": "robot_nominal_same"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "COMMITTED",
+        "must_include_stages": [
+          "RECEIVED",
+          "SCHEMA_VALIDATED",
+          "INTEGRITY_PASSED",
+          "SAFETY_PASSED",
+          "PREPARE_LOCK_GRANTED",
+          "REVERIFY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": true,
+        "verify_evidence_chain": true
+      }
+    },
+    {
+      "case_id": "agv_happy_path_committed",
+      "category": "happy_path",
+      "description": "AGV request commits successfully.",
+      "asset_id": "agv_01",
+      "proof": {
+        "action_sequence_ref": "agv_move_to_station"
+      },
+      "mock": {
+        "asset_profile_ref": "agv_default",
+        "sensor_sequence_ref": "agv_nominal_same"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "COMMITTED",
+        "must_include_stages": [
+          "RECEIVED",
+          "SCHEMA_VALIDATED",
+          "INTEGRITY_PASSED",
+          "SAFETY_PASSED",
+          "PREPARE_LOCK_GRANTED",
+          "REVERIFY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": true,
+        "verify_evidence_chain": true
+      }
+    },
+    {
+      "case_id": "divergence_within_threshold_committed",
+      "category": "happy_path",
+      "description": "Integrity passes when sensor snapshot divergence is within policy threshold.",
+      "proof": {
+        "sensor_hash_mode": "from_sensor_snapshot",
+        "sensor_snapshot_ref": "reactor_abs_proof_near"
+      },
+      "mock": {
+        "asset_profile_ref": "reactor_abs_divergence"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "COMMITTED",
+        "must_include_stages": [
+          "INTEGRITY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": true,
+        "verify_evidence_chain": true
+      }
+    },
+    {
+      "case_id": "policy_driven_timestamp_and_ttl_committed",
+      "category": "happy_path",
+      "description": "Profile-specific timestamp age and lock TTL are applied.",
+      "proof": {
+        "timestamp_offset_ms": -800
+      },
+      "mock": {
+        "asset_profile_ref": "reactor_strict_timestamp"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "COMMITTED",
+        "must_include_stages": [
+          "INTEGRITY_PASSED",
+          "PREPARE_LOCK_GRANTED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "prepare_lock_ttl_ms": 9000,
+        "response_has_evidence_ref": true,
+        "verify_evidence_chain": true
+      }
+    },
+    {
+      "case_id": "missing_sensor_reliability_index_422",
+      "category": "schema",
+      "description": "Missing sensor_reliability_index should fail schema validation.",
+      "proof": {
+        "remove_fields": [
+          "sensor_reliability_index"
+        ]
+      },
+      "expected": {
+        "http_status": 422,
+        "status": null,
+        "response_has_evidence_ref": false,
+        "evidence_count_exact": 0,
+        "must_not_call_paths": [
+          "/events/append",
+          "/prepare",
+          "/commit"
+        ]
+      }
+    },
+    {
+      "case_id": "invalid_hash_pattern_422",
+      "category": "schema",
+      "description": "Invalid sensor hash format should fail schema validation.",
+      "proof": {
+        "sensor_hash_mode": "explicit",
+        "sensor_snapshot_hash": "not-a-sha256-hash"
+      },
+      "expected": {
+        "http_status": 422,
+        "status": null,
+        "response_has_evidence_ref": false,
+        "evidence_count_exact": 0,
+        "must_not_call_paths": [
+          "/events/append",
+          "/prepare",
+          "/commit"
+        ]
+      }
+    },
+    {
+      "case_id": "missing_policy_version_id_422",
+      "category": "schema",
+      "description": "Missing policy_version_id should fail schema validation.",
+      "proof": {
+        "remove_fields": [
+          "policy_version_id"
+        ]
+      },
+      "expected": {
+        "http_status": 422,
+        "status": null,
+        "response_has_evidence_ref": false,
+        "evidence_count_exact": 0,
+        "must_not_call_paths": [
+          "/events/append",
+          "/prepare",
+          "/commit"
+        ]
+      }
+    },
+    {
+      "case_id": "sensor_reliability_out_of_range_422",
+      "category": "schema",
+      "description": "sensor_reliability_index outside [0, 1] should fail schema validation.",
+      "proof": {
+        "sensor_reliability_index": 1.2
+      },
+      "expected": {
+        "http_status": 422,
+        "status": null,
+        "response_has_evidence_ref": false,
+        "evidence_count_exact": 0,
+        "must_not_call_paths": [
+          "/events/append",
+          "/prepare",
+          "/commit"
+        ]
+      }
+    },
+    {
+      "case_id": "policy_version_mismatch_rejected",
+      "category": "integrity",
+      "description": "Reject when proof policy version differs from active policy.",
+      "proof": {
+        "policy_version_id": "v-WRONG-VERSION"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "REJECTED",
+        "reason_code": "INTEGRITY_POLICY_MISMATCH",
+        "must_include_stages": [
+          "RECEIVED",
+          "SCHEMA_VALIDATED",
+          "INTEGRITY_REJECTED"
+        ],
+        "must_not_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "timestamp_expired_default_profile_rejected",
+      "category": "integrity",
+      "description": "Reject when proof timestamp is older than the default max age.",
+      "proof": {
+        "timestamp_offset_ms": -10000
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "REJECTED",
+        "reason_code": "INTEGRITY_TIMESTAMP_EXPIRED",
+        "must_include_stages": [
+          "INTEGRITY_REJECTED"
+        ],
+        "must_not_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "timestamp_future_rejected",
+      "category": "integrity",
+      "description": "Reject when proof timestamp is too far in the future.",
+      "proof": {
+        "timestamp_offset_ms": 6000
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "REJECTED",
+        "reason_code": "INTEGRITY_TIMESTAMP_FUTURE",
+        "must_include_stages": [
+          "INTEGRITY_REJECTED"
+        ],
+        "must_not_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "divergence_absolute_rejected",
+      "category": "integrity",
+      "description": "Reject when absolute sensor divergence exceeds policy threshold.",
+      "proof": {
+        "sensor_hash_mode": "from_sensor_snapshot",
+        "sensor_snapshot_ref": "reactor_abs_proof_far"
+      },
+      "mock": {
+        "asset_profile_ref": "reactor_abs_divergence"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "REJECTED",
+        "reason_code": "INTEGRITY_SENSOR_DIVERGENCE",
+        "must_include_stages": [
+          "INTEGRITY_REJECTED"
+        ],
+        "must_not_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "divergence_percentage_rejected",
+      "category": "integrity",
+      "description": "Reject when percentage sensor divergence exceeds policy threshold.",
+      "proof": {
+        "sensor_hash_mode": "from_sensor_snapshot",
+        "sensor_snapshot_ref": "reactor_pct_proof_far"
+      },
+      "mock": {
+        "asset_profile_ref": "reactor_pct_divergence"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "REJECTED",
+        "reason_code": "INTEGRITY_SENSOR_DIVERGENCE",
+        "must_include_stages": [
+          "INTEGRITY_REJECTED"
+        ],
+        "must_not_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "divergence_missing_sensor_key_rejected",
+      "category": "integrity",
+      "description": "Reject when required divergence sensor key is missing.",
+      "proof": {
+        "sensor_hash_mode": "from_sensor_snapshot",
+        "sensor_snapshot_ref": "reactor_missing_key_proof"
+      },
+      "mock": {
+        "asset_profile_ref": "reactor_missing_key_divergence"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "REJECTED",
+        "reason_code": "INTEGRITY_SENSOR_DIVERGENCE",
+        "must_include_stages": [
+          "INTEGRITY_REJECTED"
+        ],
+        "must_not_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "strict_profile_timestamp_rejected",
+      "category": "integrity",
+      "description": "Reject when strict profile timestamp max age is exceeded.",
+      "proof": {
+        "timestamp_offset_ms": -2000
+      },
+      "mock": {
+        "asset_profile_ref": "reactor_strict_timestamp"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "REJECTED",
+        "reason_code": "INTEGRITY_TIMESTAMP_EXPIRED",
+        "must_include_stages": [
+          "INTEGRITY_REJECTED"
+        ],
+        "must_not_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "safety_rules_unsafe_returns_alternatives",
+      "category": "safety",
+      "description": "Unsafe rules verdict should stop before PREPARE and return alternatives.",
+      "mock": {
+        "safety_verdict": "UNSAFE",
+        "validator_verdicts": {
+          "rules": {
+            "verdict": "UNSAFE",
+            "details": {
+              "violated_rules": [
+                {
+                  "rule_id": "door_motor_conflict",
+                  "reason": "door_open and motor_on"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "UNSAFE",
+        "reason_code": "SAFETY_UNSAFE",
+        "reason_contains": "door_motor_conflict",
+        "must_include_stages": [
+          "SAFETY_UNSAFE"
+        ],
+        "must_not_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "safety_cbf_unsafe_returns_alternatives",
+      "category": "safety",
+      "description": "Unsafe CBF verdict should stop before PREPARE and return alternatives.",
+      "mock": {
+        "safety_verdict": "UNSAFE",
+        "validator_verdicts": {
+          "cbf": {
+            "verdict": "UNSAFE",
+            "details": {
+              "min_barrier_value": -0.2
+            }
+          }
+        }
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "UNSAFE",
+        "reason_code": "SAFETY_UNSAFE",
+        "reason_contains": "CBF barrier h=-0.2 < 0",
+        "must_include_stages": [
+          "SAFETY_UNSAFE"
+        ],
+        "must_not_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "safety_sim_unsafe_returns_alternatives",
+      "category": "safety",
+      "description": "Unsafe simulation verdict should stop before PREPARE and return alternatives.",
+      "mock": {
+        "safety_verdict": "UNSAFE",
+        "validator_verdicts": {
+          "simulation": {
+            "verdict": "UNSAFE",
+            "details": {
+              "violations": [
+                {
+                  "code": "collision_zone_a"
+                },
+                {
+                  "code": "collision_zone_b"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "UNSAFE",
+        "reason_code": "SAFETY_UNSAFE",
+        "reason_contains": "Simulation: 2 violations detected",
+        "must_include_stages": [
+          "SAFETY_UNSAFE"
+        ],
+        "must_not_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "safety_unsafe_without_safe_state_returns_empty_alternatives",
+      "category": "safety",
+      "description": "Unsafe response can contain zero alternatives when safe_state is empty.",
+      "mock": {
+        "asset_profile_ref": "reactor_no_safe_state",
+        "safety_verdict": "UNSAFE",
+        "validator_verdicts": {
+          "rules": {
+            "verdict": "UNSAFE",
+            "details": {
+              "violated_rules": [
+                {
+                  "rule_id": "unsafe_zone",
+                  "reason": "unsafe zone occupancy"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "UNSAFE",
+        "reason_code": "SAFETY_UNSAFE",
+        "must_include_stages": [
+          "SAFETY_UNSAFE"
+        ],
+        "must_not_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "alternative_actions_exact_count": 0,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "prepare_lock_denied_aborts",
+      "category": "two_phase_commit",
+      "description": "Lock denial should abort before reverify and commit.",
+      "mock": {
+        "prepare_status": "LOCK_DENIED"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ABORTED",
+        "reason_code": "LOCK_DENIED",
+        "must_include_stages": [
+          "PREPARE_LOCK_DENIED"
+        ],
+        "must_exclude_stages": [
+          "REVERIFY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/prepare"
+        ],
+        "must_not_call_paths": [
+          "/commit"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "reverify_hash_mismatch_aborts",
+      "category": "two_phase_commit",
+      "description": "Hash mismatch during reverify should abort and skip commit.",
+      "mock": {
+        "sensor_sequence_ref": "reactor_reverify_drift"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ABORTED",
+        "reason_code": "REVERIFY_HASH_MISMATCH",
+        "must_include_stages": [
+          "PREPARE_LOCK_GRANTED",
+          "REVERIFY_FAILED"
+        ],
+        "must_exclude_stages": [
+          "REVERIFY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/prepare",
+          "/abort"
+        ],
+        "must_not_call_paths": [
+          "/commit"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "reverify_sensor_http_failure_aborts",
+      "category": "two_phase_commit",
+      "description": "Reverify sensor read failure should abort and skip commit.",
+      "mock": {
+        "sensor_status_sequence": [
+          200,
+          503
+        ]
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ABORTED",
+        "reason_code": "TOCTOU_REVERIFY_FAILED",
+        "must_include_stages": [
+          "PREPARE_LOCK_GRANTED",
+          "REVERIFY_FAILED"
+        ],
+        "must_exclude_stages": [
+          "REVERIFY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/prepare",
+          "/abort"
+        ],
+        "must_not_call_paths": [
+          "/commit"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "commit_timeout_aborts",
+      "category": "two_phase_commit",
+      "description": "Non-ACK commit result should be treated as timeout and abort the request outcome.",
+      "mock": {
+        "commit_status": "TIMEOUT"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ABORTED",
+        "reason_code": "COMMIT_TIMEOUT",
+        "must_include_stages": [
+          "REVERIFY_PASSED",
+          "COMMIT_TIMEOUT"
+        ],
+        "must_exclude_stages": [
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "commit_http_failure_returns_error",
+      "category": "two_phase_commit",
+      "description": "Commit transport failure should return ERROR after abort attempt.",
+      "mock": {
+        "commit_http_status": 504
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ERROR",
+        "reason_code": "COMMIT_FAILED",
+        "must_include_stages": [
+          "REVERIFY_PASSED"
+        ],
+        "must_exclude_stages": [
+          "COMMIT_ACK",
+          "COMMIT_TIMEOUT"
+        ],
+        "must_call_paths": [
+          "/prepare",
+          "/commit",
+          "/abort"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "reverify_abort_failure_returns_error",
+      "category": "two_phase_commit",
+      "description": "Abort failure after reverify read failure should surface as ERROR.",
+      "mock": {
+        "sensor_status_sequence": [
+          200,
+          503
+        ],
+        "abort_http_status": 500
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ERROR",
+        "reason_code": "OT_ABORT_FAILED",
+        "must_include_stages": [
+          "PREPARE_LOCK_GRANTED"
+        ],
+        "must_exclude_stages": [
+          "REVERIFY_FAILED",
+          "COMMIT_ACK"
+        ],
+        "must_call_paths": [
+          "/prepare",
+          "/abort"
+        ],
+        "must_not_call_paths": [
+          "/commit"
+        ],
+        "alternative_actions_min_count": 2,
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "evidence_non_2xx_fail_hard_500",
+      "category": "service_failure",
+      "description": "Evidence append non-2xx should fail hard with HTTP 500.",
+      "mock": {
+        "evidence_status_code": 503
+      },
+      "expected": {
+        "http_status": 500,
+        "status": null,
+        "evidence_count_exact": 1,
+        "must_call_paths": [
+          "/events/append"
+        ],
+        "must_not_call_paths": [
+          "/prepare",
+          "/commit"
+        ]
+      }
+    },
+    {
+      "case_id": "policy_store_unreachable_returns_error",
+      "category": "service_failure",
+      "description": "Policy Store connectivity failure should return ERROR.",
+      "mock": {
+        "policy_active_error": "policy store offline"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ERROR",
+        "reason_code": "POLICY_STORE_UNREACHABLE",
+        "must_include_stages": [
+          "RECEIVED",
+          "SCHEMA_VALIDATED"
+        ],
+        "must_exclude_stages": [
+          "INTEGRITY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_not_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "sensor_gateway_initial_unreachable_returns_error",
+      "category": "service_failure",
+      "description": "Initial sensor read failure should return ERROR before safety.",
+      "mock": {
+        "sensor_error_sequence": [
+          "sensor gateway offline"
+        ]
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ERROR",
+        "reason_code": "SENSOR_GATEWAY_ERROR",
+        "must_include_stages": [
+          "RECEIVED",
+          "SCHEMA_VALIDATED"
+        ],
+        "must_exclude_stages": [
+          "INTEGRITY_PASSED",
+          "COMMIT_ACK"
+        ],
+        "must_not_call_paths": [
+          "/validate",
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    },
+    {
+      "case_id": "safety_cluster_unreachable_returns_error",
+      "category": "service_failure",
+      "description": "Safety Cluster connectivity failure should return ERROR after integrity.",
+      "mock": {
+        "safety_error": "safety cluster offline"
+      },
+      "expected": {
+        "http_status": 200,
+        "status": "ERROR",
+        "reason_code": "SAFETY_CLUSTER_UNREACHABLE",
+        "must_include_stages": [
+          "INTEGRITY_PASSED"
+        ],
+        "must_exclude_stages": [
+          "SAFETY_PASSED",
+          "PREPARE_LOCK_GRANTED",
+          "COMMIT_ACK"
+        ],
+        "must_not_call_paths": [
+          "/prepare",
+          "/commit"
+        ],
+        "response_has_evidence_ref": false
+      }
+    }
+  ]
+}

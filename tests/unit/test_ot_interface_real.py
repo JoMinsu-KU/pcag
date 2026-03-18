@@ -34,7 +34,8 @@ def test_happy_path_prepare_commit(mock_state_machine, mock_executor_manager):
     """정상 경로: PREPARE → COMMIT → ACK"""
     # Setup Mock SM
     mock_state_machine.prepare.return_value = {"status": "LOCK_GRANTED", "lock_expires_at_ms": 12345}
-    mock_state_machine.commit.return_value = {"status": "COMMITTED"}
+    mock_state_machine.check_commit_ready.return_value = {"status": "READY"}
+    mock_state_machine.finalize_commit.return_value = {"status": "COMMITTED"}
     
     # Setup Mock Executor
     executor = mock_executor_manager.get_executor.return_value
@@ -61,6 +62,7 @@ def test_happy_path_prepare_commit(mock_state_machine, mock_executor_manager):
     
     # Verify Executor called
     executor.execute.assert_called_once()
+    mock_state_machine.finalize_commit.assert_called_once_with(transaction_id="tx-001", asset_id="reactor_01")
 
 
 def test_lock_conflict(mock_state_machine):
@@ -89,7 +91,7 @@ def test_idempotent_prepare(mock_state_machine):
 
 def test_idempotent_commit(mock_state_machine, mock_executor_manager):
     """Idempotent: 같은 tx_id로 COMMIT 재호출 → ALREADY_COMMITTED (재실행 안 함!)"""
-    mock_state_machine.commit.return_value = {"status": "ALREADY_COMMITTED"}
+    mock_state_machine.check_commit_ready.return_value = {"status": "ALREADY_COMMITTED", "reason": "Transaction already committed"}
     
     resp = client.post("/v1/commit", json={
         "transaction_id": "tx-001",
@@ -100,6 +102,44 @@ def test_idempotent_commit(mock_state_machine, mock_executor_manager):
     
     # Executor should NOT be called
     mock_executor_manager.get_executor.return_value.execute.assert_not_called()
+
+
+def test_commit_execution_failure_returns_execution_failed(mock_state_machine, mock_executor_manager):
+    """Executor failure should abort instead of marking the tx committed."""
+    mock_state_machine.check_commit_ready.return_value = {"status": "READY"}
+    mock_state_machine.abort.return_value = {"status": "ABORTED"}
+
+    executor = mock_executor_manager.get_executor.return_value
+    executor.execute.return_value = False
+    executor.safe_state.return_value = True
+    executor.last_error = "modbus write failed"
+
+    resp = client.post("/v1/commit", json={
+        "transaction_id": "tx-001",
+        "asset_id": "reactor_01",
+        "action_sequence": [{"action_type": "set_heater", "params": {"value": 70}}],
+    })
+
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "EXECUTION_FAILED"
+    assert resp.json()["safe_state_executed"] is True
+    assert "modbus write failed" in resp.json()["reason"]
+    mock_state_machine.finalize_commit.assert_not_called()
+    mock_state_machine.abort.assert_called_once_with("tx-001", "reactor_01")
+
+
+def test_commit_rejected_returns_409(mock_state_machine):
+    """Commit without a valid prepared transaction should be rejected."""
+    mock_state_machine.check_commit_ready.return_value = {"status": "REJECTED", "reason": "Transaction not found"}
+
+    resp = client.post("/v1/commit", json={
+        "transaction_id": "tx-missing",
+        "asset_id": "reactor_01",
+        "action_sequence": []
+    })
+
+    assert resp.status_code == 409
+    assert resp.json()["detail"] == "Transaction not found"
 
 
 def test_abort(mock_state_machine, mock_executor_manager):
@@ -117,6 +157,21 @@ def test_abort(mock_state_machine, mock_executor_manager):
     assert resp.json()["safe_state_executed"] == True
     
     executor.safe_state.assert_called_once_with("reactor_01")
+
+
+def test_abort_rejected_surfaces_reason(mock_state_machine):
+    """Committed tx abort attempts should no longer masquerade as ALREADY_ABORTED."""
+    mock_state_machine.abort.return_value = {"status": "ABORT_REJECTED", "reason": "Cannot abort committed transaction"}
+
+    resp = client.post("/v1/abort", json={
+        "transaction_id": "tx-001",
+        "asset_id": "reactor_01",
+        "reason": "late failure"
+    })
+
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "ABORT_REJECTED"
+    assert resp.json()["reason"] == "Cannot abort committed transaction"
 
 
 def test_estop(mock_state_machine, mock_executor_manager):

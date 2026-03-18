@@ -54,8 +54,10 @@ class CommitResponse(BaseModel):
     OT Interface가 액션 실행 결과를 반환합니다.
     """
     transaction_id: str
-    status: Literal["ACK", "ALREADY_COMMITTED", "TIMEOUT"]  # 실행 확인(ACK), 중복 커밋(ALREADY_COMMITTED), 시간 초과(TIMEOUT)
+    status: Literal["ACK", "ALREADY_COMMITTED", "TIMEOUT", "EXECUTION_FAILED"]  # 실행 확인(ACK), 중복 커밋(ALREADY_COMMITTED), 시간 초과(TIMEOUT), 실행 실패
     executed_at_ms: Optional[int] = None  # 실제 실행 완료 시각
+    reason: Optional[str] = None
+    safe_state_executed: Optional[bool] = None
 
 class AbortRequest(BaseModel):
     """
@@ -74,8 +76,9 @@ class AbortResponse(BaseModel):
     중단 요청에 대한 응답.
     """
     transaction_id: str
-    status: Literal["ABORTED", "ALREADY_ABORTED"]  # 중단 완료(ABORTED) 또는 이미 중단됨(ALREADY_ABORTED)
+    status: Literal["ABORTED", "ALREADY_ABORTED", "ABORT_REJECTED"]  # 중단 완료, 이미 중단됨, 혹은 중단 거부
     safe_state_executed: Optional[bool] = None  # 안전 상태 복귀 액션이 실행되었는지 여부
+    reason: Optional[str] = None
 
 class EstopRequest(BaseModel):
     """

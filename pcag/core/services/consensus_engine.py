@@ -34,8 +34,8 @@ def evaluate_consensus(
         ConsensusResult: 최종 합의 결과 (SAFE/UNSAFE 및 상세 근거 포함)
     """
     
-    # 1. 유효 합의 모드 결정 (Determine effective mode)
-    # config.mode가 AUTO이면 SIL 레벨에 따라 자동으로 결정
+    # 1. 유효 합의 모드 결정
+    # 정책이 AUTO를 지정하면, 자산 SIL 수준에 맞는 보수성을 자동 선택한다.
     mode = config.mode
     if mode == ConsensusMode.AUTO:
         if sil_level >= 3:
@@ -58,10 +58,10 @@ def evaluate_consensus(
     def is_indeterminate(v: ValidatorVerdict) -> bool:
         return v.verdict == "INDETERMINATE"
 
-    # 2. 모드에 기반한 평가 수행 (Evaluate based on mode)
+    # 2. 모드별 최종 판정 수행
     if mode == ConsensusMode.AND:
-        # AND 모드: 모든 검증기가 "SAFE"여야 함
-        # INDETERMINATE(판단불가)도 UNSAFE로 간주 (Fail-Closed 원칙)
+        # AND 모드는 가장 보수적이다.
+        # 셋 중 하나라도 SAFE가 아니면 전체를 UNSAFE로 본다.
         all_safe = is_safe(rules_verdict) and is_safe(cbf_verdict) and is_safe(sim_verdict)
         final_verdict = "SAFE" if all_safe else "UNSAFE"
         score = 1.0 if all_safe else 0.0
@@ -73,8 +73,7 @@ def evaluate_consensus(
         )
 
     elif mode == ConsensusMode.WORST_CASE:
-        # WORST_CASE 모드: 단 하나의 검증기라도 UNSAFE면 즉시 UNSAFE
-        # INDETERMINATE도 위험 신호로 간주하여 UNSAFE 처리
+        # WORST_CASE는 "위험 신호가 하나라도 보이면 차단"이라는 운영 철학에 가깝다.
         any_unsafe = is_unsafe(rules_verdict) or is_unsafe(cbf_verdict) or is_unsafe(sim_verdict)
         any_indeterminate = is_indeterminate(rules_verdict) or is_indeterminate(cbf_verdict) or is_indeterminate(sim_verdict)
         
@@ -88,11 +87,12 @@ def evaluate_consensus(
         )
 
     elif mode == ConsensusMode.WEIGHTED:
-        # WEIGHTED 모드: 각 검증기의 결과에 가중치를 곱해 합산 점수 계산
+        # WEIGHTED는 각 검증기의 중요도를 점수화해서 절충하는 방식이다.
         weights = config.weights or {"rules": 0.4, "cbf": 0.35, "sim": 0.25}
         threshold = config.threshold if config.threshold is not None else 0.5
         
-        # 시뮬레이션 결과가 INDETERMINATE일 때의 처리 로직
+        # Simulation은 비용이 큰 대신 실패/미결정 가능성도 높아서,
+        # 정책이 그 상황을 어떻게 다룰지 별도 옵션으로 가진다.
         effective_weights = weights.copy()
         sim_val = 0.0
         
@@ -117,7 +117,7 @@ def evaluate_consensus(
         else: # UNSAFE
             sim_val = 0.0
             
-        # 다른 검증기 점수 변환 헬퍼
+        # SAFE=1.0, UNSAFE=0.0으로 정규화해서 가중 합산한다.
         def get_score(v: ValidatorVerdict) -> float:
             if is_safe(v): return 1.0
             if is_unsafe(v): return 0.0

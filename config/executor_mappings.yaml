@@ -4,7 +4,7 @@ executors:
     config: {}
 
   modbus_local:
-    type: "modbus"
+    type: "plc_adapter"
     config:
       host: "127.0.0.1"
       port: 503

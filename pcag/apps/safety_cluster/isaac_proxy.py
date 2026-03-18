@@ -1,33 +1,27 @@
 """
-Isaac Sim Proxy — Worker 프로세스와 Queue 통신
-================================================
-ISimulationBackend 인터페이스를 구현하되,
-실제 시뮬레이션은 별도 프로세스(isaac_worker)에서 실행됩니다.
+Isaac Sim proxy that talks to the dedicated worker process.
 
-Safety Cluster(uvicorn)에서 사용:
-  proxy = IsaacSimProxy()
-  proxy.start(config)
-  result = proxy.validate_trajectory(...)
-  proxy.stop()
+The proxy lives inside the Safety Cluster process, while Isaac Sim itself
+stays isolated in a separate spawned process. Queue RPC is serialized with
+an internal lock so concurrent FastAPI requests cannot mix responses.
 """
-import os
-import uuid
-import time
+
+from __future__ import annotations
+
 import logging
 import multiprocessing as mp
+import os
+import threading
+import uuid
+
 from pcag.core.ports.simulation_backend import ISimulationBackend
 
 logger = logging.getLogger(__name__)
 
 
 class IsaacSimProxy(ISimulationBackend):
-    """
-    Isaac Sim Worker 프로세스와 Queue로 통신하는 프록시
-    
-    ISimulationBackend 인터페이스를 구현하여,
-    Safety Cluster의 service.py에서는 다른 백엔드와 동일하게 사용됩니다.
-    """
-    
+    """Queue-based proxy for the dedicated Isaac Sim worker process."""
+
     def __init__(self):
         self._enabled = os.environ.get("PCAG_ENABLE_ISAAC", "false").lower() == "true"
         self._proc = None
@@ -35,147 +29,114 @@ class IsaacSimProxy(ISimulationBackend):
         self._res_q = None
         self._initialized = False
         self._timeout_s = 30
-    
+        self._rpc_lock = threading.Lock()
+
     def is_initialized(self) -> bool:
-        """Worker 프로세스가 실행 중이고 준비되었는지"""
+        """Return whether the worker process is alive and ready."""
         return self._initialized and self._proc is not None and self._proc.is_alive()
-    
+
     def initialize(self, config: dict) -> None:
-        """
-        Isaac Sim Worker 프로세스 시작
-        
-        메인 프로세스에서 호출. Worker는 별도 프로세스에서 Isaac Sim을 실행합니다.
-        """
+        """Start the dedicated Isaac Sim worker process."""
         if self._initialized:
             logger.info("Isaac Sim Proxy already initialized")
             return
-        
+
         if not self._enabled:
             logger.info("Isaac Sim disabled (PCAG_ENABLE_ISAAC != true)")
             return
-        
+
         self._timeout_s = config.get("timeout_ms", 30000) / 1000
-        
+
         logger.info("Starting Isaac Sim Worker process...")
-        
-        # Windows에서는 spawn 컨텍스트 명시
+
         ctx = mp.get_context("spawn")
         self._req_q = ctx.Queue()
         self._res_q = ctx.Queue()
-        
-        # Worker 프로세스 시작
         self._proc = ctx.Process(
             target=self._worker_entry,
             args=(self._req_q, self._res_q, config),
-            daemon=True
+            daemon=True,
         )
         self._proc.start()
-        
-        # 부팅 완료 대기 (최대 120초 — Isaac Sim 초기화 시간)
+
         try:
             boot_msg = self._res_q.get(timeout=120)
             if boot_msg.get("ok"):
                 self._initialized = True
-                logger.info(f"Isaac Sim Worker ready: {boot_msg.get('message')}")
+                logger.info("Isaac Sim Worker ready: %s", boot_msg.get("message"))
             else:
-                logger.error(f"Isaac Sim Worker boot failed: {boot_msg.get('error')}")
+                logger.error("Isaac Sim Worker boot failed: %s", boot_msg.get("error"))
                 self._cleanup()
-        except Exception as e:
-            logger.error(f"Isaac Sim Worker boot timeout: {e}")
+        except Exception as exc:
+            logger.error("Isaac Sim Worker boot timeout: %s", exc)
             self._cleanup()
-    
+
     @staticmethod
     def _worker_entry(req_q, res_q, config):
-        """Worker 프로세스 진입점 (static method for pickling)"""
+        """Worker process bootstrap entrypoint."""
         from pcag.apps.safety_cluster.isaac_worker import isaac_worker_main
+
         isaac_worker_main(req_q, res_q, config)
-    
+
     def validate_trajectory(
         self,
         current_state: dict,
         action_sequence: list[dict],
-        constraints: dict
+        constraints: dict,
     ) -> dict:
-        """
-        Isaac Sim Worker에 검증 요청 전송 + 결과 수신
-        
-        Worker가 없거나 응답 없으면 INDETERMINATE 반환.
-        """
+        """Submit one simulation job to the worker and wait for the reply."""
         if not self.is_initialized():
-            return {
-                "verdict": "INDETERMINATE",
-                "engine": "isaac_sim",
-                "common": {"first_violation_step": None, "violated_constraint": None, "latency_ms": 0, "steps_completed": 0},
-                "details": {"reason": "Isaac Sim Worker not available"}
-            }
-        
+            return self._indeterminate_result("Isaac Sim Worker not available")
+
         job_id = uuid.uuid4().hex
-        
-        # 요청 전송
-        self._req_q.put({
-            "job_id": job_id,
-            "state": current_state,
-            "actions": action_sequence,
-            "constraints": constraints,
-            "world_ref": constraints.get("world_ref")
-        })
-        
-        # 결과 대기
         try:
-            msg = self._res_q.get(timeout=self._timeout_s)
-            
-            if msg.get("job_id") != job_id:
-                logger.warning(f"Job ID mismatch: expected {job_id}, got {msg.get('job_id')}")
-                # 일단 사용 (단일 요청 직렬 처리이므로 거의 발생 안 함)
-            
-            if msg.get("ok"):
-                return msg["result"]
-            else:
-                logger.error(f"Isaac Worker error: {msg.get('error')}")
-                return {
-                    "verdict": "INDETERMINATE",
-                    "engine": "isaac_sim",
-                    "common": {"first_violation_step": None, "violated_constraint": None, "latency_ms": 0, "steps_completed": 0},
-                    "details": {"reason": f"Worker error: {msg.get('error')}"}
-                }
-                
-        except Exception as e:
-            logger.error(f"Isaac Worker timeout/error: {e}")
-            return {
-                "verdict": "INDETERMINATE",
-                "engine": "isaac_sim",
-                "common": {"first_violation_step": None, "violated_constraint": None, "latency_ms": 0, "steps_completed": 0},
-                "details": {"reason": f"Worker communication error: {str(e)}"}
-            }
-    
+            message = self._round_trip(
+                request={
+                    "job_id": job_id,
+                    "state": current_state,
+                    "actions": action_sequence,
+                    "constraints": constraints,
+                    "world_ref": constraints.get("world_ref"),
+                },
+                timeout_s=self._timeout_s,
+            )
+        except Exception as exc:
+            logger.error("Isaac Worker timeout/error: %s", exc)
+            return self._indeterminate_result(f"Worker communication error: {exc}")
+
+        if message.get("job_id") != job_id:
+            logger.error("Job ID mismatch: expected %s, got %s", job_id, message.get("job_id"))
+            return self._indeterminate_result("Worker returned mismatched job_id")
+
+        if message.get("ok"):
+            return message["result"]
+
+        logger.error("Isaac Worker error: %s", message.get("error"))
+        return self._indeterminate_result(f"Worker error: {message.get('error')}")
+
     def get_current_state(self) -> dict:
-        """현재 시뮬레이션(Digital Twin) 상태 조회"""
+        """Query current world state from the worker."""
         if not self.is_initialized():
-            return {}
-        
-        job_id = uuid.uuid4().hex
-        
-        try:
-            self._req_q.put({
-                "type": "GET_STATE",
-                "job_id": job_id
-            })
-            
-            # State query should be fast
-            msg = self._res_q.get(timeout=5.0)
-            
-            if msg.get("job_id") == job_id and msg.get("ok"):
-                return msg["result"]
-            else:
-                logger.error(f"GET_STATE failed: {msg.get('error')}")
-                return {}
-                
-        except Exception as e:
-            logger.error(f"GET_STATE timeout/error: {e}")
             return {}
 
+        job_id = uuid.uuid4().hex
+        try:
+            message = self._round_trip(
+                request={"type": "GET_STATE", "job_id": job_id},
+                timeout_s=5.0,
+            )
+        except Exception as exc:
+            logger.error("GET_STATE timeout/error: %s", exc)
+            return {}
+
+        if message.get("job_id") == job_id and message.get("ok"):
+            return message["result"]
+
+        logger.error("GET_STATE failed: %s", message.get("error"))
+        return {}
+
     def shutdown(self) -> None:
-        """Worker 프로세스 종료"""
+        """Stop the worker process."""
         logger.info("Shutting down Isaac Sim Proxy...")
         if self._proc and self._proc.is_alive():
             try:
@@ -184,15 +145,38 @@ class IsaacSimProxy(ISimulationBackend):
                 if self._proc.is_alive():
                     self._proc.terminate()
                     logger.warning("Isaac Worker terminated forcefully")
-            except Exception as e:
-                logger.error(f"Worker shutdown error: {e}")
-        
+            except Exception as exc:
+                logger.error("Worker shutdown error: %s", exc)
+
         self._cleanup()
         logger.info("Isaac Sim Proxy shutdown complete")
-    
+
     def _cleanup(self):
-        """리소스 정리"""
+        """Reset proxy runtime state."""
         self._proc = None
         self._req_q = None
         self._res_q = None
         self._initialized = False
+
+    def _round_trip(self, *, request: dict, timeout_s: float) -> dict:
+        """
+        Serialize queue RPC so concurrent HTTP requests cannot interleave
+        request/response pairs on the shared worker queues.
+        """
+        with self._rpc_lock:
+            self._req_q.put(request)
+            return self._res_q.get(timeout=timeout_s)
+
+    @staticmethod
+    def _indeterminate_result(reason: str) -> dict:
+        return {
+            "verdict": "INDETERMINATE",
+            "engine": "isaac_sim",
+            "common": {
+                "first_violation_step": None,
+                "violated_constraint": None,
+                "latency_ms": 0,
+                "steps_completed": 0,
+            },
+            "details": {"reason": reason},
+        }

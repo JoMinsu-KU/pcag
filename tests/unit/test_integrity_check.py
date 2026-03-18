@@ -43,6 +43,22 @@ def test_integrity_timestamp_expired():
     assert res is False
     assert err == "INTEGRITY_TIMESTAMP_EXPIRED"
 
+def test_integrity_sensor_hash_mismatch():
+    res, err = check_integrity(
+        proof_policy_version="v1",
+        active_policy_version="v1",
+        proof_timestamp_ms=1000,
+        current_timestamp_ms=1100,
+        timestamp_max_age_ms=500,
+        proof_sensor_snapshot={"a": 10},
+        current_sensor_snapshot={"a": 10},
+        divergence_thresholds=[],
+        proof_sensor_snapshot_hash="a" * 64,
+        current_sensor_snapshot_hash="b" * 64,
+    )
+    assert res is False
+    assert err == "INTEGRITY_SENSOR_HASH_MISMATCH"
+
 def test_integrity_sensor_divergence_absolute():
     dt = DivergenceThreshold(sensor_type="a", method="absolute", max_divergence=5.0)
     

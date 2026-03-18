@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import select, update, and_
+from sqlalchemy import select, update
 from pcag.core.database.models import TransactionRecord
-import time
 
 class TxRepository:
     """
@@ -43,13 +42,15 @@ class TxRepository:
         ).values(lock_expires_at_ms=lock_expires_at_ms)
         self.session.execute(stmt)
 
-    def update_status(self, transaction_id: str, status: str):
-        """트랜잭션 상태 변경 (COMMITTED, ABORTED)"""
-        # 상태 변경 시 만료 시간은 의미가 없어지므로 그대로 두거나 0으로 설정할 수 있음.
-        # 여기서는 상태만 변경.
+    def update_status(self, transaction_id: str, status: str, *, clear_lock: bool = False):
+        """트랜잭션 상태 변경 (COMMITTED, ABORTED)."""
+        values = {"status": status}
+        if clear_lock:
+            values["lock_expires_at_ms"] = 0
+
         stmt = update(TransactionRecord).where(
             TransactionRecord.transaction_id == transaction_id
-        ).values(status=status)
+        ).values(**values)
         self.session.execute(stmt)
 
     def abort_active_locks_for_asset(self, asset_id: str):

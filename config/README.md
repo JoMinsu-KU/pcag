@@ -1,35 +1,45 @@
-# PCAG Configuration (`config/`)
+# PCAG 설정 파일 안내
 
-The `config/` directory contains YAML files that define the static configuration and mappings for the PCAG system. These files are loaded at service startup and dictate how microservices communicate, which plugins to use for specific assets, and the mathematical constraints (CBFs) applied to them.
+`config/`는 PCAG 서비스 간 연결 정보, 자산 매핑, CBF 설정, 실행기/센서 라우팅을 담는 정적 설정 디렉터리다.
 
-## Configuration Files
+## 현재 핵심 파일
 
-### 1. `services.yaml`
-The central registry for all PCAG microservices. It defines the URLs, ports, and execution modes for each component.
-*   **Key Settings:** `url` for inter-service communication, logging levels, and whether a service is enabled.
-*   **Consumers:** Gateway Core, Admin scripts, and inter-service HTTP clients.
+### `services.yaml`
 
-### 2. `cbf_mappings.yaml`
-Maps physical assets to their respective Control Barrier Function (CBF) implementations. CBFs provide mathematical guarantees of safety.
-*   **Key Settings:** The mathematical function definition or the specific Python class implementation to use for evaluating the asset's safety boundary ($h(x) \ge 0$).
-*   **Consumers:** Safety Cluster (CBF Validator).
+전체 서비스 레지스트리와 로깅/대시보드 설정을 담는다.
 
-### 3. `executor_mappings.yaml`
-Maps physical assets to the OT execution plugins responsible for translating PCAG commands into hardware-specific protocols (e.g., Modbus, ROS, Mock).
-*   **Key Settings:** The name of the executor plugin (from `pcag/plugins/executor/`) to use for a given `asset_id`.
-*   **Consumers:** OT Interface.
+- 각 서비스 기본 URL은 `127.0.0.1` 기준
+- `dashboard` 설정 포함
+- 서비스별 `health` 또는 `openapi` probe에 사용
+- 일부 서비스는 시작 시점에 이 파일을 읽으므로 변경 후 재시작이 필요하다
 
-### 4. `sensor_mappings.yaml`
-Maps physical assets to the sensor plugins responsible for retrieving real-time data snapshots.
-*   **Key Settings:** The name of the sensor plugin (from `pcag/plugins/sensor/`) to use for a given `asset_id`.
-*   **Consumers:** Sensor Gateway.
+### `cbf_mappings.yaml`
 
-## Usage
+자산별 CBF 상태 매핑과 barrier 계산 기준을 정의한다.
 
-These configurations are designed to be modified without recompiling the core code, allowing operators to seamlessly add new assets, change simulation backends, or re-route service communications.
+### `executor_mappings.yaml`
 
-Changes to these files typically require a restart of the affected microservices.
+자산별 OT 실행 경로를 정의한다.
 
-## Related Files
-*   `pcag/core/utils/config_loader.py`: The utility used to parse and validate these YAML files at runtime.
-*   `pcag/plugins/`: The actual implementations referenced in the mapping files.
+현재 runtime에서는 PLC/Modbus 자산이 직접 low-level executor로 나가지 않고, `PLC Adapter`를 통한 중앙화된 경로를 사용한다.
+
+### `sensor_mappings.yaml`
+
+자산별 센서 소스 라우팅을 정의한다.
+
+중요:
+
+- `robot_arm_01`은 `isaac` 계열 센서 경로를 사용한다
+- PLC/Modbus 계열 자산은 runtime에서 `PLCAdapterSensorSource`를 통해 중앙화된 경로를 타도록 구성되어 있다
+
+## 운영 메모
+
+- `localhost` 대신 `127.0.0.1`를 유지하는 것이 좋다
+- 서비스 URL 변경 시 `start_services.py`, Dashboard, live E2E 러너, 일부 HTTP client 동작에 영향이 있다
+- 설정 변경 후에는 영향받는 서비스를 재시작해야 한다
+
+## 관련 코드
+
+- [config_loader.py](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/core/utils/config_loader.py)
+- [sensor_gateway/routes.py](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/apps/sensor_gateway/routes.py)
+- [executor_manager.py](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/apps/ot_interface/executor_manager.py)

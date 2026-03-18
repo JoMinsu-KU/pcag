@@ -71,6 +71,7 @@ def test_append_single_event():
     data = resp.json()
     assert data["transaction_id"] == "tx-001"
     assert data["sequence_no"] == 0
+    assert "created_at" in data
 
 
 def test_append_chain():
@@ -99,6 +100,7 @@ def test_get_transaction_events():
     assert len(data["events"]) == 2
     assert data["events"][0]["stage"] == "RECEIVED"
     assert data["events"][1]["stage"] == "SCHEMA_VALIDATED"
+    assert "created_at" in data["events"][0]
 
 
 def test_chain_valid():

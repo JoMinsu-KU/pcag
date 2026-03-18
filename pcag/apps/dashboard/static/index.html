@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PCAG 실시간 모니터링 대시보드</title>
+  <link rel="stylesheet" href="/static/dashboard.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">PCAG OPERATIONS</p>
+        <h1>실시간 안전 실행 모니터링 대시보드</h1>
+        <p class="hero-copy">
+          Gateway, Safety Cluster, OT, PLC, Evidence, 정책, 평가 결과를 하나의 흐름으로 추적하는 운영 화면입니다.
+        </p>
+      </div>
+      <div class="hero-meta">
+        <div class="stream-pill" id="stream-status">연결 대기</div>
+        <div class="timestamp-block">
+          <span>마지막 갱신</span>
+          <strong id="last-updated">-</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="overview-grid" id="overview-cards"></section>
+
+    <section class="panel-grid chart-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>서비스 지연 추이</h2>
+          <span>최근 샘플</span>
+        </div>
+        <div class="chart-host" id="service-latency-chart"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head">
+          <h2>최종 판정 시계열</h2>
+          <span>분 단위 집계</span>
+        </div>
+        <div class="chart-host" id="outcome-timeseries-chart"></div>
+      </article>
+      <article class="panel compact">
+        <div class="panel-head">
+          <h2>최근 트랜잭션 상태 분포</h2>
+          <span>최종 stage 기준</span>
+        </div>
+        <div class="chart-host" id="final-status-chart"></div>
+      </article>
+      <article class="panel compact">
+        <div class="panel-head">
+          <h2>Consensus Score</h2>
+          <span>최근 SAFETY_PASSED</span>
+        </div>
+        <div class="chart-host" id="consensus-score-chart"></div>
+      </article>
+      <article class="panel compact">
+        <div class="panel-head">
+          <h2>UNSAFE 원인 분포</h2>
+          <span>최근 안전 거부</span>
+        </div>
+        <div class="chart-host" id="unsafe-reasons-chart"></div>
+      </article>
+    </section>
+
+    <section class="panel-grid split-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>서비스 상태</h2>
+          <span>실시간 ping</span>
+        </div>
+        <div class="service-grid" id="service-grid"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head">
+          <h2>정책 상태</h2>
+          <span>현재 활성 정책과 자산 프로파일</span>
+        </div>
+        <div id="policy-summary"></div>
+      </article>
+    </section>
+
+    <section class="panel-grid split-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>자산 실시간 스냅샷</h2>
+          <span>Sensor Gateway 기준</span>
+        </div>
+        <div class="asset-grid" id="asset-grid"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head">
+          <h2>PLC / OT 잠금 상태</h2>
+          <span>현재 잠금 및 연결 상태</span>
+        </div>
+        <div id="plc-summary"></div>
+        <div class="subsection">
+          <h3>활성 잠금</h3>
+          <div id="lock-list"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>최근 트랜잭션</h2>
+        <span>Evidence 기준 최신 흐름</span>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Transaction</th>
+              <th>Asset</th>
+              <th>최종 상태</th>
+              <th>최신 Stage</th>
+              <th>이벤트 수</th>
+              <th>지속시간</th>
+              <th>마지막 시각</th>
+              <th>근거</th>
+            </tr>
+          </thead>
+          <tbody id="transaction-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel-grid split-grid">
+      <article class="panel">
+        <div class="panel-head">
+          <h2>평가 결과</h2>
+          <span>최근 live E2E 요약</span>
+        </div>
+        <div id="evaluation-summary"></div>
+      </article>
+      <article class="panel">
+        <div class="panel-head">
+          <h2>최근 운영 로그</h2>
+          <span>로그 파일 tail</span>
+        </div>
+        <div class="log-list" id="log-list"></div>
+      </article>
+    </section>
+  </div>
+
+  <script src="/static/dashboard.js"></script>
+</body>
+</html>

@@ -25,10 +25,12 @@ os.chdir(PROJECT_ROOT)
 SERVICES = [
     ("Policy Store",    "pcag.apps.policy_store.main:app",    8002),
     ("Evidence Ledger", "pcag.apps.evidence_ledger.main:app", 8005),
+    ("PLC Adapter",     "pcag.apps.plc_adapter.main:app",     8007),
     ("Sensor Gateway",  "pcag.apps.sensor_gateway.main:app",  8003),
     ("OT Interface",    "pcag.apps.ot_interface.main:app",    8004),
     ("Policy Admin",    "pcag.apps.policy_admin.main:app",    8006),
     ("Gateway Core",    "pcag.apps.gateway.main:app",         8000),
+    ("Dashboard",       "pcag.apps.dashboard.main:app",       8008),
 ]
 
 processes = []
@@ -61,6 +63,7 @@ def start_all():
     print()
     print("NOTE: Safety Cluster(8001) runs separately in pcag-isaac env")
     print("Gateway: http://localhost:8000/docs")
+    print("Dashboard: http://localhost:8008/")
     print()
     print("Press Ctrl+C to stop all services")
 

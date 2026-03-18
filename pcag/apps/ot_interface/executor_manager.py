@@ -12,6 +12,7 @@ from typing import Dict, Optional
 from pcag.core.ports.executor import IExecutor
 from pcag.plugins.executor.mock_executor import MockExecutor
 from pcag.plugins.executor.modbus_executor import ModbusExecutor
+from pcag.plugins.executor.plc_adapter_executor import PLCAdapterExecutor
 from pcag.core.utils.config_loader import load_config
 
 logger = logging.getLogger(__name__)
@@ -55,6 +56,13 @@ class ExecutorManager:
         
         # 2. Return existing instance if available
         if executor_name in cls._instances:
+            logger.info(
+                "Reusing executor instance | executor_name=%s asset=%s executor_id=%s executor_type=%s",
+                executor_name,
+                asset_id,
+                id(cls._instances[executor_name]),
+                cls._instances[executor_name].__class__.__name__,
+            )
             return cls._instances[executor_name]
             
         # 3. Create new instance
@@ -68,9 +76,17 @@ class ExecutorManager:
         etype = executor_conf.get("type", "mock")
         econfig = executor_conf.get("config", {})
         
-        logger.info(f"Initializing executor '{executor_name}' of type '{etype}'")
+        logger.info(
+            "Initializing executor | executor_name=%s asset=%s type=%s config_keys=%s",
+            executor_name,
+            asset_id,
+            etype,
+            sorted(econfig.keys()),
+        )
         
-        if etype == "modbus":
+        if etype == "plc_adapter":
+            executor = PLCAdapterExecutor()
+        elif etype == "modbus":
             executor = ModbusExecutor()
         elif etype == "mock":
             if os.environ.get("PCAG_ENV") == "production":
@@ -85,6 +101,13 @@ class ExecutorManager:
         try:
             executor.initialize(econfig)
             cls._instances[executor_name] = executor
+            logger.info(
+                "Executor initialized | executor_name=%s asset=%s executor_id=%s executor_type=%s",
+                executor_name,
+                asset_id,
+                id(executor),
+                executor.__class__.__name__,
+            )
             return executor
         except Exception as e:
             logger.critical(f"[SYSTEM_ERROR] Failed to initialize executor '{executor_name}': {e}", exc_info=True)
@@ -96,6 +119,12 @@ class ExecutorManager:
         """Shutdown all executors and clear registry."""
         for name, executor in cls._instances.items():
             try:
+                logger.info(
+                    "Resetting executor | executor_name=%s executor_id=%s executor_type=%s",
+                    name,
+                    id(executor),
+                    executor.__class__.__name__,
+                )
                 executor.shutdown()
             except Exception as e:
                 logger.error(f"Error shutting down executor {name}: {e}")

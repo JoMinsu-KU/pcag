@@ -15,10 +15,31 @@ conda pcag 환경에서 실행.
 """
 import os
 import logging
+from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 logger = logging.getLogger(__name__)
+
+
+def _load_project_env() -> None:
+    env_path = Path(__file__).resolve().parents[3] / ".env"
+    if not env_path.exists():
+        return
+
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+_load_project_env()
 
 # PostgreSQL 연결 설정 (Docker Compose 기본값)
 DATABASE_URL = os.environ.get("PCAG_DATABASE_URL")

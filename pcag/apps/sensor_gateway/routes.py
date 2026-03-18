@@ -24,7 +24,7 @@ from fastapi import APIRouter, HTTPException
 from pcag.core.contracts.sensor import SensorSnapshotResponse
 from pcag.core.utils.hash_utils import compute_sensor_hash
 from pcag.core.ports.sensor_source import ISensorSource
-from pcag.plugins.sensor.modbus_sensor import ModbusSensorSource
+from pcag.plugins.sensor.plc_adapter_sensor import PLCAdapterSensorSource
 from pcag.plugins.sensor.mock_sensor import MockSensorSource
 from pcag.plugins.sensor.isaac_sim_sensor import IsaacSimSensorSource
 from pcag.core.utils.config_loader import get_sensor_mappings, get_service_urls
@@ -38,25 +38,30 @@ _sensor_source: ISensorSource | None = None
 
 class CompositeSensorSource(ISensorSource):
     """
-    여러 센서 소스(Modbus, Mock, Isaac Sim)를 조합하여 사용하는 Composite 패턴
-    자산별로 소스를 라우팅하거나, Modbus 실패 시 Mock으로 폴백하는 로직을 통합합니다.
+    여러 센서 소스를 하나의 인터페이스로 묶는 Composite 패턴.
+
+    상위 계층은 "센서를 읽는다"만 알면 되고,
+    실제로 PLC Adapter / Isaac Sim / Mock 중 무엇을 쓰는지는 이 클래스가 숨긴다.
     """
     def __init__(self):
         self._sources = {} # name -> ISensorSource instance
         self._asset_routing = {} # asset_id -> source_name
 
     def initialize(self, config: dict) -> None:
-        # 1. Modbus Source 초기화
+        # 1. PLC Adapter Source 초기화
+        # Modbus 직접 접근을 여기저기 흩뿌리지 않고, PLC Adapter를 통해 단일 경로로 읽는다.
+        plc_adapter_url = get_service_urls().get("plc_adapter")
+        if not plc_adapter_url:
+            raise RuntimeError("PLC Adapter URL not configured in services.yaml")
         modbus_conf = {
-            "host": config.get("modbus", {}).get("host", "127.0.0.1"),
-            "port": config.get("modbus", {}).get("port", 503),
-            "asset_mappings": config.get("assets", {})
+            "plc_adapter_url": plc_adapter_url,
         }
-        modbus = ModbusSensorSource()
+        modbus = PLCAdapterSensorSource()
         modbus.initialize(modbus_conf)
         self._sources["modbus"] = modbus
 
         # 2. Mock Source 초기화
+        # 개발 환경에서만 허용하고, 운영에서는 실센서 경로를 강제한다.
         if os.environ.get("PCAG_ENV") != "production":
             mock_conf = {"mock_data": config.get("mock_data", {})}
             mock = MockSensorSource()
@@ -75,6 +80,7 @@ class CompositeSensorSource(ISensorSource):
         self._sources["isaac"] = isaac
         
         # 4. 라우팅 테이블 구축
+        # 자산별 preferred source를 읽어, 요청 시 어느 소스로 보낼지 미리 결정한다.
         asset_mappings = config.get("assets", {})
         
         for asset_id, props in asset_mappings.items():
@@ -87,16 +93,11 @@ class CompositeSensorSource(ISensorSource):
                     raise RuntimeError(f"Asset {asset_id} is configured to use MOCK source, which is forbidden in PRODUCTION.")
                 self._asset_routing[asset_id] = "mock"
             elif preferred == "modbus":
-                # Always route to Modbus if configured, even if not connected initially
                 self._asset_routing[asset_id] = "modbus"
-                if not modbus._connected:
-                    logger.warning(f"Asset {asset_id} routed to Modbus, but Modbus is currently disconnected.")
             else:
-                # auto: Modbus defaults if mappings exist
+                # auto 모드는 "매핑이 있으면 modbus, 아니면 명시 설정 필요" 규칙으로 처리한다.
                 if "mappings" in props:
                     self._asset_routing[asset_id] = "modbus"
-                    if not modbus._connected:
-                        logger.warning(f"Asset {asset_id} (auto) routed to Modbus, but Modbus is currently disconnected.")
                 else:
                     logger.error(f"[SYSTEM_ERROR] Asset {asset_id} (auto) cannot determine source. No mappings found.")
                     
@@ -111,7 +112,7 @@ class CompositeSensorSource(ISensorSource):
         if not source:
             raise RuntimeError(f"Sensor source '{source_key}' not initialized")
             
-        # 라우팅된 소스 사용
+        # 실제 읽기는 라우팅된 소스에 위임한다.
         return source.read_snapshot(asset_id)
 
     def get_source_name(self, asset_id: str) -> str:
@@ -124,7 +125,7 @@ class CompositeSensorSource(ISensorSource):
 
 def initialize_sensor_source():
     """
-    센서 소스 초기화 (CompositeSensorSource 사용)
+    전역 sensor source 초기화.
     """
     global _sensor_source
     config = get_sensor_mappings()
@@ -156,7 +157,7 @@ def get_latest_snapshot(asset_id: str):
     try:
         source = get_sensor_source()
         
-        # 센서 데이터 읽기
+        # 1. 현재 자산의 실데이터를 읽는다.
         sensor_data = source.read_snapshot(asset_id)
         
         # Source Name 확인 (Composite인 경우)
@@ -164,7 +165,7 @@ def get_latest_snapshot(asset_id: str):
         if hasattr(source, "get_source_name"):
             source_name = source.get_source_name(asset_id)
         
-        # 해시 계산
+        # 2. Gateway 무결성 검증에서 사용할 해시를 계산한다.
         snapshot_hash = compute_sensor_hash(sensor_data)
         
         # 타임스탬프

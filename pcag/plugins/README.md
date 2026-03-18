@@ -1,42 +1,47 @@
-# PCAG Plugins (`plugins/`)
+# PCAG 플러그인 계층 안내
 
-The `pcag/plugins/` directory provides concrete implementations of the abstract interfaces (ports) defined in `pcag/core/ports/`. This pluggable architecture allows PCAG to connect to a wide variety of physical assets, sensors, and simulation environments without modifying the core gateway logic.
+`pcag/plugins/`는 sensor, executor, simulation backend의 실제 구현체를 담는다.
 
-## Plugin Categories
+## executor
 
-The plugins are categorized based on their function within the PCAG pipeline:
+- `mock_executor.py`
+  - 테스트 및 개발용
+- `modbus_executor.py`
+  - 직접 Modbus executor
+  - 현재는 진단/호환성 의미가 더 크다
+- `plc_adapter_executor.py`
+  - 현재 권장 실행 경로
+  - OT Interface가 PLC Adapter를 통해 PLC/Modbus 자산에 접근한다
 
-1.  **`executor/`**: Implements the `OTExecutorPort`. These plugins translate abstract control commands (e.g., "move_joint") into protocol-specific instructions for physical controllers.
-    *   `mock_executor.py`: A software mock for testing and demonstration.
-    *   `modbus_executor.py`: Translates commands into Modbus TCP packets for PLCs.
+## sensor
 
-2.  **`sensor/`**: Implements the `SensorSourcePort`. These plugins retrieve real-time data from physical or simulated sensors to build the "Sensor Snapshot" used in Integrity and Safety checks.
-    *   `isaac_sim_sensor.py`: Retrieves joint states and simulated sensor data from NVIDIA Isaac Sim.
-    *   `mock_sensor.py`: Generates synthetic sensor data for testing.
-    *   `modbus_sensor.py`: Reads registers from a Modbus PLC.
+- `isaac_sim_sensor.py`
+  - Safety Cluster의 simulation state를 읽어 robot arm 스냅샷을 구성
+- `mock_sensor.py`
+  - 테스트용
+- `modbus_sensor.py`
+  - 직접 Modbus sensor
+  - 현재는 보조/진단 성격
+- `plc_adapter_sensor.py`
+  - 현재 권장 PLC 계열 센서 경로
 
-3.  **`simulation/`**: Implements the `SimulationBackendPort`. These plugins execute predictive simulations to verify the safety of proposed actions before they are executed on the real asset.
-    *   `discrete_event.py`: A fast, grid-based simulator for AGVs (Scenario C).
-    *   `isaac_backend.py`: A high-fidelity physics simulator using NVIDIA Isaac Sim (Scenario B).
-    *   `none_backend.py`: A passthrough simulator for assets that do not require predictive simulation.
-    *   `ode_solver.py`: A continuous-time solver for chemical reactors (Scenario A).
+## simulation
 
-## Extensibility
+- `ode_solver.py`
+  - reactor 계열
+- `isaac_backend.py`
+  - robot arm 계열
+- `discrete_event.py`
+  - AGV 계열
+- `none_backend.py`
+  - simulation 없는 자산용
 
-To add support for a new asset type (e.g., a ROS 2 robot or an OPC UA server), you simply create new plugin classes that implement the corresponding ports. PCAG uses the configuration files in `config/` (e.g., `executor_mappings.yaml`, `sensor_mappings.yaml`) to dynamically load and route requests to the appropriate plugin for each `asset_id`.
+## 현재 기준 해석
 
-## Usage
+플러그인 계층은 "각 자산마다 제각각 직접 연결"하는 구조가 아니라, 현재는 아래 방향으로 정리돼 있다.
 
-Plugins are typically instantiated by the microservices (e.g., `ot_interface`, `sensor_gateway`, `safety_cluster`) during startup based on the system configuration.
+- PLC/Modbus 읽기·쓰기: `PLC Adapter`를 통한 중앙화
+- 로봇 시뮬레이션: Safety Cluster의 Isaac worker/proxy
+- 평가용 mock: 테스트와 문서정합성 검증에 사용
 
-```python
-# Example: Configuration mapping an asset to a plugin
-# config/executor_mappings.yaml
-reactor_01: "modbus_executor"
-robot_arm_01: "mock_executor"
-```
-
-## Related Files
-
-*   `pcag/core/ports/`: The abstract interfaces defining the required methods for plugins.
-*   `config/`: YAML files that map assets to specific plugin implementations.
+즉 plugin 자체는 여럿 있지만, 실제 운영 경로는 중앙화된 쪽을 우선 사용한다.

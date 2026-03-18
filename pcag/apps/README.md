@@ -1,47 +1,62 @@
-# PCAG Microservices (Apps)
+# PCAG 서비스 계층 안내
 
-The `pcag/apps/` directory contains the 7 core microservices that make up the Proof-Carrying Action Gateway (PCAG) architecture. Each service is responsible for a distinct phase of the verification pipeline or system administration.
+`pcag/apps/`는 PCAG의 서비스 진입점을 담는 디렉터리다. 각 서비스는 독립적인 FastAPI 앱이며, 현재 구현 기준으로 총 9개 서비스가 존재한다.
 
-## Core Microservices
+## 서비스 목록
 
-1.  **Gateway Core (`gateway/`)**
-    *   **Purpose:** The central orchestrator. Receives control requests from AI agents, validates the Proof Package schema, checks data integrity, initiates safety verification, coordinates the 2-Phase Commit (2PC) protocol, and logs evidence.
-    *   **Pipeline Stages:** [100] Schema Validation → [110] Integrity Verification → [120] Safety Validation → [130] 2PC Execution → [140] Evidence Recording.
+### `gateway/`
 
-2.  **Safety Cluster (`safety_cluster/`)**
-    *   **Purpose:** The deterministic safety validation engine. Evaluates proposed actions against physical limits, mathematical models (CBFs), and predictive simulations (e.g., Isaac Sim). Aggregates results using a SIL-based dynamic Consensus Engine.
+전체 안전 실행 파이프라인 오케스트레이터.
 
-3.  **Policy Store (`policy_store/`)**
-    *   **Purpose:** The source of truth for safety constraints. Stores and serves versioned safety policies, asset profiles (SIL levels, thresholds), and consensus configurations.
+- schema validation
+- integrity check
+- safety validation orchestration
+- PREPARE / REVERIFY / COMMIT / ABORT 흐름
+- evidence 기록
 
-4.  **Policy Admin (`policy_admin/`)**
-    *   **Purpose:** Administrative interface for managing the Policy Store. Provides endpoints to create, update, and activate new policy versions securely.
+### `safety_cluster/`
 
-5.  **Sensor Gateway (`sensor_gateway/`)**
-    *   **Purpose:** The single point of contact for physical sensor data. Fetches real-time sensor snapshots from assets (via plugins) and provides them to the Gateway Core for Integrity (TOCTOU) checks.
+Rules, CBF, Simulation 검증과 SIL consensus를 수행한다.
 
-6.  **OT Interface (`ot_interface/`)**
-    *   **Purpose:** The execution layer connecting PCAG to physical assets (PLCs, robot controllers). Manages the 2-Phase Commit (2PC) protocol, acquiring input suppression locks (PREPARE) and executing verified commands (COMMIT).
+- validator 병렬 fan-out
+- Isaac worker/proxy 기반 simulation
+- consensus verdict 계산
 
-7.  **Evidence Ledger (`evidence_ledger/`)**
-    *   **Purpose:** An immutable, cryptographically verifiable log of all control transactions. Records each stage of the verification pipeline using a hash chain to ensure auditability and post-incident analysis.
+### `policy_store/`
 
-## Architecture and Interaction
+활성 정책, 자산 프로필, 버전 조회의 source of truth.
 
-The Gateway Core is the primary entry point. It calls the other services over HTTP/REST according to the 5-stage pipeline defined in its orchestrator.
+### `policy_admin/`
 
-## Usage
+정책 등록, 수정, 활성화, 버전 관리용 관리 인터페이스.
 
-Each microservice is a standalone FastAPI application. They are typically started concurrently using the provided utility scripts.
+### `sensor_gateway/`
 
-```bash
-# Start all microservices (for local development/testing)
-python scripts/start_services.py
+자산별 최신 센서 스냅샷과 해시를 제공한다.
 
-# Or start a single service individually
-uvicorn pcag.apps.gateway.main:app --port 8000 --reload
-```
+- Isaac sensor
+- PLC Adapter 경유 센서
+- mock sensor
 
-## Configuration
+### `ot_interface/`
 
-Service URLs and connection parameters are managed in the central `config/services.yaml` file.
+PREPARE/COMMIT/ABORT/E-Stop 실행 제어.
+
+### `evidence_ledger/`
+
+증거 이벤트 append/query와 해시 체인을 담당한다.
+
+### `plc_adapter/`
+
+PLC/Modbus 읽기·쓰기를 단일 진입점으로 중앙화한다.
+
+### `dashboard/`
+
+실시간 운영 대시보드와 snapshot/SSE 스트림을 제공한다.
+
+## 운영 메모
+
+- `safety_cluster`는 `pcag-isaac` 환경
+- 나머지는 `pcag` 환경
+- 서비스 간 URL은 `config/services.yaml`에서 관리한다
+- 현재 기준 문서는 [PCAG_최종_시스템_명세서.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_최종_시스템_명세서.md)이다

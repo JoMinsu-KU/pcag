@@ -1,33 +1,41 @@
-# PCAG Core Logic (`core/`)
+# PCAG 공통 코어 안내
 
-The `pcag/core/` directory contains the foundational business logic, data structures, and utilities that power the Proof-Carrying Action Gateway (PCAG) microservices. It abstracts the complex deterministic safety checks, cryptographic hashing, and data interchange formats into reusable components.
+`pcag/core/`는 서비스들이 공유하는 계약, 공통 로직, 데이터 모델, 미들웨어를 담고 있다.
 
-## Directory Structure
+## 주요 하위 구성
 
-*   `contracts/`: Pydantic data models (Data Transfer Objects) defining the structure of API requests and responses (Proof Packages, Evidence Payloads, Control Requests).
-*   `database/`: Database engines and SQLAlchemy ORM models for persistent storage (Evidence Ledger, Policy Store).
-*   `middleware/`: FastAPI middleware components for authentication (API keys) and centralized logging.
-*   `models/`: Internal domain models representing system state, policies, consensus results, and proof evidence.
-*   `ports/`: Interfaces (abstract base classes) defining how PCAG interacts with external systems like sensors, simulators, and OT executors.
-*   `services/`: The core algorithms and business logic for safety validation.
-    *   **`cbf_validator.py`**: Evaluates mathematical safety boundaries (Control Barrier Functions).
-    *   **`consensus_engine.py`**: Aggregates validator results based on asset SIL levels (AND, WORST_CASE, WEIGHTED modes).
-    *   **`integrity_service.py`**: Checks sensor divergence and data freshness.
-    *   **`rules_validator.py`**: Verifies physical limits (thresholds, ranges).
-    *   **`tx_state_machine.py`**: Manages the state transitions of the 2-Phase Commit (2PC) protocol.
-*   `utils/`: Helper functions for canonicalization, hashing, logging configuration, and configuration loading.
+- `contracts/`
+  - Gateway, OT, Evidence, Policy, Proof Package, PLC Adapter 등 API 계약
+- `database/`
+  - SQLAlchemy 모델과 DB 엔진
+- `middleware/`
+  - API key 인증, 사람 친화형 운영 로그
+- `models/`
+  - 정책/검증 관련 내부 모델
+- `ports/`
+  - sensor / executor / simulation backend 인터페이스
+- `services/`
+  - `integrity_service.py`
+  - `rules_validator.py`
+  - `cbf_validator.py`
+  - `consensus_engine.py`
+  - `alternative_action.py`
+- `utils/`
+  - hashing, canonicalization, config loading, logging config
 
-## Usage
+## 현재 코어에서 중요한 변경점
 
-This module provides the core libraries used by the microservices in `pcag/apps/`. For example, the `safety_cluster` service relies heavily on the `services/` components to evaluate control actions, while the `gateway` uses `utils/` for cryptographic evidence logging.
+현재 구현 기준으로 아래 항목이 반영돼 있다.
 
-```python
-from pcag.core.services.consensus_engine import evaluate_consensus
-from pcag.core.contracts.gateway import ControlRequest
-from pcag.core.utils.hash_utils import compute_event_hash
-```
+- `proof_package.py` 계약 분리
+- `gateway` 응답에 `alternative_actions` 포함 가능
+- L1 `sensor_snapshot_hash` mismatch reject
+- 운영 로그용 사람 친화 포맷 + 색상 + module/source 표시
+- evidence 응답에 `created_at` 포함
 
-## Related Files
+## 참고
 
-*   `pcag/apps/`: Microservices that consume these core libraries.
-*   `tests/unit/`: Unit tests ensuring the accuracy and reliability of the core deterministic logic.
+코어의 실제 의미와 현재 계약 기준은 아래 문서를 우선 본다.
+
+- [PCAG_최종_시스템_명세서.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_최종_시스템_명세서.md)
+- [PCAG_DSG_정합성_보완계획.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_DSG_정합성_보완계획.md)

@@ -23,7 +23,7 @@ conda pcag 환경에서 실행.
 """
 import time
 import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pcag.core.contracts.ot_interface import (
     PrepareRequest, PrepareResponse,
     CommitRequest, CommitResponse,
@@ -42,6 +42,30 @@ router = APIRouter(prefix="/v1", tags=["OTInterface"])
 _state_machine = PersistentTxStateMachine()
 
 
+def _execute_safe_state(asset_id: str) -> bool:
+    # 장비 실행 실패 후에도 현장을 안전 상태로 되돌릴 수 있도록
+    # executor별 safe_state 경로를 공통 함수로 묶는다.
+    try:
+        executor = ExecutorManager.get_executor(asset_id)
+        logger.warning(
+            "SAFE_STATE dispatch | asset=%s executor_id=%s executor_type=%s",
+            asset_id,
+            id(executor),
+            executor.__class__.__name__,
+        )
+        result = executor.safe_state(asset_id)
+        logger.warning(
+            "SAFE_STATE result | asset=%s executor_id=%s success=%s",
+            asset_id,
+            id(executor),
+            result,
+        )
+        return result
+    except Exception as exc:
+        logger.error("Safe state execution failed for asset=%s: %s", asset_id, exc, exc_info=True)
+        return False
+
+
 @router.post("/prepare")
 def prepare(request: PrepareRequest):
     """
@@ -55,13 +79,15 @@ def prepare(request: PrepareRequest):
     
     Idempotency: 같은 tx_id로 재호출 시 LOCK_GRANTED (재잠금 아님)
     """
+    # PREPARE는 "실행 전에 자산 점유권을 확보"하는 단계다.
     result = _state_machine.prepare(
         transaction_id=request.transaction_id,
         asset_id=request.asset_id,
         lock_ttl_ms=request.lock_ttl_ms
     )
     
-    status = result.get("status", "LOCK_DENIED")
+    raw_status = result.get("status", "LOCK_DENIED")
+    status = "LOCK_GRANTED" if raw_status == "LOCK_GRANTED" else "LOCK_DENIED"
     logger.info(f"PREPARE tx={request.transaction_id} asset={request.asset_id} -> {status}")
     
     return PrepareResponse(
@@ -87,44 +113,117 @@ def commit(request: CommitRequest):
     실제 장비 제어는 IOTExecutor 플러그인이 담당합니다.
     현재는 Mock Executor (로깅만) 사용.
     """
-    result = _state_machine.commit(
+    # COMMIT은 세 단계로 읽으면 이해가 쉽다.
+    # 1) 아직 커밋 가능한 상태인지 확인
+    # 2) executor로 실제 장비 실행
+    # 3) 성공 시에만 COMMITTED finalize
+    readiness = _state_machine.check_commit_ready(
         transaction_id=request.transaction_id,
         asset_id=request.asset_id
     )
-    
-    # TxStateMachine returns "COMMITTED", but contract expects "ACK"
-    raw_status = result.get("status", "TIMEOUT")
-    if raw_status == "COMMITTED":
-        # Execute actual command on device
-        try:
-            executor = ExecutorManager.get_executor(request.asset_id)
-            exec_success = executor.execute(
-                transaction_id=request.transaction_id,
-                asset_id=request.asset_id,
-                action_sequence=request.action_sequence
+    readiness_status = readiness.get("status", "REJECTED")
+
+    if readiness_status == "ALREADY_COMMITTED":
+        logger.info("COMMIT tx=%s asset=%s -> ALREADY_COMMITTED", request.transaction_id, request.asset_id)
+        return CommitResponse(
+            transaction_id=request.transaction_id,
+            status="ALREADY_COMMITTED",
+            reason=readiness.get("reason"),
+        )
+
+    if readiness_status == "TIMEOUT":
+        logger.warning("COMMIT tx=%s asset=%s -> TIMEOUT", request.transaction_id, request.asset_id)
+        return CommitResponse(
+            transaction_id=request.transaction_id,
+            status="TIMEOUT",
+            reason=readiness.get("reason"),
+        )
+
+    if readiness_status != "READY":
+        detail = readiness.get("reason", "Commit rejected")
+        logger.error("COMMIT tx=%s asset=%s rejected: %s", request.transaction_id, request.asset_id, detail)
+        raise HTTPException(status_code=409, detail=detail)
+
+    try:
+        # 자산별 executor 선택 결과를 남겨 두면 장애 분석 시 어느 경로를 탔는지 바로 알 수 있다.
+        executor = ExecutorManager.get_executor(request.asset_id)
+        logger.info(
+            "COMMIT executor selected | tx=%s asset=%s executor_id=%s executor_type=%s action_count=%s",
+            request.transaction_id,
+            request.asset_id,
+            id(executor),
+            executor.__class__.__name__,
+            len(request.action_sequence),
+        )
+        exec_success = executor.execute(
+            transaction_id=request.transaction_id,
+            asset_id=request.asset_id,
+            action_sequence=request.action_sequence
+        )
+    except Exception as exc:
+        logger.critical("[SYSTEM_ERROR] Executor error for tx=%s: %s", request.transaction_id, exc, exc_info=True)
+        abort_result = _state_machine.abort(request.transaction_id, request.asset_id)
+        if abort_result.get("status") not in {"ABORTED", "ALREADY_ABORTED"}:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Execution failed and transaction could not be aborted: {abort_result.get('reason', 'unknown')}",
             )
-            
-            if exec_success:
-                status = "ACK"
-            else:
-                logger.critical(f"[SYSTEM_ERROR] Execution failed for tx={request.transaction_id}")
-                status = "ERROR" 
-        except Exception as e:
-            logger.critical(f"[SYSTEM_ERROR] Executor error for tx={request.transaction_id}: {e}", exc_info=True)
-            status = "ERROR"
-    else:
-        status = raw_status
-        
-    logger.info(f"COMMIT tx={request.transaction_id} asset={request.asset_id} -> {status}")
-    
-    # 실행 시각 (ACK인 경우)
-    executed_at_ms = int(time.time() * 1000) if status == "ACK" else None
-    
-    return CommitResponse(
+
+        safe_state_executed = _execute_safe_state(request.asset_id)
+        return CommitResponse(
+            transaction_id=request.transaction_id,
+            status="EXECUTION_FAILED",
+            reason=str(exc),
+            safe_state_executed=safe_state_executed,
+        )
+
+    if not exec_success:
+        # 예외가 아니더라도 executor가 False를 반환하면 장비 적용 실패로 취급한다.
+        # 이 경우에도 abort + safe_state 복구 절차를 동일하게 적용한다.
+        failure_reason = getattr(executor, "last_error", None) or "Executor returned unsuccessful result"
+        logger.error("COMMIT execution failed for tx=%s asset=%s: %s", request.transaction_id, request.asset_id, failure_reason)
+        abort_result = _state_machine.abort(request.transaction_id, request.asset_id)
+        if abort_result.get("status") not in {"ABORTED", "ALREADY_ABORTED"}:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Execution failed and transaction could not be aborted: {abort_result.get('reason', 'unknown')}",
+            )
+
+        safe_state_executed = _execute_safe_state(request.asset_id)
+        return CommitResponse(
+            transaction_id=request.transaction_id,
+            status="EXECUTION_FAILED",
+            reason=failure_reason,
+            safe_state_executed=safe_state_executed,
+        )
+
+    # finalize 단계는 executor 성공 이후에만 호출된다.
+    # 따라서 여기서 COMMITTED가 되면 "실제로 장비 적용이 끝났다"는 의미를 갖는다.
+    finalize_result = _state_machine.finalize_commit(
         transaction_id=request.transaction_id,
-        status=status,
-        executed_at_ms=executed_at_ms
+        asset_id=request.asset_id,
     )
+    finalize_status = finalize_result.get("status", "REJECTED")
+
+    if finalize_status == "COMMITTED":
+        logger.info("COMMIT tx=%s asset=%s -> ACK", request.transaction_id, request.asset_id)
+        return CommitResponse(
+            transaction_id=request.transaction_id,
+            status="ACK",
+            executed_at_ms=int(time.time() * 1000),
+        )
+
+    if finalize_status == "ALREADY_COMMITTED":
+        logger.info("COMMIT tx=%s asset=%s -> ALREADY_COMMITTED", request.transaction_id, request.asset_id)
+        return CommitResponse(
+            transaction_id=request.transaction_id,
+            status="ALREADY_COMMITTED",
+            reason=finalize_result.get("reason"),
+        )
+
+    detail = finalize_result.get("reason", "Finalize commit rejected")
+    logger.error("Finalize COMMIT failed for tx=%s asset=%s: %s", request.transaction_id, request.asset_id, detail)
+    raise HTTPException(status_code=409, detail=detail)
 
 
 @router.post("/abort")
@@ -139,36 +238,24 @@ def abort(request: AbortRequest):
     
     Idempotency: 같은 tx_id로 재호출 시 ALREADY_ABORTED
     """
+    # ABORT는 논리 상태(잠금/트랜잭션)와 물리 상태(safe_state)를 함께 정리하는 경로다.
     result = _state_machine.abort(
         transaction_id=request.transaction_id,
         asset_id=request.asset_id
     )
-    
-    raw_status = result.get("status", "ABORTED")
-    
-    # Map ERROR (e.g. tx not found) to ALREADY_ABORTED for idempotency
-    if raw_status == "ERROR":
-        status = "ALREADY_ABORTED"
-    else:
-        status = raw_status
-        
+
+    status = result.get("status", "ABORT_REJECTED")
     logger.info(f"ABORT tx={request.transaction_id} asset={request.asset_id} -> {status}")
-    
-    # 안전 상태 실행 여부
+
     safe_state_executed = False
-    
-    if status == "ABORTED" or status == "ALREADY_ABORTED":
-        try:
-            executor = ExecutorManager.get_executor(request.asset_id)
-            safe_state_executed = executor.safe_state(request.asset_id)
-        except Exception as e:
-            logger.error(f"Safe state execution failed for asset={request.asset_id}: {e}")
-            safe_state_executed = False
-    
+    if status in {"ABORTED", "ALREADY_ABORTED"}:
+        safe_state_executed = _execute_safe_state(request.asset_id)
+
     return AbortResponse(
         transaction_id=request.transaction_id,
         status=status,
-        safe_state_executed=safe_state_executed
+        safe_state_executed=safe_state_executed,
+        reason=result.get("reason"),
     )
 
 
@@ -184,12 +271,8 @@ def estop(request: EstopRequest):
     """
     result = _state_machine.estop(asset_id=request.asset_id)
     
-    # Always attempt to execute safe state for Estop
-    try:
-        executor = ExecutorManager.get_executor(request.asset_id)
-        executor.safe_state(request.asset_id)
-    except Exception as e:
-        logger.error(f"E-Stop safe state execution failed for asset={request.asset_id}: {e}")
+    # E-Stop은 일반 실패 여부와 무관하게 safe_state를 즉시 시도한다.
+    _execute_safe_state(request.asset_id)
     
     status = result.get("status", "ESTOP_EXECUTED")
     logger.info(f"E-STOP asset={request.asset_id} reason={request.reason} -> {status}")

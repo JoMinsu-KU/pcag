@@ -6,10 +6,12 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: pcag-postgres
+    command: ["postgres", "-c", "timezone=Asia/Seoul", "-c", "log_timezone=Asia/Seoul"]
     environment:
       POSTGRES_DB: pcag
       POSTGRES_USER: pcag_user
       POSTGRES_PASSWORD: pcag_pass
+      TZ: Asia/Seoul
     ports:
       - "5432:5432"
     volumes:
@@ -22,6 +24,7 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: jms663100@kyungnam.ac.kr
       PGADMIN_DEFAULT_PASSWORD: dufrns12@@
+      TZ: Asia/Seoul
     ports:
       - "5050:80"
     depends_on:
