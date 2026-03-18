@@ -3,6 +3,15 @@
 The `tests/` directory contains the validation surface for the PCAG codebase.
 It includes unit tests, integration tests, dataset-driven mock E2E evaluation, and live end-to-end evaluation against the running service stack.
 
+For paper and artifact readers, the repository should be understood as a
+hybrid evaluation stack:
+
+- mock-driven runners for semantic edge cases and failure injection
+- live service-stack runners for actual execution and evidence behavior
+- Isaac-backed validation for robot safety analysis
+- selectively mock-backed execution paths where the public reference stack does
+  not yet expose a live actuator endpoint
+
 The test strategy intentionally mirrors the architecture:
 
 - semantic correctness at the unit level
@@ -21,7 +30,7 @@ Main coverage areas:
 
 - request and response contracts
 - integrity logic
-- Rules and CBF validators
+- Rules and barrier-based validators
 - consensus logic
 - Evidence Ledger behavior
 - OT Interface behavior

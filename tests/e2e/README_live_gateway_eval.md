@@ -1,12 +1,12 @@
 # Live Gateway E2E Evaluation
 
-This suite validates the real running PCAG services with a single-entry flow:
-the test only sends a request to the Gateway, and the rest of the pipeline is
-executed by the live services.
+This suite exercises the real running PCAG stack through a single public entry
+point: every case is submitted only to the Gateway, and the rest of the
+pipeline is executed by the live services behind it.
 
-## Interfaces verified
+## What This Suite Verifies
 
-The runner checks the real interfaces before execution:
+The runner validates the following interfaces before execution:
 
 - `Gateway`: `http://127.0.0.1:8000/v1/control-requests`
 - `Safety Cluster`: `http://127.0.0.1:8001/v1/validate`
@@ -15,85 +15,107 @@ The runner checks the real interfaces before execution:
 - `OT Interface`: `http://127.0.0.1:8004/v1/prepare`, `/commit`, `/abort`
 - `Evidence Ledger`: `http://127.0.0.1:8005/v1/transactions/{transaction_id}`
 - `Policy Admin`: `http://127.0.0.1:8006/openapi.json`
+- `PLC Adapter`: `http://127.0.0.1:8007/v1/health`
 
-The runner defaults to `127.0.0.1` instead of `localhost` because on some
-Windows environments `localhost` tries IPv6 (`::1`) first, which can add a
-few seconds of retry delay when the services only listen on IPv4.
+The suite defaults to `127.0.0.1` instead of `localhost`. On some Windows
+setups, `localhost` resolves to IPv6 (`::1`) first, which can introduce
+avoidable retry delay when the services are listening on IPv4 only.
 
-## Single-entry design
+## Single-Entry Dataset Design
 
-You do not need to hand-write a full `proof_package` for each case.
-
-Each dataset case only declares:
+Each case in the dataset declares only the semantic intent of the scenario:
 
 - `asset_id`
 - `proof.action_sequence_ref`
-- optional high-level proof overrides such as timestamp offset or explicit policy mismatch
-- expected Gateway result and evidence expectations
+- optional high-level overrides such as `timestamp_offset_ms`,
+  `policy_version_override`, or `sensor_snapshot_hash_override`
+- the expected Gateway result and evidence expectations
 
-The runner automatically fetches and fills:
+The runner automatically fills the live proof package with:
 
 - active `policy_version_id`
 - latest `sensor_snapshot_hash`
 - latest `sensor_reliability_index`
 - current `timestamp_ms`
 
-## Dataset file
+That design keeps the dataset stable while still validating real live state.
 
-- [live_gateway_eval_dataset.json](/C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/live_gateway_eval_dataset.json)
+## Dataset And Support Files
 
-The current live dataset covers:
+- Dataset: [`live_gateway_eval_dataset.json`](./live_gateway_eval_dataset.json)
+- Runner: [`run_live_gateway_eval.py`](./run_live_gateway_eval.py)
+- Repeat runner: [`run_live_gateway_eval_repeat.py`](./run_live_gateway_eval_repeat.py)
+- Pytest entry: [`test_live_gateway_eval.py`](./test_live_gateway_eval.py)
+- Support module: [`live_gateway_eval_support.py`](./live_gateway_eval_support.py)
 
-- committed cases for `reactor_01` and `agv_01`
+## Coverage
+
+The default live dataset covers:
+
+- nominal committed cases for `reactor_01` and `agv_01`
 - unsafe cases for `reactor_01`, `agv_01`, and `robot_arm_01`
-- rejected integrity cases such as policy mismatch, expired timestamp, future timestamp, and sensor divergence
-- interface-level failures such as `422`, `401`, and unknown asset sensor errors
+- integrity rejections such as policy mismatch, expired timestamp, future
+  timestamp, sensor divergence, and sensor hash mismatch
+- interface-level failures such as `401`, `422`, and unknown-asset sensor
+  errors
 
-Current note:
+## Current Live Status
 
-- the robot-arm live case includes `target_positions` so that the Isaac Sim validator consumes the same semantic target that the dataset intends
-- the runner defaults to `127.0.0.1` to avoid Windows IPv6 retry delays on `localhost`
+The suite is maintained against the current stack behavior, not historical
+defects.
 
-## How to run
+- The latest healthy-stack expectation is a clean `14/14` pass on the default
+  dataset.
+- The historical March 12, 2026 OT commit defect for `reactor_01` and
+  `agv_01` safe commands has been resolved and is no longer treated as an
+  expected failure.
+- The robot live case now includes `target_positions`, so the Isaac Sim
+  validator consumes the same semantic target intended by the dataset.
+- The default robot case remains on a strong `UNSAFE` path rather than a
+  nominal commit path because robot reverify can still be more timing-sensitive
+  than the reactor and AGV flows in live mode.
 
-CLI runner:
+## How To Run
+
+Run the CLI evaluator:
 
 ```powershell
 python tests/e2e/run_live_gateway_eval.py
 ```
 
-Pytest mode:
+Run through pytest:
 
 ```powershell
 $env:PCAG_RUN_LIVE_E2E = "1"
 pytest tests/e2e/test_live_gateway_eval.py -q
 ```
 
-Results are saved to:
-
-- [live_gateway_eval_latest.json](/C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/results/live_gateway_eval_latest.json)
-
-Repeat runner for stability metrics:
+Run a repeated stability evaluation:
 
 ```powershell
 python tests/e2e/run_live_gateway_eval_repeat.py --runs 10
 ```
 
-Repeat results are saved to:
+## Result Files
 
-- [live_gateway_eval_repeat_latest.json](/C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/results/live_gateway_eval_repeat_latest.json)
+- Single-run result:
+  [`results/live_gateway_eval_latest.json`](./results/live_gateway_eval_latest.json)
+- Repeat summary:
+  [`results/live_gateway_eval_repeat_latest.json`](./results/live_gateway_eval_repeat_latest.json)
 
 The repeat summary reports:
 
-- `overall_accuracy_pct`: passed case executions / total case executions across all runs
-- `loss_rate_pct`: failed case executions / total case executions across all runs
-- `run_success_rate_pct`: percentage of runs with zero failed cases
+- `overall_accuracy_pct`: passed case executions divided by total case
+  executions across all runs
+- `loss_rate_pct`: failed case executions divided by total case executions
+- `run_success_rate_pct`: share of runs with zero failed cases
 - `per_case.pass_rate_pct`: per-case pass rate across repeated runs
-- `status_groups`: grouped accuracy by expected result class such as `COMMITTED`, `UNSAFE`, `REJECTED`, `ERROR`
+- `status_groups`: grouped accuracy by expected result class such as
+  `COMMITTED`, `UNSAFE`, `REJECTED`, and `ERROR`
 
-## Dataset authoring guide
+## Dataset Authoring Guide
 
-For a normal committed case, you usually only need this:
+For a normal committed case, only a small semantic payload is usually needed:
 
 ```json
 {
@@ -111,7 +133,7 @@ For a normal committed case, you usually only need this:
 }
 ```
 
-For an integrity rejection, override only the semantic knob you want:
+For an integrity rejection, override only the condition under test:
 
 ```json
 {
@@ -129,16 +151,6 @@ For an integrity rejection, override only the semantic knob you want:
 }
 ```
 
-## Current live finding
-
-The current environment was checked before building this suite. One important
-observation is that a nominal `robot_arm_01` move can become flaky in live mode
-because the second sensor read during reverify may drift enough to trigger
-`REVERIFY_HASH_MISMATCH`. For that reason, the default live dataset keeps the
-robot case on the stable `UNSAFE` path instead of a nominal commit path.
-
-The first live run on March 12, 2026 also exposed a real integration issue:
-safe `reactor_01` and `agv_01` commands reached `REVERIFY_PASSED` but then
-failed at OT commit with `COMMIT_FAILED` because the OT Interface returned HTTP
-500. Those committed cases are intentionally kept as `COMMITTED` expectations so
-the live suite continues to detect that defect until it is fixed.
+For robot-arm cases that should drive Isaac Sim semantics directly, include
+`target_positions` inside the referenced action payload so the simulation layer
+receives an explicit joint target vector.

@@ -41,6 +41,9 @@ This is useful immediately after startup or before running live E2E evaluation.
 
 Registers the baseline policy versions and asset profiles used by the reference scenarios.
 This includes the reactor, robot arm, and AGV assets used throughout the repository.
+The seeded metadata reflects the current public reference stack, including the
+hybrid combination of live PLC paths, Isaac-backed sensing, and explicitly
+mock-backed execution where appropriate.
 
 ## Diagnostics and targeted checks
 

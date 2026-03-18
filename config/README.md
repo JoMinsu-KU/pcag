@@ -12,7 +12,7 @@ Most service-to-service URLs, asset routing decisions, and validation mappings o
 | [`services.yaml`](services.yaml) | Base URLs, health probe targets, dashboard settings, and service discovery |
 | [`sensor_mappings.yaml`](sensor_mappings.yaml) | Asset-to-sensor routing rules |
 | [`executor_mappings.yaml`](executor_mappings.yaml) | Asset-to-executor routing rules |
-| [`cbf_mappings.yaml`](cbf_mappings.yaml) | Asset-specific CBF state mappings and barrier definitions |
+| [`cbf_mappings.yaml`](cbf_mappings.yaml) | Asset-specific state mappings used by the barrier-based validator |
 
 ## Design Principles
 
@@ -23,7 +23,7 @@ Configuration in this repository is used for three different responsibilities:
 2. **asset routing**
    - which sensor path, executor path, or simulation backend should be used for a given asset
 3. **validation semantics**
-   - how action parameters map into state variables and how safety constraints should be interpreted
+   - how action parameters map into state variables and how barrier-style safety constraints should be interpreted
 
 ## `services.yaml`
 
@@ -69,7 +69,11 @@ This keeps field I/O centralized instead of allowing each service to open direct
 
 ## `cbf_mappings.yaml`
 
-[`cbf_mappings.yaml`](cbf_mappings.yaml) connects high-level action parameters to the state representation used by the CBF validator.
+[`cbf_mappings.yaml`](cbf_mappings.yaml) connects high-level action parameters to the state representation used by the repository's barrier-based validator.
+
+In the current implementation, this mapping feeds a static projected-state
+check. It should not be interpreted as a full nonlinear control-theoretic
+model on its own.
 
 This file is especially important when:
 
@@ -86,7 +90,7 @@ When adding a new asset, the usual configuration flow is:
 1. add the service URLs you will rely on in [`services.yaml`](services.yaml) if needed
 2. define the sensor route in [`sensor_mappings.yaml`](sensor_mappings.yaml)
 3. define the executor route in [`executor_mappings.yaml`](executor_mappings.yaml)
-4. define CBF mappings in [`cbf_mappings.yaml`](cbf_mappings.yaml) if the asset uses barrier-based validation
+4. define barrier-validator mappings in [`cbf_mappings.yaml`](cbf_mappings.yaml) if the asset uses that validation path
 5. seed or register the corresponding policy through the Policy Admin / Policy Store path
 
 ## Related Code

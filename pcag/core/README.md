@@ -14,7 +14,7 @@ This is the part of the repository that most directly captures the meaning of PC
 | `middleware/` | API-key enforcement and structured logging middleware |
 | `models/` | Shared domain data structures |
 | `ports/` | Abstract interfaces for sensors, executors, and simulation backends |
-| `services/` | Integrity, Rules, CBF, consensus, alternative actions, and other reusable logic |
+| `services/` | Integrity, Rules, barrier-based validation, consensus, alternative actions, and other reusable logic |
 | `utils/` | Hashing, canonicalization, config loading, and logging utilities |
 
 ## Most Important Files
@@ -39,7 +39,7 @@ This is the part of the repository that most directly captures the meaning of PC
 - [`services/rules_validator.py`](services/rules_validator.py)
   - discrete rules and forbidden combinations
 - [`services/cbf_validator.py`](services/cbf_validator.py)
-  - state projection and barrier checking
+  - state projection and static barrier-style checking
 - [`services/consensus_engine.py`](services/consensus_engine.py)
   - SIL-aware consensus logic
 - [`services/alternative_action.py`](services/alternative_action.py)
@@ -88,6 +88,10 @@ If you want to understand the semantics quickly, start with:
 3. [`services/consensus_engine.py`](services/consensus_engine.py)
 4. [`services/rules_validator.py`](services/rules_validator.py)
 5. [`services/cbf_validator.py`](services/cbf_validator.py)
+
+When describing this file in papers or public artifacts, the safest wording is
+"barrier-based validator" or "static CBF-style validator" rather than a claim
+of a novel control-theoretic CBF method.
 
 ## Related Documentation
 

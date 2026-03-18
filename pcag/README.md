@@ -60,12 +60,17 @@ It implements an end-to-end deterministic execution stack:
 1. request contract handling
 2. integrity validation
 3. parallel safety validation
+   - Rules, barrier-based validation, and simulation
 4. transactional execution control
 5. evidence-backed auditability
 6. centralized field I/O
 7. operational monitoring
 
 That is the main reason the repository is more than a paper prototype.
+
+It is also why the public artifact should be read as a hybrid runtime stack:
+some paths are fully live-backed, some are simulation-backed, and some remain
+explicitly mock-backed in the reference configuration.
 
 ## Reading Guide
 

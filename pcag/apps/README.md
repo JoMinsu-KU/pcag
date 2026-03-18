@@ -10,7 +10,7 @@ The services are intentionally separated so that policy retrieval, sensing, safe
 | Service | Port | Main Responsibility |
 | --- | --- | --- |
 | `gateway` | 8000 | Orchestrates the full execution pipeline |
-| `safety_cluster` | 8001 | Runs Rules, CBF, Simulation, and consensus |
+| `safety_cluster` | 8001 | Runs Rules, barrier-based validation, Simulation, and consensus |
 | `policy_store` | 8002 | Serves active policies and asset profiles |
 | `sensor_gateway` | 8003 | Returns live snapshots and hashes |
 | `ot_interface` | 8004 | Owns `PREPARE`, `COMMIT`, `ABORT`, and `E-Stop` |
@@ -41,7 +41,7 @@ The Safety Cluster is responsible for evaluating whether a command is safe under
 It currently provides:
 
 - Rules validation
-- CBF validation
+- barrier-based validation through the current static CBF-style layer
 - Simulation validation
 - SIL-aware consensus
 - Isaac worker/proxy isolation

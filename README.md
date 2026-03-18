@@ -31,6 +31,9 @@ It accepts a control request only after integrity validation, multi-validator sa
 > [!IMPORTANT]
 > PCAG is not just a validator. It is a fail-closed execution gateway that sits between an AI agent and the field layer, ensuring that a command is still policy-aligned, state-consistent, and safe at the instant of execution.
 
+> [!NOTE]
+> In this repository, a `proof package` is an operational evidence bundle used for runtime verification. It should not be interpreted as a classical formal proof artifact in the proof-carrying code sense.
+
 ## Overview
 
 Large language models and autonomous agents are increasingly used to generate high-level commands for robots, PLC-connected assets, AGVs, and other operational technology endpoints.
@@ -75,7 +78,7 @@ PCAG currently includes:
 
 - a `Proof Package` request contract for control submissions
 - `L1 integrity` checks for policy version, timestamp freshness, sensor divergence, and `sensor_snapshot_hash`
-- parallel `Rules + CBF + Simulation` safety validation with SIL-aware consensus
+- parallel `Rules + barrier-based validator (CBF-style static margin) + Simulation` safety validation with SIL-aware consensus
 - fail-closed `PREPARE -> REVERIFY -> COMMIT/ABORT` execution control
 - `COMMITTED` only after successful execution, never before
 - an append-only evidence ledger with hash-chain verification and fail-hard append semantics
@@ -90,7 +93,7 @@ PCAG combines three concerns that are often separated in practice:
 | Concern | Typical Gap | PCAG Response |
 | --- | --- | --- |
 | Command semantics | The command is syntactically valid but operationally naive | Strict request contracts and policy-aware proof packages |
-| State-dependent safety | A command may be safe in one state and unsafe in another | Parallel Rules, CBF, and Simulation with consensus |
+| State-dependent safety | A command may be safe in one state and unsafe in another | Parallel Rules, barrier-based validation, and Simulation with consensus |
 | Execution semantics | A command can become unsafe between validation and actuation | `PREPARE`, `REVERIFY`, `COMMIT/ABORT`, and evidence-backed fail-closed behavior |
 
 For paper-oriented readers, this is the key contribution of the repository.
@@ -191,7 +194,7 @@ sequenceDiagram
         G-->>A: REJECTED
     else Integrity passed
         G->>E: INTEGRITY_PASSED
-        G->>C: Parallel Rules + CBF + Simulation
+    G->>C: Parallel Rules + barrier-based validator + Simulation
         alt Safety unsafe
             G->>E: SAFETY_UNSAFE
             G-->>A: UNSAFE
@@ -229,7 +232,7 @@ sequenceDiagram
 | Service | Port | Responsibility |
 | --- | --- | --- |
 | `gateway` | 8000 | Orchestrates the full safety pipeline |
-| `safety_cluster` | 8001 | Runs Rules, CBF, Simulation, and consensus |
+| `safety_cluster` | 8001 | Runs Rules, barrier-based validation, Simulation, and consensus |
 | `policy_store` | 8002 | Serves active policy versions and asset profiles |
 | `sensor_gateway` | 8003 | Provides live asset snapshots and hashes |
 | `ot_interface` | 8004 | Handles `PREPARE`, `COMMIT`, `ABORT`, and `E-Stop` |
@@ -249,6 +252,13 @@ The reference implementation currently includes three scenario families:
 | AGV supervision | `agv_01` | discrete-event simulation | cell logistics and route safety |
 
 For manufacturing-paper positioning, the strongest story is the robot-arm + AGV + PLC manufacturing-cell path.
+
+The public repository should be read as a hybrid validation artifact:
+
+- live service orchestration and evidence logging
+- live PLC-adapter-backed sensor and actuation paths for reactor and AGV scenarios
+- Isaac-Sim-backed robot validation
+- some mock-backed execution paths that remain intentionally explicit in the reference stack, especially for robot actuation
 
 ## Repository Layout
 
@@ -463,6 +473,12 @@ This keeps the project useful both as:
 
 - a research artifact for deterministic safety execution
 - an operational prototype that can be run end-to-end
+
+The evaluation story is intentionally split:
+
+- `mock` runners verify semantic edge cases and hard-to-stage failure modes
+- `live` runners verify the actual microservice stack and runtime evidence flow
+- the overall repository is therefore best described as a reproducible hybrid execution-assurance artifact rather than a single-mode deployment package
 
 ## Notes for Public Readers
 

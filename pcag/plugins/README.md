@@ -81,10 +81,14 @@ The plugin layer still contains legacy direct-connect implementations, but the c
 
 - PLC and Modbus field I/O through the PLC Adapter
 - robot simulation through the Safety Cluster and Isaac worker
-- mock backends for controlled semantic testing
+- mock backends for controlled semantic testing and selected reference-stack execution paths
 
 This is why the plugin directory may contain more than one valid implementation for a given class of asset.
 The recommended path depends on the current system architecture, not just on whether a plugin exists.
+
+For public readers, this means the repository should be understood as a hybrid
+runtime artifact rather than a claim that every asset path is fully live-driven
+in every default scenario.
 
 ## When to Edit This Directory
 
