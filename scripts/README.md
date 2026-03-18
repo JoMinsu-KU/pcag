@@ -1,39 +1,66 @@
-# PCAG 스크립트 안내
+# Operational Scripts
 
-`scripts/`는 로컬 개발, 운영 점검, 정책 시드, 진단에 필요한 유틸리티를 모아둔 디렉터리다.
+The `scripts/` directory contains helper commands for starting services, checking runtime health, seeding policies, and running focused diagnostics.
 
-## 주요 스크립트
+These scripts are the fastest way to bring the stack up locally without manually invoking each service one by one.
 
-### 서비스 기동/중지
+## Main Scripts
 
-- `start_services.py`
-  - `pcag` 환경 서비스 8개를 한 번에 기동한다
-  - Gateway, Policy Store, Sensor Gateway, OT Interface, Evidence Ledger, Policy Admin, PLC Adapter, Dashboard
-- `stop_services.py`
-  - `start_services.py`로 올린 프로세스를 정리한다
-- `start_safety_cluster.py`
-  - `pcag-isaac` 환경에서 Safety Cluster를 별도로 띄운다
-- `check_services.py`
-  - 등록된 서비스들의 응답 상태를 빠르게 점검한다
+## Startup and shutdown
 
-### 초기화/정책
+### [`start_services.py`](start_services.py)
 
-- `seed_policy.py`
-  - 현재 자산 프로필과 정책 버전을 등록한다
-  - reactor, robot arm, AGV 기준 정책을 포함한다
+Starts the services that run in the `pcag` environment:
 
-### 진단/개발
+- Gateway
+- Policy Store
+- Sensor Gateway
+- OT Interface
+- Evidence Ledger
+- Policy Admin
+- PLC Adapter
+- Dashboard
 
-- `test_gateway.py`
-  - Gateway에 synthetic 요청을 보내며 파이프라인을 빠르게 확인할 때 사용한다
-- `test_isaac_sensor.py`
-  - Sensor Gateway와 Isaac 기반 상태 조회 연결을 확인할 때 사용한다
-- `test_logging.py`
-  - 공통 로깅 형식을 점검할 때 사용한다
-- `test_persistent_tx.py`
-  - 트랜잭션/증거 저장 동작을 점검할 때 사용한다
+### [`stop_services.py`](stop_services.py)
 
-## 권장 실행 순서
+Stops the processes launched by [`start_services.py`](start_services.py).
+
+### [`start_safety_cluster.py`](start_safety_cluster.py)
+
+Starts the Safety Cluster in the `pcag-isaac` environment.
+This must be run separately because Isaac Sim has different runtime constraints from the rest of the stack.
+
+### [`check_services.py`](check_services.py)
+
+Performs lightweight health probing for the registered services.
+This is useful immediately after startup or before running live E2E evaluation.
+
+## Policy and setup
+
+### [`seed_policy.py`](seed_policy.py)
+
+Registers the baseline policy versions and asset profiles used by the reference scenarios.
+This includes the reactor, robot arm, and AGV assets used throughout the repository.
+
+## Diagnostics and targeted checks
+
+### [`test_gateway.py`](test_gateway.py)
+
+Sends synthetic requests to the Gateway for quick end-to-end sanity checks.
+
+### [`test_isaac_sensor.py`](test_isaac_sensor.py)
+
+Checks whether the Sensor Gateway can retrieve Isaac-backed robot state correctly.
+
+### [`test_logging.py`](test_logging.py)
+
+Exercises the logging stack and helps verify formatting and middleware behavior.
+
+### [`test_persistent_tx.py`](test_persistent_tx.py)
+
+Useful for checking transaction persistence and evidence behavior in development.
+
+## Recommended Startup Order
 
 ```powershell
 conda activate pcag-isaac
@@ -45,13 +72,16 @@ python scripts/seed_policy.py
 python scripts/check_services.py
 ```
 
-## 주의사항
+## Operational Notes
 
-- Safety Cluster는 별도 가상환경에서 띄워야 한다
-- 설정 파일을 바꾼 뒤에는 관련 서비스를 재시작해야 한다
-- live E2E와 Dashboard는 서비스 URL을 `127.0.0.1` 기준으로 맞춘 상태를 전제로 한다
+- The Safety Cluster is not launched from the same environment as the rest of the services.
+- After changing files in [`config/`](../config/README.md), restart the services that consume those settings.
+- The live E2E tooling and the dashboard assume service URLs are configured with `127.0.0.1`.
 
-## 관련 문서
+## Best Companions
 
-- [PCAG_운영_Runbook.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_운영_Runbook.md)
-- [README_live_gateway_eval.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/README_live_gateway_eval.md)
+These scripts are usually used together with:
+
+- [`../README.md`](../README.md)
+- [`../tests/README.md`](../tests/README.md)
+- [`../config/README.md`](../config/README.md)

@@ -1,45 +1,107 @@
-# PCAG 설정 파일 안내
+# Configuration Guide
 
-`config/`는 PCAG 서비스 간 연결 정보, 자산 매핑, CBF 설정, 실행기/센서 라우팅을 담는 정적 설정 디렉터리다.
+The `config/` directory contains the runtime configuration files that bind the PCAG codebase to concrete services, assets, validators, and field I/O paths.
 
-## 현재 핵심 파일
+This folder is intentionally small but operationally important.
+Most service-to-service URLs, asset routing decisions, and validation mappings originate here.
 
-### `services.yaml`
+## Files
 
-전체 서비스 레지스트리와 로깅/대시보드 설정을 담는다.
+| File | Purpose |
+| --- | --- |
+| [`services.yaml`](services.yaml) | Base URLs, health probe targets, dashboard settings, and service discovery |
+| [`sensor_mappings.yaml`](sensor_mappings.yaml) | Asset-to-sensor routing rules |
+| [`executor_mappings.yaml`](executor_mappings.yaml) | Asset-to-executor routing rules |
+| [`cbf_mappings.yaml`](cbf_mappings.yaml) | Asset-specific CBF state mappings and barrier definitions |
 
-- 각 서비스 기본 URL은 `127.0.0.1` 기준
-- `dashboard` 설정 포함
-- 서비스별 `health` 또는 `openapi` probe에 사용
-- 일부 서비스는 시작 시점에 이 파일을 읽으므로 변경 후 재시작이 필요하다
+## Design Principles
 
-### `cbf_mappings.yaml`
+Configuration in this repository is used for three different responsibilities:
 
-자산별 CBF 상태 매핑과 barrier 계산 기준을 정의한다.
+1. **service discovery**
+   - where the Gateway, Sensor Gateway, OT Interface, and Dashboard should send HTTP requests
+2. **asset routing**
+   - which sensor path, executor path, or simulation backend should be used for a given asset
+3. **validation semantics**
+   - how action parameters map into state variables and how safety constraints should be interpreted
 
-### `executor_mappings.yaml`
+## `services.yaml`
 
-자산별 OT 실행 경로를 정의한다.
+[`services.yaml`](services.yaml) is the most important file in this directory.
 
-현재 runtime에서는 PLC/Modbus 자산이 직접 low-level executor로 나가지 않고, `PLC Adapter`를 통한 중앙화된 경로를 사용한다.
+It defines:
 
-### `sensor_mappings.yaml`
+- the URL of each PCAG service
+- which endpoint should be used for readiness probing
+- dashboard refresh and aggregation settings
+- shared runtime assumptions used by evaluation tooling and monitoring
 
-자산별 센서 소스 라우팅을 정의한다.
+### Current convention
 
-중요:
+The repository uses `127.0.0.1` instead of `localhost`.
 
-- `robot_arm_01`은 `isaac` 계열 센서 경로를 사용한다
-- PLC/Modbus 계열 자산은 runtime에서 `PLCAdapterSensorSource`를 통해 중앙화된 경로를 타도록 구성되어 있다
+This is intentional.
+On Windows, `localhost` may resolve through IPv6 first, which can introduce avoidable connection delays when services are only listening on IPv4.
 
-## 운영 메모
+### When to restart services
 
-- `localhost` 대신 `127.0.0.1`를 유지하는 것이 좋다
-- 서비스 URL 변경 시 `start_services.py`, Dashboard, live E2E 러너, 일부 HTTP client 동작에 영향이 있다
-- 설정 변경 후에는 영향받는 서비스를 재시작해야 한다
+Some services read `services.yaml` at startup and keep the resolved values in memory.
+If you change service URLs or dashboard settings, restart the affected services before relying on the new behavior.
 
-## 관련 코드
+## `sensor_mappings.yaml`
 
-- [config_loader.py](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/core/utils/config_loader.py)
-- [sensor_gateway/routes.py](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/apps/sensor_gateway/routes.py)
-- [executor_manager.py](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/apps/ot_interface/executor_manager.py)
+[`sensor_mappings.yaml`](sensor_mappings.yaml) defines how each asset obtains its latest observable state.
+
+Examples:
+
+- `robot_arm_01` uses the Isaac-based sensor path
+- PLC-backed assets are routed through the centralized PLC Adapter path
+- mock sensors can still be used for controlled testing
+
+This file tells the Sensor Gateway which source family to select, but the actual implementation is still handled in code.
+
+## `executor_mappings.yaml`
+
+[`executor_mappings.yaml`](executor_mappings.yaml) defines how each asset is actuated.
+
+In the current architecture, the recommended execution path for PLC and Modbus-backed assets is the PLC Adapter.
+This keeps field I/O centralized instead of allowing each service to open direct low-level connections independently.
+
+## `cbf_mappings.yaml`
+
+[`cbf_mappings.yaml`](cbf_mappings.yaml) connects high-level action parameters to the state representation used by the CBF validator.
+
+This file is especially important when:
+
+- adding a new asset family
+- extending the action vocabulary
+- introducing new safety barriers or derived state terms
+
+It is the bridge between request semantics and continuous-state safety checking.
+
+## Practical Workflow
+
+When adding a new asset, the usual configuration flow is:
+
+1. add the service URLs you will rely on in [`services.yaml`](services.yaml) if needed
+2. define the sensor route in [`sensor_mappings.yaml`](sensor_mappings.yaml)
+3. define the executor route in [`executor_mappings.yaml`](executor_mappings.yaml)
+4. define CBF mappings in [`cbf_mappings.yaml`](cbf_mappings.yaml) if the asset uses barrier-based validation
+5. seed or register the corresponding policy through the Policy Admin / Policy Store path
+
+## Related Code
+
+- [`pcag/core/utils/config_loader.py`](../pcag/core/utils/config_loader.py)
+- [`pcag/apps/sensor_gateway/routes.py`](../pcag/apps/sensor_gateway/routes.py)
+- [`pcag/apps/ot_interface/executor_manager.py`](../pcag/apps/ot_interface/executor_manager.py)
+- [`pcag/apps/dashboard/service.py`](../pcag/apps/dashboard/service.py)
+
+## Recommended Reading Order
+
+If you are new to the repository, read the files in this order:
+
+1. [`../README.md`](../README.md)
+2. [`services.yaml`](services.yaml)
+3. [`sensor_mappings.yaml`](sensor_mappings.yaml)
+4. [`executor_mappings.yaml`](executor_mappings.yaml)
+5. [`cbf_mappings.yaml`](cbf_mappings.yaml)

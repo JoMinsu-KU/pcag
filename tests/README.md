@@ -1,50 +1,80 @@
-# PCAG 테스트 안내
+# Test Guide
 
-`tests/`는 unit, integration, live/mock E2E, 외부 환경 연동 테스트를 포함하는 검증 디렉터리다.
+The `tests/` directory contains the validation surface for the PCAG codebase.
+It includes unit tests, integration tests, dataset-driven mock E2E evaluation, and live end-to-end evaluation against the running service stack.
 
-## 테스트 층
+The test strategy intentionally mirrors the architecture:
 
-### Unit
+- semantic correctness at the unit level
+- pipeline integration under controlled conditions
+- full-stack behavior under live service execution
 
-`tests/unit/`
+## Test Layers
 
-현재 핵심 범위:
+## Unit tests
 
-- consensus
-- CBF
-- rules
-- integrity
-- evidence ledger
-- OT interface
-- PLC adapter
-- Safety Cluster 병렬화
-- logging
-- contracts
+Location:
 
-### Integration
+- `tests/unit/`
 
-`tests/integration/`
+Main coverage areas:
 
-현재 핵심 범위:
+- request and response contracts
+- integrity logic
+- Rules and CBF validators
+- consensus logic
+- Evidence Ledger behavior
+- OT Interface behavior
+- PLC Adapter logic
+- Safety Cluster parallel execution behavior
+- logging and middleware
 
-- Gateway 파이프라인 mock 통합
-- PostgreSQL 연동
+## Integration tests
 
-### E2E
+Location:
 
-`tests/e2e/`
+- `tests/integration/`
 
-현재 기준으로 가장 중요한 두 개는 아래다.
+Main purpose:
 
-1. 문서정합성 mock E2E
-- [README_document_conformance_eval.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/README_document_conformance_eval.md)
+- validate cross-service semantics in controlled mock-based conditions
+- verify database-backed flows without requiring the entire live stack
 
-2. 실제 서버 기반 live E2E
-- [README_live_gateway_eval.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/README_live_gateway_eval.md)
+The most important integration coverage in this repository is the mock Gateway pipeline path.
 
-legacy 시나리오 파일(`test_three_scenarios.py`, `test_all_scenarios.py`, `test_real_pipeline.py` 등)은 남아 있지만, 현재 상태 검증의 우선 기준은 dataset 기반 runner들이다.
+## End-to-end evaluation
 
-## 권장 실행
+Location:
+
+- `tests/e2e/`
+
+This folder contains two especially important families of runners.
+
+### 1. Document-conformance mock evaluation
+
+Primary guide:
+
+- [`e2e/README_document_conformance_eval.md`](e2e/README_document_conformance_eval.md)
+
+Purpose:
+
+- validate reject, unsafe, abort, and evidence semantics
+- ensure documented gateway behavior is preserved
+- exercise difficult error conditions without depending on all live services
+
+### 2. Live gateway evaluation
+
+Primary guide:
+
+- [`e2e/README_live_gateway_eval.md`](e2e/README_live_gateway_eval.md)
+
+Purpose:
+
+- send real requests to the live Gateway
+- allow the actual services to process the rest of the pipeline
+- verify real end-to-end behavior, including evidence generation
+
+## Recommended Commands
 
 ```powershell
 pytest tests/unit/
@@ -54,14 +84,43 @@ python tests/e2e/run_live_gateway_eval.py
 python tests/e2e/run_live_gateway_eval_repeat.py --runs 10
 ```
 
-## 결과물
+## Result Artifacts
 
-- live 단일 실행 결과:
-  - [live_gateway_eval_latest.json](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/results/live_gateway_eval_latest.json)
-- live 반복 실행 결과:
-  - [live_gateway_eval_repeat_latest.json](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/results/live_gateway_eval_repeat_latest.json)
+The main result artifacts are written under `tests/e2e/results/`.
 
-## 참고 문서
+Examples:
 
-- [PCAG_Test_Documentation.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/archive/PCAG_Test_Documentation.md)
-- [PCAG_문서_현행상태_색인.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_문서_현행상태_색인.md)
+- `live_gateway_eval_latest.json`
+- `live_gateway_eval_repeat_latest.json`
+- `document_conformance_eval_30_latest.json`
+
+These files are useful for:
+
+- regression tracking
+- dashboard summaries
+- paper tables and reproducibility material
+
+## Legacy Files
+
+Some older scenario files still exist under `tests/e2e/`, but the current repository relies primarily on dataset-driven runners instead of hand-authored one-off scenarios.
+
+For current verification work, prefer:
+
+- the document-conformance runner
+- the live gateway runner
+- the repeated live runner
+
+## How to Read This Directory
+
+If you are new to the repository, this is a good order:
+
+1. [`../README.md`](../README.md)
+2. [`e2e/README_live_gateway_eval.md`](e2e/README_live_gateway_eval.md)
+3. [`e2e/README_document_conformance_eval.md`](e2e/README_document_conformance_eval.md)
+4. browse `tests/unit/` by subsystem
+
+## Related Documentation
+
+- [`../README.md`](../README.md)
+- [`../scripts/README.md`](../scripts/README.md)
+- [`../config/README.md`](../config/README.md)

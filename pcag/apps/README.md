@@ -1,62 +1,131 @@
-# PCAG 서비스 계층 안내
+# Service Applications
 
-`pcag/apps/`는 PCAG의 서비스 진입점을 담는 디렉터리다. 각 서비스는 독립적인 FastAPI 앱이며, 현재 구현 기준으로 총 9개 서비스가 존재한다.
+The `pcag/apps/` directory contains the concrete microservices that make up the PCAG runtime.
+Each service is a FastAPI application with a well-scoped responsibility inside the deterministic execution architecture.
 
-## 서비스 목록
+The services are intentionally separated so that policy retrieval, sensing, safety validation, execution control, evidence recording, and monitoring can evolve independently while still composing into a single pipeline.
 
-### `gateway/`
+## Service Map
 
-전체 안전 실행 파이프라인 오케스트레이터.
+| Service | Port | Main Responsibility |
+| --- | --- | --- |
+| `gateway` | 8000 | Orchestrates the full execution pipeline |
+| `safety_cluster` | 8001 | Runs Rules, CBF, Simulation, and consensus |
+| `policy_store` | 8002 | Serves active policies and asset profiles |
+| `sensor_gateway` | 8003 | Returns live snapshots and hashes |
+| `ot_interface` | 8004 | Owns `PREPARE`, `COMMIT`, `ABORT`, and `E-Stop` |
+| `evidence_ledger` | 8005 | Stores append-only evidence events |
+| `policy_admin` | 8006 | Registers and activates policy versions |
+| `plc_adapter` | 8007 | Centralized PLC and Modbus I/O |
+| `dashboard` | 8008 | Live operational monitoring UI and APIs |
+
+## Service Directory Guide
+
+### [`gateway/`](gateway)
+
+The Gateway is the main orchestration service.
+It is the entrypoint for external control requests and implements the top-level fail-closed pipeline:
 
 - schema validation
-- integrity check
-- safety validation orchestration
-- PREPARE / REVERIFY / COMMIT / ABORT 흐름
-- evidence 기록
+- integrity validation
+- safety validation dispatch
+- transactional execution control
+- evidence emission
 
-### `safety_cluster/`
+If you only read one service in the repository, start here.
 
-Rules, CBF, Simulation 검증과 SIL consensus를 수행한다.
+### [`safety_cluster/`](safety_cluster)
 
-- validator 병렬 fan-out
-- Isaac worker/proxy 기반 simulation
-- consensus verdict 계산
+The Safety Cluster is responsible for evaluating whether a command is safe under current conditions.
 
-### `policy_store/`
+It currently provides:
 
-활성 정책, 자산 프로필, 버전 조회의 source of truth.
+- Rules validation
+- CBF validation
+- Simulation validation
+- SIL-aware consensus
+- Isaac worker/proxy isolation
 
-### `policy_admin/`
+This service runs in the separate `pcag-isaac` environment because of Isaac runtime requirements.
 
-정책 등록, 수정, 활성화, 버전 관리용 관리 인터페이스.
+### [`policy_store/`](policy_store)
 
-### `sensor_gateway/`
+The Policy Store is the source of truth for active policy versions and asset profiles.
+It supports immutable policy versioning and is queried by the Gateway during live request handling.
 
-자산별 최신 센서 스냅샷과 해시를 제공한다.
+### [`policy_admin/`](policy_admin)
 
-- Isaac sensor
-- PLC Adapter 경유 센서
-- mock sensor
+The Policy Admin service manages policy registration and activation.
+It is the administrative interface for evolving policy versions without mutating the meaning of already-recorded evidence.
 
-### `ot_interface/`
+### [`sensor_gateway/`](sensor_gateway)
 
-PREPARE/COMMIT/ABORT/E-Stop 실행 제어.
+The Sensor Gateway provides the latest observable state for each asset.
 
-### `evidence_ledger/`
+Depending on the asset, this may involve:
 
-증거 이벤트 append/query와 해시 체인을 담당한다.
+- Isaac-based robot state retrieval
+- PLC Adapter-backed field reads
+- mock or synthetic sensor sources for evaluation
 
-### `plc_adapter/`
+The Gateway depends on this service both for the initial integrity check and for re-verification.
 
-PLC/Modbus 읽기·쓰기를 단일 진입점으로 중앙화한다.
+### [`ot_interface/`](ot_interface)
 
-### `dashboard/`
+The OT Interface controls execution authority and transactional state.
 
-실시간 운영 대시보드와 snapshot/SSE 스트림을 제공한다.
+It owns:
 
-## 운영 메모
+- `PREPARE`
+- `COMMIT`
+- `ABORT`
+- `E-Stop`
+- lock ownership and expiration
 
-- `safety_cluster`는 `pcag-isaac` 환경
-- 나머지는 `pcag` 환경
-- 서비스 간 URL은 `config/services.yaml`에서 관리한다
-- 현재 기준 문서는 [PCAG_최종_시스템_명세서.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_최종_시스템_명세서.md)이다
+This service is where "execution semantics" become concrete.
+
+### [`evidence_ledger/`](evidence_ledger)
+
+The Evidence Ledger stores append-only evidence events with hash-chain linkage.
+It is critical for reproducibility, forensics, and paper-oriented auditability claims.
+
+### [`plc_adapter/`](plc_adapter)
+
+The PLC Adapter centralizes PLC and Modbus access.
+This prevents field I/O from being scattered across the codebase and reduces connection-management instability.
+
+### [`dashboard/`](dashboard)
+
+The Dashboard provides live operational visibility across the system:
+
+- health probes
+- recent transactions
+- evidence summaries
+- live logs
+- PLC state
+- evaluation summaries
+
+## Runtime Split
+
+Most services run in the `pcag` environment.
+Only the Safety Cluster and Isaac worker path belong in `pcag-isaac`.
+
+This split is not accidental; it reflects the operational constraints of Isaac Sim and keeps the rest of the stack easier to run and test.
+
+## Reading Guide
+
+For system understanding, a practical order is:
+
+1. [`gateway/`](gateway)
+2. [`safety_cluster/`](safety_cluster)
+3. [`ot_interface/`](ot_interface)
+4. [`evidence_ledger/`](evidence_ledger)
+5. [`plc_adapter/`](plc_adapter)
+6. [`dashboard/`](dashboard)
+
+## Related Documentation
+
+- [`../README.md`](../README.md)
+- [`../core/README.md`](../core/README.md)
+- [`../plugins/README.md`](../plugins/README.md)
+- [`../../scripts/README.md`](../../scripts/README.md)

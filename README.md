@@ -1,101 +1,475 @@
-# PCAG: Proof-Carrying Action Gateway
+<div align="center">
 
-PCAG는 에이전트 또는 상위 소프트웨어가 생성한 물리 제어 명령을 바로 실행하지 않고, 증거 패키지, 무결성 검증, 다중 안전 검증, 트랜잭션형 실행 제어, 증거 장부 기록을 거쳐서만 OT 계층으로 전달하는 결정론적 안전 실행 게이트웨이이다.
+# PCAG
 
-## 현재 상태
+### Proof-Carrying Action Gateway for Deterministic Safety Execution
 
-기준일: 2026-03-17
+PCAG is a deterministic safety gateway for AI-generated control commands in industrial and cyber-physical environments.
+It accepts a control request only after integrity validation, multi-validator safety analysis, transactional execution control, and cryptographic evidence logging.
 
-현재 구현에는 아래 기능이 반영되어 있다.
+<p>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.13-1f6feb">
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-microservices-0f766e">
+  <img alt="Isaac Sim" src="https://img.shields.io/badge/Isaac%20Sim-4.5-c2410c">
+  <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-16-1d4ed8">
+  <img alt="Dashboard" src="https://img.shields.io/badge/Live-Dashboard-14532d">
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-15803d">
+</p>
 
-- `Proof Package` 기반 요청 계약
-- `L1 Integrity`에서 정책 버전, timestamp, sensor divergence, `sensor_snapshot_hash` 불일치 reject
-- `Rules + CBF + Simulation` 병렬 검증과 SIL consensus
-- `PREPARE -> REVERIFY -> COMMIT/ABORT` fail-closed 실행 제어
-- 실행 성공 후에만 `COMMITTED` 확정
-- `Evidence Ledger` 해시 체인과 non-2xx fail-hard
-- PLC/Modbus 접근의 단일화(`PLC Adapter`)
-- 실시간 운영 대시보드(`Dashboard`)
-- live E2E 및 반복 평가 러너
+<p>
+  <a href="#overview">Overview</a> |
+  <a href="#architecture">Architecture</a> |
+  <a href="#execution-model">Execution Model</a> |
+  <a href="#services">Services</a> |
+  <a href="#quick-start">Quick Start</a> |
+  <a href="#running-evaluations">Evaluation</a> |
+  <a href="#dashboard">Dashboard</a>
+</p>
 
-## 서비스 구성
+</div>
 
-현재 서비스는 총 9개다.
+> [!IMPORTANT]
+> PCAG is not just a validator. It is a fail-closed execution gateway that sits between an AI agent and the field layer, ensuring that a command is still policy-aligned, state-consistent, and safe at the instant of execution.
 
-| 서비스 | 포트 | 비고 |
+## Overview
+
+Large language models and autonomous agents are increasingly used to generate high-level commands for robots, PLC-connected assets, AGVs, and other operational technology endpoints.
+The critical problem is not only whether a command looks reasonable, but whether it remains safe at the exact moment it reaches the actuation boundary.
+
+PCAG addresses that gap by turning execution into a deterministic pipeline:
+
+1. validate the request contract
+2. verify policy alignment, freshness, and sensor integrity
+3. evaluate safety with multiple validators
+4. acquire execution authority through a transaction-style control path
+5. record an auditable evidence chain
+
+The result is a research-grade but operationally runnable microservice stack for supervisory control in manufacturing and cyber-physical systems.
+
+## Research At a Glance
+
+<table>
+  <tr>
+    <td width="25%">
+      <strong>Problem</strong><br/>
+      AI-generated commands can drift away from current plant state between planning and execution.
+    </td>
+    <td width="25%">
+      <strong>Core Idea</strong><br/>
+      Wrap execution in integrity checks, safety consensus, transactional control, and immutable evidence.
+    </td>
+    <td width="25%">
+      <strong>Operational Guarantees</strong><br/>
+      Reject stale or inconsistent inputs, abort on reverify mismatch, commit only after successful execution.
+    </td>
+    <td width="25%">
+      <strong>Reference Assets</strong><br/>
+      Reactor, robot arm with Isaac Sim, and AGV with discrete-event simulation.
+    </td>
+  </tr>
+</table>
+
+## What PCAG Implements
+
+PCAG currently includes:
+
+- a `Proof Package` request contract for control submissions
+- `L1 integrity` checks for policy version, timestamp freshness, sensor divergence, and `sensor_snapshot_hash`
+- parallel `Rules + CBF + Simulation` safety validation with SIL-aware consensus
+- fail-closed `PREPARE -> REVERIFY -> COMMIT/ABORT` execution control
+- `COMMITTED` only after successful execution, never before
+- an append-only evidence ledger with hash-chain verification and fail-hard append semantics
+- a centralized `PLC Adapter` so field I/O is not scattered across services
+- a live operational dashboard backed by real services, database state, and logs
+- dataset-driven mock E2E and live E2E evaluation suites
+
+## Why This Repository Is Different
+
+PCAG combines three concerns that are often separated in practice:
+
+| Concern | Typical Gap | PCAG Response |
 | --- | --- | --- |
-| Gateway Core | 8000 | 전체 파이프라인 오케스트레이션 |
-| Safety Cluster | 8001 | `pcag-isaac` 환경에서 별도 실행 |
-| Policy Store | 8002 | 활성 정책/자산 프로필 조회 |
-| Sensor Gateway | 8003 | 자산 스냅샷 제공 |
-| OT Interface | 8004 | PREPARE/COMMIT/ABORT |
-| Evidence Ledger | 8005 | 증거 이벤트 체인 |
-| Policy Admin | 8006 | 정책 등록/활성화 |
-| PLC Adapter | 8007 | PLC/Modbus 단일 진입점 |
-| Dashboard | 8008 | 실시간 모니터링 |
+| Command semantics | The command is syntactically valid but operationally naive | Strict request contracts and policy-aware proof packages |
+| State-dependent safety | A command may be safe in one state and unsafe in another | Parallel Rules, CBF, and Simulation with consensus |
+| Execution semantics | A command can become unsafe between validation and actuation | `PREPARE`, `REVERIFY`, `COMMIT/ABORT`, and evidence-backed fail-closed behavior |
 
-내부 서비스 URL은 `localhost` 대신 `127.0.0.1` 기준으로 맞춘다.
+For paper-oriented readers, this is the key contribution of the repository.
+PCAG is not only "another safety classifier"; it is a deterministic execution gateway around AI-generated supervisory commands.
 
-## 현재 기준 문서
+## Architecture
 
-현재 구현을 가장 정확하게 설명하는 문서는 아래 4개다.
+The implementation is intentionally split across two Python environments:
 
-- [PCAG_최종_시스템_명세서.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_최종_시스템_명세서.md)
-- [PCAG_운영_Runbook.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_운영_Runbook.md)
-- [PCAG_개발완료_구현상태_검증보고서.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_개발완료_구현상태_검증보고서.md)
-- [PCAG_IJAMT_실험설계서.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_IJAMT_실험설계서.md)
+- `pcag` for the main runtime and field-facing services
+- `pcag-isaac` for the simulation stack and Isaac worker isolation
 
-과거 계획/분석 문서는 `plans/` 아래에 보존되어 있으며, 각 문서는 작성 시점의 계획 또는 분석 기록으로 취급하는 것이 맞다.
+### System Architecture
 
-## 빠른 시작
+```mermaid
+flowchart TB
+    classDef actor fill:#e0f2fe,stroke:#0369a1,color:#082f49,stroke-width:1px
+    classDef core fill:#ccfbf1,stroke:#0f766e,color:#134e4a,stroke-width:1px
+    classDef sim fill:#ffedd5,stroke:#c2410c,color:#7c2d12,stroke-width:1px
+    classDef data fill:#dbeafe,stroke:#1d4ed8,color:#1e3a8a,stroke-width:1px
+    classDef monitor fill:#ecfccb,stroke:#4d7c0f,color:#365314,stroke-width:1px
 
-### 1. DB 실행
+    Agent["AI Agent / Supervisory Planner"]:::actor
+    Operator["Operator / Researcher"]:::actor
+
+    subgraph MAIN["PCAG Main Runtime (pcag)"]
+        Gateway["Gateway Core<br/>:8000"]:::core
+        PolicyStore["Policy Store<br/>:8002"]:::core
+        PolicyAdmin["Policy Admin<br/>:8006"]:::core
+        SensorGateway["Sensor Gateway<br/>:8003"]:::core
+        OT["OT Interface<br/>:8004"]:::core
+        Evidence["Evidence Ledger<br/>:8005"]:::core
+        PLCAdapter["PLC Adapter<br/>:8007"]:::core
+        Dashboard["Dashboard<br/>:8008"]:::monitor
+    end
+
+    subgraph SIM["Simulation Runtime (pcag-isaac)"]
+        Safety["Safety Cluster<br/>:8001"]:::sim
+        IsaacWorker["Isaac Sim Worker"]:::sim
+    end
+
+    subgraph FIELD["Data and Field Layer"]
+        Postgres["PostgreSQL"]:::data
+        PLC["PLC / Modbus / ModRSsim2"]:::data
+        IsaacWorld["Isaac Sim Robot World"]:::data
+    end
+
+    Agent -->|"control request + proof package"| Gateway
+
+    Gateway -->|"active policy lookup"| PolicyStore
+    Gateway -->|"latest snapshot + hash"| SensorGateway
+    Gateway -->|"parallel safety validation"| Safety
+    Gateway -->|"prepare / commit / abort"| OT
+    Gateway -->|"append / query evidence"| Evidence
+
+    PolicyAdmin -->|"register / activate versions"| PolicyStore
+
+    SensorGateway -->|"field read"| PLCAdapter
+    OT -->|"field write"| PLCAdapter
+    PLCAdapter --> PLC
+
+    Safety -->|"proxy request"| IsaacWorker
+    IsaacWorker --> IsaacWorld
+
+    PolicyStore --> Postgres
+    Evidence --> Postgres
+    OT --> Postgres
+    Dashboard -->|"health, logs, snapshots, summaries"| Gateway
+    Dashboard -->|"recent transactions and evidence"| Postgres
+    Dashboard --> Operator
+```
+
+### Execution Model
+
+The request path is intentionally deterministic and fail-closed.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant A as Agent
+    participant G as Gateway
+    participant P as Policy Store
+    participant S as Sensor Gateway
+    participant C as Safety Cluster
+    participant O as OT Interface
+    participant E as Evidence Ledger
+
+    A->>G: Control request + Proof Package
+    G->>E: RECEIVED
+    G->>G: Schema validation
+    G->>E: SCHEMA_VALIDATED
+    G->>P: Active policy / asset profile
+    G->>S: Latest snapshot + hash
+    G->>G: L1 integrity checks
+
+    alt Integrity failed
+        G->>E: INTEGRITY_REJECTED
+        G-->>A: REJECTED
+    else Integrity passed
+        G->>E: INTEGRITY_PASSED
+        G->>C: Parallel Rules + CBF + Simulation
+        alt Safety unsafe
+            G->>E: SAFETY_UNSAFE
+            G-->>A: UNSAFE
+        else Safety passed
+            G->>E: SAFETY_PASSED
+            G->>O: PREPARE
+            alt Lock denied
+                G->>E: PREPARE_LOCK_DENIED
+                G-->>A: ABORTED
+            else Lock granted
+                G->>E: PREPARE_LOCK_GRANTED
+                G->>S: REVERIFY snapshot + hash
+                alt Reverify failed
+                    G->>E: REVERIFY_FAILED
+                    G->>O: ABORT
+                    G-->>A: ABORTED
+                else Reverify passed
+                    G->>E: REVERIFY_PASSED
+                    G->>O: COMMIT
+                    alt Execution success
+                        G->>E: COMMIT_ACK
+                        G-->>A: COMMITTED
+                    else Execution failure
+                        G->>E: COMMIT_FAILED
+                        G-->>A: ABORTED or ERROR
+                    end
+                end
+            end
+        end
+    end
+```
+
+## Services
+
+| Service | Port | Responsibility |
+| --- | --- | --- |
+| `gateway` | 8000 | Orchestrates the full safety pipeline |
+| `safety_cluster` | 8001 | Runs Rules, CBF, Simulation, and consensus |
+| `policy_store` | 8002 | Serves active policy versions and asset profiles |
+| `sensor_gateway` | 8003 | Provides live asset snapshots and hashes |
+| `ot_interface` | 8004 | Handles `PREPARE`, `COMMIT`, `ABORT`, and `E-Stop` |
+| `evidence_ledger` | 8005 | Stores append-only evidence events |
+| `policy_admin` | 8006 | Registers and activates policy versions |
+| `plc_adapter` | 8007 | Centralized field I/O path for PLC/Modbus assets |
+| `dashboard` | 8008 | Live operational monitoring UI and snapshot APIs |
+
+## Reference Scenarios
+
+The reference implementation currently includes three scenario families:
+
+| Scenario | Asset | Main Backend | Intended Role |
+| --- | --- | --- | --- |
+| Chemical process supervision | `reactor_01` | ODE-based simulation | deterministic process safety benchmark |
+| Robot-arm supervision | `robot_arm_01` | Isaac Sim | high-fidelity digital-twin validation |
+| AGV supervision | `agv_01` | discrete-event simulation | cell logistics and route safety |
+
+For manufacturing-paper positioning, the strongest story is the robot-arm + AGV + PLC manufacturing-cell path.
+
+## Repository Layout
+
+```text
+pcag/
+  apps/        # FastAPI microservices
+  core/        # contracts, models, shared logic, middleware
+  plugins/     # executors, sensors, simulation backends
+config/        # service URLs and asset mappings
+scripts/       # service runners, seeding, diagnostics
+tests/         # unit, integration, mock E2E, live E2E
+docker/        # database stack
+```
+
+Additional module-level documentation is available in:
+
+- [`config/README.md`](config/README.md)
+- [`pcag/README.md`](pcag/README.md)
+- [`scripts/README.md`](scripts/README.md)
+- [`tests/README.md`](tests/README.md)
+
+## Runtime Environments
+
+PCAG uses two Python environments by design.
+
+### `pcag`
+
+Main runtime for:
+
+- Gateway
+- Policy Store
+- Sensor Gateway
+- OT Interface
+- Evidence Ledger
+- Policy Admin
+- PLC Adapter
+- Dashboard
+
+### `pcag-isaac`
+
+Separate runtime for:
+
+- Safety Cluster
+- Isaac Sim worker
+
+This split is intentional.
+Isaac Sim has runtime constraints that are easier to manage when isolated from the rest of the stack.
+
+## Prerequisites
+
+- Python 3.13 for the main runtime
+- PostgreSQL 16
+- Docker Desktop or Docker Engine for local database startup
+- NVIDIA Isaac Sim 4.5 for the robot simulation path
+- Windows PowerShell commands are shown below because that is the primary development environment in this repository
+
+## Installation
+
+### Main environment
+
+```powershell
+conda create -n pcag python=3.13 -y
+conda activate pcag
+pip install -e .
+pip install fastapi uvicorn httpx sqlalchemy numpy scipy simpy python-dotenv
+```
+
+### Isaac environment
+
+```powershell
+conda create -n pcag-isaac python=3.10 -y
+conda activate pcag-isaac
+pip install -r requirements-isaac.txt
+```
+
+> [!NOTE]
+> The Isaac environment assumes Isaac Sim libraries are already available in that environment. The repository uses `pyproject.toml` for the minimal package definition, while some operational dependencies are still installed explicitly for local service execution.
+
+## Quick Start
+
+### 1. Start PostgreSQL
 
 ```powershell
 docker compose -f docker/docker-compose.db.yml up -d
 ```
 
-### 2. `Safety Cluster` 실행 (`pcag-isaac`)
+### 2. Start the Safety Cluster in `pcag-isaac`
 
 ```powershell
 conda activate pcag-isaac
 python scripts/start_safety_cluster.py
 ```
 
-### 3. 나머지 서비스 실행 (`pcag`)
+### 3. Start the remaining services in `pcag`
 
 ```powershell
 conda activate pcag
 python scripts/start_services.py
 ```
 
-### 4. 정책 시드
+### 4. Seed the initial policy set
 
 ```powershell
 python scripts/seed_policy.py
 ```
 
-### 5. live E2E 실행
+### 5. Open the service docs and dashboard
+
+- Gateway docs: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- Dashboard: [http://127.0.0.1:8008/](http://127.0.0.1:8008/)
+
+## Running Evaluations
+
+### Mock document-conformance evaluation
+
+This suite validates gateway semantics without requiring the full live stack.
+
+```powershell
+python tests/e2e/run_document_conformance_eval.py
+```
+
+### Live gateway evaluation
+
+This suite sends a single request to the live Gateway and lets the real services execute the rest of the pipeline.
 
 ```powershell
 python tests/e2e/run_live_gateway_eval.py
+```
+
+### Repeated live evaluation
+
+Use this to estimate stability, pass rate, and loss rate across repeated runs.
+
+```powershell
 python tests/e2e/run_live_gateway_eval_repeat.py --runs 10
 ```
 
-### 6. 대시보드 확인
+See also:
+
+- [`tests/e2e/README_document_conformance_eval.md`](tests/e2e/README_document_conformance_eval.md)
+- [`tests/e2e/README_live_gateway_eval.md`](tests/e2e/README_live_gateway_eval.md)
+
+## Dashboard
+
+The repository includes a live monitoring dashboard backed by real services, PostgreSQL state, operational logs, and evaluation outputs.
+
+Main UI:
 
 - [http://127.0.0.1:8008/](http://127.0.0.1:8008/)
 
-## 디렉터리 안내
+Main endpoints:
 
-- [config/README.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/config/README.md)
-- [pcag/README.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/README.md)
-- [scripts/README.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/scripts/README.md)
-- [tests/README.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/README.md)
+- `GET /v1/health`
+- `GET /v1/snapshot`
+- `GET /v1/stream`
 
-## 검증 메모
+The dashboard is not a static mock.
+It reads:
 
-현재 핵심 회귀 기준은 아래 두 개다.
+- service health
+- recent transactions
+- evidence chains
+- PLC adapter state
+- asset snapshots
+- live evaluation summaries
+- operational logs
 
-- mock 기반 문서정합성 검증: [README_document_conformance_eval.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/README_document_conformance_eval.md)
-- 실제 서버 기반 live E2E: [README_live_gateway_eval.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/tests/e2e/README_live_gateway_eval.md)
+## Example Control Request
+
+PCAG is designed so that clients submit a request with a `proof_package`.
+A minimal example looks like this:
+
+```json
+{
+  "transaction_id": "demo-tx-001",
+  "asset_id": "reactor_01",
+  "proof_package": {
+    "schema_version": "1.0",
+    "policy_version_id": "v2025-03-06",
+    "timestamp_ms": 1773718800000,
+    "sensor_snapshot_hash": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "sensor_reliability_index": 0.95,
+    "action_sequence": [
+      {
+        "action_type": "set_heater_output",
+        "params": {
+          "value": 60
+        }
+      }
+    ],
+    "safety_verification_summary": {
+      "checks": [],
+      "assumptions": [],
+      "warnings": []
+    }
+  }
+}
+```
+
+In practice, the live dataset runners generate many of the dynamic fields automatically from the running system.
+
+## Verification Focus
+
+The repository currently emphasizes two complementary validation modes:
+
+- **mock semantic conformance**
+  - verifies reject, unsafe, abort, and evidence behavior against expected gateway semantics
+- **live gateway execution**
+  - validates the real service stack with actual HTTP interfaces and runtime state
+
+This keeps the project useful both as:
+
+- a research artifact for deterministic safety execution
+- an operational prototype that can be run end-to-end
+
+## Notes for Public Readers
+
+- internal design notes and paper-planning documents are not required to understand the tracked repository
+- the source tree is the primary reference artifact
+- some local-only planning materials may exist outside the public repository structure
+
+## License
+
+This project is released under the [MIT License](LICENSE).

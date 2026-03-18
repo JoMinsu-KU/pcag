@@ -1,38 +1,93 @@
-# PCAG 패키지 개요
+# PCAG Package Guide
 
-`pcag/`는 PCAG 시스템의 실제 구현 코드가 들어 있는 핵심 패키지다.
+The `pcag/` package contains the implementation of the PCAG system itself.
+It is the core software artifact of the repository and houses the service applications, shared contracts, validation logic, database models, and runtime plugins.
 
-## 현재 구성
+If the top-level [`README.md`](../README.md) explains what PCAG is, this document explains where the implementation lives and how the package is organized.
 
-- `apps/`
-  - 마이크로서비스 구현
-  - Gateway, Safety Cluster, Sensor Gateway, OT Interface, Policy Store, Policy Admin, Evidence Ledger, PLC Adapter, Dashboard
-- `core/`
-  - 계약, 데이터베이스 모델, 로깅, 공통 서비스 로직, consensus, integrity, rules, CBF 등
-- `plugins/`
-  - executor, sensor, simulation backend 구현
+## Package Structure
 
-## 현재 구조의 의미
+| Directory | Role |
+| --- | --- |
+| [`apps/`](apps/README.md) | FastAPI microservices and service entrypoints |
+| [`core/`](core/README.md) | Shared contracts, data models, middleware, validators, consensus, and infrastructure utilities |
+| [`plugins/`](plugins/README.md) | Concrete executor, sensor, and simulation backend implementations |
 
-PCAG는 단순히 검증기 묶음이 아니라 아래 층을 모두 가진다.
+## Architectural Layers
 
-1. 요청 계약 층
-2. 무결성 검증 층
-3. 병렬 안전 검증 층
-4. 트랜잭션형 실행 제어 층
-5. 증거 기록 층
-6. 현장 I/O 중앙화 층
-7. 운영 모니터링 층
+The package is intentionally layered.
 
-즉 `pcag/` 패키지는 "검증 로직"뿐 아니라 실제 운영 가능한 안전 실행 시스템 전체를 담고 있다.
+### 1. Application layer
 
-## 현재 기준 문서
+The service applications in [`apps/`](apps/README.md) expose external HTTP interfaces and orchestrate runtime behavior.
+Examples:
 
-- [PCAG_최종_시스템_명세서.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_최종_시스템_명세서.md)
-- [PCAG_운영_Runbook.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_운영_Runbook.md)
+- Gateway
+- Safety Cluster
+- Sensor Gateway
+- OT Interface
+- Evidence Ledger
+- PLC Adapter
+- Dashboard
 
-## 관련 디렉터리
+### 2. Shared logic layer
 
-- [apps/README.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/apps/README.md)
-- [core/README.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/core/README.md)
-- [plugins/README.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/pcag/plugins/README.md)
+The reusable logic in [`core/`](core/README.md) holds:
+
+- request and response contracts
+- database access models
+- validation engines
+- consensus logic
+- canonicalization and hashing utilities
+- logging middleware
+
+This is where the system semantics are defined.
+
+### 3. Backend implementation layer
+
+The implementations in [`plugins/`](plugins/README.md) translate abstract interfaces into concrete backends:
+
+- PLC and Modbus execution
+- Isaac-based sensor reads
+- ODE and discrete-event simulation
+- PLC Adapter-backed field I/O
+
+## What Lives Here Conceptually
+
+The `pcag/` package is not just a collection of validators.
+It implements an end-to-end deterministic execution stack:
+
+1. request contract handling
+2. integrity validation
+3. parallel safety validation
+4. transactional execution control
+5. evidence-backed auditability
+6. centralized field I/O
+7. operational monitoring
+
+That is the main reason the repository is more than a paper prototype.
+
+## Reading Guide
+
+If you want to understand the system from code instead of from papers, a good reading order is:
+
+1. [`../README.md`](../README.md)
+2. [`apps/gateway/routes.py`](apps/gateway/routes.py)
+3. [`core/services/integrity_service.py`](core/services/integrity_service.py)
+4. [`apps/safety_cluster/service.py`](apps/safety_cluster/service.py)
+5. [`core/services/consensus_engine.py`](core/services/consensus_engine.py)
+6. [`apps/ot_interface/routes.py`](apps/ot_interface/routes.py)
+7. [`apps/evidence_ledger/routes.py`](apps/evidence_ledger/routes.py)
+8. [`apps/plc_adapter/service.py`](apps/plc_adapter/service.py)
+
+## Recommended Module Docs
+
+- [`apps/README.md`](apps/README.md)
+- [`core/README.md`](core/README.md)
+- [`plugins/README.md`](plugins/README.md)
+
+## Notes for Contributors
+
+- Most runtime semantics belong in `core`, not directly in service routes.
+- Service routes should orchestrate decisions, not duplicate validator logic.
+- Plugin code should stay backend-focused and avoid absorbing policy semantics that belong to `core`.

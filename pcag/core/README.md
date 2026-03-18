@@ -1,41 +1,96 @@
-# PCAG 공통 코어 안내
+# Core Package Guide
 
-`pcag/core/`는 서비스들이 공유하는 계약, 공통 로직, 데이터 모델, 미들웨어를 담고 있다.
+The `pcag/core/` directory contains the shared semantics of the system.
+If `pcag/apps/` defines the service boundaries, `pcag/core/` defines the contracts, rules, validators, and utilities that make the architecture deterministic and consistent.
 
-## 주요 하위 구성
+This is the part of the repository that most directly captures the meaning of PCAG.
 
-- `contracts/`
-  - Gateway, OT, Evidence, Policy, Proof Package, PLC Adapter 등 API 계약
-- `database/`
-  - SQLAlchemy 모델과 DB 엔진
-- `middleware/`
-  - API key 인증, 사람 친화형 운영 로그
-- `models/`
-  - 정책/검증 관련 내부 모델
-- `ports/`
-  - sensor / executor / simulation backend 인터페이스
-- `services/`
-  - `integrity_service.py`
-  - `rules_validator.py`
-  - `cbf_validator.py`
-  - `consensus_engine.py`
-  - `alternative_action.py`
-- `utils/`
-  - hashing, canonicalization, config loading, logging config
+## Subpackages
 
-## 현재 코어에서 중요한 변경점
+| Directory | Purpose |
+| --- | --- |
+| `contracts/` | API and cross-service request/response models |
+| `database/` | SQLAlchemy models and engine setup |
+| `middleware/` | API-key enforcement and structured logging middleware |
+| `models/` | Shared domain data structures |
+| `ports/` | Abstract interfaces for sensors, executors, and simulation backends |
+| `services/` | Integrity, Rules, CBF, consensus, alternative actions, and other reusable logic |
+| `utils/` | Hashing, canonicalization, config loading, and logging utilities |
 
-현재 구현 기준으로 아래 항목이 반영돼 있다.
+## Most Important Files
 
-- `proof_package.py` 계약 분리
-- `gateway` 응답에 `alternative_actions` 포함 가능
-- L1 `sensor_snapshot_hash` mismatch reject
-- 운영 로그용 사람 친화 포맷 + 색상 + module/source 표시
-- evidence 응답에 `created_at` 포함
+### Contracts
 
-## 참고
+- [`contracts/gateway.py`](contracts/gateway.py)
+  - Gateway request and response models
+- [`contracts/proof_package.py`](contracts/proof_package.py)
+  - The core request proof structure
+- [`contracts/ot_interface.py`](contracts/ot_interface.py)
+  - Transactional execution contracts
+- [`contracts/evidence.py`](contracts/evidence.py)
+  - Evidence append and query models
+- [`contracts/plc_adapter.py`](contracts/plc_adapter.py)
+  - PLC Adapter request and health models
 
-코어의 실제 의미와 현재 계약 기준은 아래 문서를 우선 본다.
+### Validation and decision logic
 
-- [PCAG_최종_시스템_명세서.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_최종_시스템_명세서.md)
-- [PCAG_DSG_정합성_보완계획.md](C:/Users/choiLee/Dropbox/경남대학교/AI%20agent%20기반으로%20물리%20환경%20제어/plans/PCAG_DSG_정합성_보완계획.md)
+- [`services/integrity_service.py`](services/integrity_service.py)
+  - policy version, timestamp, divergence, and sensor hash checks
+- [`services/rules_validator.py`](services/rules_validator.py)
+  - discrete rules and forbidden combinations
+- [`services/cbf_validator.py`](services/cbf_validator.py)
+  - state projection and barrier checking
+- [`services/consensus_engine.py`](services/consensus_engine.py)
+  - SIL-aware consensus logic
+- [`services/alternative_action.py`](services/alternative_action.py)
+  - conservative safe-state-based alternative action generation
+
+### Shared infrastructure
+
+- [`utils/hash_utils.py`](utils/hash_utils.py)
+  - hash-chain support and canonical hashing
+- [`utils/config_loader.py`](utils/config_loader.py)
+  - YAML loading for runtime config
+- [`utils/logging_config.py`](utils/logging_config.py)
+  - human-readable colored logging configuration
+- [`middleware/logging_middleware.py`](middleware/logging_middleware.py)
+  - access-log summarization and request context binding
+
+## What Changed in the Current Implementation
+
+The current implementation includes several semantics that are especially important for papers and audits:
+
+- `sensor_snapshot_hash` mismatch is now a real L1 reject condition
+- Gateway responses can include `alternative_actions`
+- evidence responses include `created_at`
+- logging is human-readable, service-aware, and source-aware
+- commit semantics are fail-closed and only finalize after successful execution
+
+## Design Intent
+
+The guiding rule for this package is:
+
+> system meaning should live in `core`, not be duplicated ad hoc inside service routes.
+
+That means:
+
+- validation semantics belong in `services/`
+- request meaning belongs in `contracts/`
+- backend-neutral abstractions belong in `ports/`
+- shared infrastructure belongs in `utils/` and `middleware/`
+
+## Good Entry Points for Reviewers
+
+If you want to understand the semantics quickly, start with:
+
+1. [`contracts/proof_package.py`](contracts/proof_package.py)
+2. [`services/integrity_service.py`](services/integrity_service.py)
+3. [`services/consensus_engine.py`](services/consensus_engine.py)
+4. [`services/rules_validator.py`](services/rules_validator.py)
+5. [`services/cbf_validator.py`](services/cbf_validator.py)
+
+## Related Documentation
+
+- [`../README.md`](../README.md)
+- [`../apps/README.md`](../apps/README.md)
+- [`../plugins/README.md`](../plugins/README.md)
