@@ -1,0 +1,273 @@
+{
+  "spec_id": "pcag-single-asset-family-expansion-v1",
+  "status": "phase_a_robot_generation_target_completed",
+  "scope_rule": {
+    "single_primary_asset_per_request": true,
+    "background_environment_expansion_allowed": true,
+    "gateway_contract_change_allowed": false,
+    "ot_transaction_contract_change_allowed": false,
+    "cross_asset_commit_in_scope": false
+  },
+  "target_counts": {
+    "core_current_total": 116,
+    "phase_a_expected_total_range": [280, 320],
+    "phase_b_expected_total_range": [500, 560]
+  },
+  "families": [
+    {
+      "asset_family": "robot",
+      "family_id": "narrow_clearance_approach",
+      "change_level": "dataset_only",
+      "current_runtime_reuse": [
+        "robot_pick_place_cell",
+        "robot_narrow_clearance_cell"
+      ],
+      "implementation_status": "family_expanded_release_generated_live_family_validated",
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "current_generated_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "fixture gap width",
+        "approach direction",
+        "joint_speed_scale"
+      ],
+      "unsafe_mutations": [
+        "fixture offset toward arm path",
+        "end-effector probe boundary crossing",
+        "wrist-angle perturbation"
+      ],
+      "fault_reuse": true
+    },
+    {
+      "asset_family": "robot",
+      "family_id": "fixture_insertion",
+      "change_level": "plugin_light",
+      "current_runtime_reuse": [
+        "robot_pick_place_cell",
+        "robot_fixture_insertion_cell"
+      ],
+      "implementation_status": "expanded_release_generated_representative_smoke_validated",
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "current_generated_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "insertion corridor",
+        "orientation alignment",
+        "depth target"
+      ],
+      "unsafe_mutations": [
+        "depth overshoot",
+        "orientation mismatch",
+        "side-wall contact"
+      ],
+      "fault_reuse": true
+    },
+    {
+      "asset_family": "robot",
+      "family_id": "conveyor_timing_pick",
+      "change_level": "dataset_only",
+      "current_runtime_reuse": [
+        "robot_stack_cell",
+        "robot_pick_place_cell"
+      ],
+      "implementation_status": "expanded_release_generated_representative_smoke_validated",
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "current_generated_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "initial pose timing offset",
+        "pickup window",
+        "goal tolerance"
+      ],
+      "unsafe_mutations": [
+        "late approach stretch",
+        "boundary-reaching wrist motion",
+        "pickup-zone overshoot"
+      ],
+      "fault_reuse": true
+    },
+    {
+      "asset_family": "agv",
+      "family_id": "merge_bottleneck",
+      "change_level": "dataset_only",
+      "current_runtime_reuse": [
+        "agv_transfer_map"
+      ],
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "release stagger",
+        "following distance",
+        "background traffic path"
+      ],
+      "unsafe_mutations": [
+        "simultaneous merge attempt",
+        "yield omission",
+        "too-short following gap"
+      ],
+      "fault_reuse": true
+    },
+    {
+      "asset_family": "agv",
+      "family_id": "single_lane_corridor",
+      "change_level": "dataset_only",
+      "current_runtime_reuse": [
+        "agv_shared_zone_map"
+      ],
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "yield timing",
+        "corridor entry offset",
+        "two-AGV vs three-AGV occupancy"
+      ],
+      "unsafe_mutations": [
+        "head-on entry",
+        "corridor deadlock",
+        "edge-swap conflict"
+      ],
+      "fault_reuse": true
+    },
+    {
+      "asset_family": "agv",
+      "family_id": "dock_occupancy_conflict",
+      "change_level": "plugin_light",
+      "current_runtime_reuse": [
+        "agv_docking_map"
+      ],
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "dock release timing",
+        "clearance zone size",
+        "neighbor departure path"
+      ],
+      "unsafe_mutations": [
+        "arrival during occupancy",
+        "clearance-zone invasion",
+        "dock-mouth race"
+      ],
+      "fault_reuse": true
+    },
+    {
+      "asset_family": "process",
+      "family_id": "startup_ramp",
+      "change_level": "dataset_only",
+      "current_runtime_reuse": [
+        "reactor_nominal_profile",
+        "reactor_high_heat_profile"
+      ],
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "initial temperature",
+        "initial pressure",
+        "ramp aggressiveness"
+      ],
+      "unsafe_mutations": [
+        "heater overshoot",
+        "late cooling",
+        "transient pressure excursion"
+      ],
+      "fault_reuse": true
+    },
+    {
+      "asset_family": "process",
+      "family_id": "cooling_failure_management",
+      "change_level": "plugin_light",
+      "current_runtime_reuse": [
+        "reactor_high_heat_profile",
+        "reactor_disturbance_profile"
+      ],
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "cooling effectiveness",
+        "heater fallback sequence",
+        "actuator lag"
+      ],
+      "unsafe_mutations": [
+        "stuck cooling valve",
+        "reduced cooling effectiveness",
+        "late heater reduction"
+      ],
+      "fault_reuse": true
+    },
+    {
+      "asset_family": "process",
+      "family_id": "pressure_relief_margin",
+      "change_level": "dataset_only",
+      "current_runtime_reuse": [
+        "reactor_nominal_profile",
+        "reactor_disturbance_profile"
+      ],
+      "recommended_counts": {
+        "nominal": 8,
+        "unsafe": 12,
+        "fault": 8
+      },
+      "nominal_axes": [
+        "pressure upper-band target",
+        "coupled heater/cooling trim",
+        "operating envelope margin"
+      ],
+      "unsafe_mutations": [
+        "pressure overshoot",
+        "coupled temperature-pressure violation",
+        "relief-margin depletion"
+      ],
+      "fault_reuse": true
+    }
+  ],
+  "phase_order": {
+    "phase_a": [
+      "narrow_clearance_approach",
+      "conveyor_timing_pick",
+      "merge_bottleneck",
+      "single_lane_corridor",
+      "startup_ramp",
+      "pressure_relief_margin"
+    ],
+    "phase_b": [
+      "fixture_insertion",
+      "dock_occupancy_conflict",
+      "cooling_failure_management"
+    ]
+  }
+}

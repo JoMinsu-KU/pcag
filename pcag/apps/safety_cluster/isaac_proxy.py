@@ -55,7 +55,7 @@ class IsaacSimProxy(ISimulationBackend):
         self._proc = ctx.Process(
             target=self._worker_entry,
             args=(self._req_q, self._res_q, config),
-            daemon=True,
+            daemon=False,
         )
         self._proc.start()
 
@@ -134,6 +134,28 @@ class IsaacSimProxy(ISimulationBackend):
 
         logger.error("GET_STATE failed: %s", message.get("error"))
         return {}
+
+    def preload_runtime(self, runtime_context: dict, initial_state: dict | None = None) -> dict:
+        """Load a benchmark runtime shell and optionally apply an initial robot state."""
+        if not self.is_initialized():
+            raise RuntimeError("Isaac Sim Worker not available")
+
+        job_id = uuid.uuid4().hex
+        message = self._round_trip(
+            request={
+                "type": "PRELOAD_RUNTIME",
+                "job_id": job_id,
+                "runtime_context": runtime_context,
+                "initial_state": initial_state or {},
+            },
+            timeout_s=max(self._timeout_s, 60.0),
+        )
+
+        if message.get("job_id") != job_id:
+            raise RuntimeError("Worker returned mismatched job_id for PRELOAD_RUNTIME")
+        if not message.get("ok"):
+            raise RuntimeError(message.get("error") or "Runtime preload failed")
+        return message.get("result") or {}
 
     def shutdown(self) -> None:
         """Stop the worker process."""

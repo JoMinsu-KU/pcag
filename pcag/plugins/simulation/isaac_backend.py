@@ -25,6 +25,7 @@ import logging
 import threading
 import numpy as np
 from pcag.core.ports.simulation_backend import ISimulationBackend
+from pcag.plugins.simulation.isaac_collision import evaluate_collision_probe, get_end_effector_position
 
 logger = logging.getLogger(__name__)
 
@@ -260,12 +261,17 @@ class IsaacSimBackend(ISimulationBackend):
         # 제약 조건 추출
         ruleset = constraints.get("ruleset", [])
         joint_limits = constraints.get("joint_limits", {})
+        collision_config = constraints.get("collision") or {}
         
         # 궤적 기록
         trajectory = []
         violations = []
         first_violation_step = None
         collision_detected = False
+        collision_probe_unavailable = False
+        collided_object_ids = set()
+        collision_violation_recorded = False
+        collision_probe_violation_recorded = False
         min_clearance = float('inf')
         max_force = 0.0
         
@@ -334,6 +340,37 @@ class IsaacSimBackend(ISimulationBackend):
                 
                 for sim_step in range(steps_per_action):
                     self._world.step(render=not headless)
+                    if collision_config.get("enabled"):
+                        collision_eval = evaluate_collision_probe(
+                            get_end_effector_position(self._robot),
+                            collision_config,
+                        )
+                        if collision_eval["probe_unavailable"] and not collision_probe_unavailable:
+                            collision_probe_unavailable = True
+                            if first_violation_step is None:
+                                first_violation_step = step_idx
+                            if not collision_probe_violation_recorded:
+                                violations.append({
+                                    "constraint": "collision_probe_unavailable",
+                                    "step": step_idx,
+                                    "check_type": "sim_collision",
+                                    "detail": "Collision policy is enabled but end-effector pose is unavailable.",
+                                })
+                                collision_probe_violation_recorded = True
+                        if collision_eval["collision_detected"]:
+                            collision_detected = True
+                            collided_object_ids.update(collision_eval["collided_object_ids"])
+                            if first_violation_step is None:
+                                first_violation_step = step_idx
+                            if not collision_violation_recorded:
+                                violations.append({
+                                    "constraint": "fixture_collision",
+                                    "step": step_idx,
+                                    "check_type": "sim_collision",
+                                    "objects": collision_eval["collided_object_ids"],
+                                    "probe_radius_m": collision_eval["probe_radius_m"],
+                                })
+                                collision_violation_recorded = True
                 
                 # 실제 결과 상태 읽기
                 result_pos = self._robot.get_joint_positions()
@@ -372,7 +409,11 @@ class IsaacSimBackend(ISimulationBackend):
                     return self._make_result(
                         "INDETERMINATE", trajectory, violations, first_violation_step,
                         start_time, collision_detected, min_clearance, max_force,
-                        {"reason": f"Simulation timeout: {elapsed_ms:.0f}ms > {timeout_ms}ms"}
+                        {
+                            "reason": f"Simulation timeout: {elapsed_ms:.0f}ms > {timeout_ms}ms",
+                            "collision_objects": sorted(collided_object_ids),
+                            "collision_probe_unavailable": collision_probe_unavailable,
+                        }
                     )
             
         except ValueError:
@@ -383,7 +424,11 @@ class IsaacSimBackend(ISimulationBackend):
             return self._make_result(
                 "INDETERMINATE", trajectory, violations, first_violation_step,
                 start_time, collision_detected, min_clearance, max_force,
-                {"reason": error_msg}
+                {
+                    "reason": error_msg,
+                    "collision_objects": sorted(collided_object_ids),
+                    "collision_probe_unavailable": collision_probe_unavailable,
+                }
             )
         
         # 최종 판정
@@ -391,7 +436,14 @@ class IsaacSimBackend(ISimulationBackend):
         
         return self._make_result(
             verdict, trajectory, violations, first_violation_step,
-            start_time, collision_detected, min_clearance, max_force, {}
+            start_time,
+            collision_detected,
+            min_clearance,
+            max_force,
+            {
+                "collision_objects": sorted(collided_object_ids),
+                "collision_probe_unavailable": collision_probe_unavailable,
+            },
         )
     
     def _reload_scene(self, scene_path: str) -> None:
@@ -559,7 +611,8 @@ class IsaacSimBackend(ISimulationBackend):
                 "min_clearance_m": round(min_clearance, 4) if min_clearance != float('inf') else None,
                 "max_force_N": round(max_force, 4) if max_force > 0 else None,
                 "collision_detected": collision_detected,
-                "collision_objects": [],
+                "collision_objects": extra.pop("collision_objects", []),
+                "collision_probe_unavailable": extra.pop("collision_probe_unavailable", False),
                 "joint_limit_exceeded": any(
                     v.get("constraint", "").endswith("_limit") or v.get("constraint") == "command_divergence"
                     for v in violations

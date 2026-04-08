@@ -1,0 +1,43 @@
+{
+  "release_id": "integrated_benchmark_release_v2",
+  "benchmark_version": "v2.0",
+  "source_releases": {
+    "robot": "tests/benchmarks/pcag_ijamt_benchmark/releases/robot_source_release_v4/all_cases.json",
+    "agv": "tests/benchmarks/pcag_ijamt_benchmark/releases/agv_source_release_v3/all_cases.json",
+    "process": "tests/benchmarks/pcag_ijamt_benchmark/releases/process_source_release_v2/all_cases.json"
+  },
+  "case_counts": {
+    "total": 368,
+    "nominal": 110,
+    "unsafe": 150,
+    "fault": 108
+  },
+  "case_counts_by_asset": {
+    "robot_arm_01": 120,
+    "agv_01": 128,
+    "reactor_01": 120
+  },
+  "case_counts_by_scenario_family": {
+    "robot_manipulation": 120,
+    "agv_logistics": 128,
+    "process_interlock": 120
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 110,
+    "UNSAFE": 150,
+    "REJECTED": 55,
+    "ABORTED": 38,
+    "ERROR": 15
+  },
+  "case_counts_by_source_release": {
+    "robot": 120,
+    "agv": 128,
+    "process": 120
+  },
+  "policy_profile": "pcag_benchmark_v1",
+  "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+  "notes": [
+    "This source-level integrated release is a non-destructive merge of the expanded robot v4, AGV v3, and process v2 source releases.",
+    "Per-case provenance and source release identity are preserved inside each case."
+  ]
+}

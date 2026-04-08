@@ -24,6 +24,7 @@ class EvidenceAppendRequest(BaseModel):
         "REVERIFY_FAILED",
         "COMMIT_ACK",
         "COMMIT_TIMEOUT",
+        "COMMIT_FAILED",
         "COMMIT_ERROR",
         "ABORTED",
         "ESTOP_TRIGGERED",

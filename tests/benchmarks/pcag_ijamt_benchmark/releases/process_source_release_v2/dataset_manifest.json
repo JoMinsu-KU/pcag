@@ -1,0 +1,83 @@
+{
+  "release_id": "process_source_release_v2",
+  "benchmark_scope": "process_only",
+  "benchmark_version": "v2.0",
+  "release_date": "2026-03-20",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_process_source_release_v2.py",
+  "derived_from_release": "process_source_release_v1",
+  "case_counts": {
+    "nominal": 36,
+    "unsafe": 48,
+    "fault": 36,
+    "total": 120
+  },
+  "case_counts_by_source": {
+    "tep_process_curated": 120
+  },
+  "case_counts_by_runtime": {
+    "reactor_nominal_profile": 38,
+    "reactor_high_heat_profile": 43,
+    "reactor_disturbance_profile": 39
+  },
+  "case_counts_by_task_family": {
+    "normal_operating_envelope": 12,
+    "interlock_compatible_recovery": 12,
+    "manipulated_variable_constraint_compliance": 6,
+    "disturbance_inspired_supervision": 6,
+    "startup_ramp": 28,
+    "cooling_failure_management": 28,
+    "pressure_relief_margin": 28
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 36,
+    "UNSAFE": 48,
+    "REJECTED": 17,
+    "ABORTED": 15,
+    "ERROR": 4
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 36,
+    "SAFETY_UNSAFE": 48,
+    "INTEGRITY_REJECTED": 17,
+    "PREPARE_LOCK_DENIED": 4,
+    "REVERIFY_FAILED": 4,
+    "COMMIT_TIMEOUT": 4,
+    "COMMIT_FAILED": 3,
+    "COMMIT_ERROR": 4
+  },
+  "unsafe_case_counts_by_family": {
+    "manipulated_variable_constraint": 16,
+    "thermal_overshoot": 16,
+    "disturbance_pressure_amplification": 16
+  },
+  "covered_source_families": [
+    "cooling_failure_management",
+    "disturbance_inspired_supervision",
+    "interlock_compatible_recovery",
+    "manipulated_variable_constraint_compliance",
+    "normal_operating_envelope",
+    "pressure_relief_margin",
+    "startup_ramp"
+  ],
+  "outcome_coverage": {
+    "COMMITTED": true,
+    "UNSAFE": true,
+    "REJECTED": true,
+    "ABORTED": true,
+    "ERROR": true
+  },
+  "release_artifacts": [
+    "nominal_dataset.json",
+    "unsafe_dataset.json",
+    "fault_dataset.json",
+    "all_cases.json",
+    "dataset_manifest.json",
+    "qc_report.md"
+  ],
+  "normalization_rule": "All process cases are lowered to set_heater_output/set_cooling_valve and executed against canonical process profiles.",
+  "notes": [
+    "This release preserves the validated v1 process benchmark and adds startup_ramp, cooling_failure_management, and pressure_relief_margin families.",
+    "The Tennessee Eastman reference tree remains a frozen provenance anchor rather than a raw copied classification dataset.",
+    "The release is outcome-complete for process benchmark drafting: committed, unsafe, rejected, aborted, and infrastructure-error paths are all represented."
+  ]
+}

@@ -1,0 +1,7021 @@
+{
+  "generated_at": "2026-03-23 17:50:50",
+  "dataset_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\releases\\integrated_benchmark_release_v2\\pcag_execution_dataset.json",
+  "policy_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\policies\\pcag_benchmark_policy_v1.json",
+  "selection": {
+    "per_asset_nominal": 20,
+    "per_asset_unsafe": 20
+  },
+  "summary": {
+    "total_cases": 40,
+    "matches": 40,
+    "mismatches": 0,
+    "match_rate": 1.0
+  },
+  "asset_summary": [
+    {
+      "asset_id": "agv_01",
+      "total_cases": 40,
+      "matches": 40,
+      "mismatches": 0,
+      "match_rate": 1.0
+    }
+  ],
+  "status_summary": [
+    {
+      "expected_status": "COMMITTED",
+      "total_cases": 20,
+      "matches": 20,
+      "mismatches": 0,
+      "match_rate": 1.0
+    },
+    {
+      "expected_status": "UNSAFE",
+      "total_cases": 20,
+      "matches": 20,
+      "mismatches": 0,
+      "match_rate": 1.0
+    }
+  ],
+  "results": [
+    {
+      "case_id": "agv_nominal_warehouse_dock_occupancy_conflict_alignment_hold_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.118,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.118,
+          "steps_completed": 11
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 24,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_alignment_variant::alignment_hold",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_dock_occupancy_conflict_gate_to_dock_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.058,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.058,
+          "steps_completed": 3
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 8,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_alignment_variant::gate_to_dock",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_dock_occupancy_conflict_release_yield_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.052,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.052,
+          "steps_completed": 3
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                3
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                4
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                4
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 8,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_alignment_variant::release_yield",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_dock_occupancy_conflict_dock_to_clearance_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.036,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.036,
+          "steps_completed": 1
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 4,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_nominal::dock_to_clearance",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_dock_occupancy_conflict_queue_to_gate_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.075,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.075,
+          "steps_completed": 8
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 18,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_nominal::queue_to_gate",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_dock_occupancy_conflict_clear_crossing_gate_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.063,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.063,
+          "steps_completed": 5
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 12,
+          "violations": [],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::shared_zone_clear_crossing::clear_crossing_gate",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "shared_zone_clear_crossing"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_dock_occupancy_conflict_shared_hold_release_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.049,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.049,
+          "steps_completed": 3
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 8,
+          "violations": [],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::shared_zone_clear_crossing::shared_hold_release",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "shared_zone_clear_crossing"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_dock_occupancy_conflict_transfer_buffer_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.098,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.098,
+          "steps_completed": 10
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                3
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                3
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                3
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                4
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                6
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                11,
+                6
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                6
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                7
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 22,
+          "violations": [],
+          "grid_size": [
+            14,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::transfer_with_path_variant::transfer_buffer",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "transfer_with_path_variant"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_docking_gate_to_dock_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.05,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.05,
+          "steps_completed": 3
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 8,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_alignment_variant::dock_align",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_docking_alignment_hold_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.089,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.089,
+          "steps_completed": 11
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 24,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_alignment_variant::dock_approach",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_nominal_concurrent_docking_release_yield_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.047,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.047,
+          "steps_completed": 3
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                3
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                4
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                4
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 8,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_alignment_variant::dock_release_concurrent",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_docking_queue_to_gate_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.075,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.075,
+          "steps_completed": 8
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 18,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_nominal::dock_approach",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_docking_dock_to_clearance_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.037,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.037,
+          "steps_completed": 1
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 4,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_nominal::dock_release",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_nominal_concurrent_shared_zone_priority_sequence_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.071,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.071,
+          "steps_completed": 4
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_03_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_03_at",
+              "location": [
+                7,
+                4
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_03_at",
+              "location": [
+                7,
+                3
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_03_at",
+              "location": [
+                7,
+                2
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_03_at",
+              "location": [
+                7,
+                2
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 15,
+          "violations": [],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 3,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "intersection_conflict::shared_zone_clear_crossing::zone_priority_release",
+      "source_task_family": "intersection_conflict",
+      "shell_role": "shared_zone_clear_crossing"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_merge_bottleneck_queue_hold_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.074,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.074,
+          "steps_completed": 8
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 18,
+          "violations": [],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "merge_bottleneck::dock_nominal::queue_hold",
+      "source_task_family": "merge_bottleneck",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_merge_bottleneck_priority_hold_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.049,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.049,
+          "steps_completed": 3
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                10,
+                8
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 8,
+          "violations": [],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "merge_bottleneck::shared_zone_clear_crossing::priority_hold",
+      "source_task_family": "merge_bottleneck",
+      "shell_role": "shared_zone_clear_crossing"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_merge_bottleneck_staggered_crossing_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.071,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.071,
+          "steps_completed": 7
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                8
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                8
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                8
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                8
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                7
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                4
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 16,
+          "violations": [],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "merge_bottleneck::shared_zone_nominal::staggered_crossing",
+      "source_task_family": "merge_bottleneck",
+      "shell_role": "shared_zone_nominal"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_merge_bottleneck_entry_release_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.07,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.07,
+          "steps_completed": 7
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                1
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                1
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                1
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                1
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                1
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                2
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                3
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                3
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 16,
+          "violations": [],
+          "grid_size": [
+            14,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "merge_bottleneck::transfer_nominal::entry_release",
+      "source_task_family": "merge_bottleneck",
+      "shell_role": "transfer_nominal"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_merge_bottleneck_reverse_release_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.085,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.085,
+          "steps_completed": 10
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                7
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                6
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                11,
+                6
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                6
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                4
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                3
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                3
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                3
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                3
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 22,
+          "violations": [],
+          "grid_size": [
+            14,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "merge_bottleneck::transfer_nominal::reverse_release",
+      "source_task_family": "merge_bottleneck",
+      "shell_role": "transfer_nominal"
+    },
+    {
+      "case_id": "agv_nominal_warehouse_merge_bottleneck_buffer_lane_shift_001",
+      "asset_id": "agv_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.121,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 0.121,
+          "steps_completed": 17
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                1
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                1
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                1
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                1
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                1
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                2
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                3
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                3
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                3
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                3
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                3
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 12,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                4
+              ]
+            },
+            {
+              "t_step": 12,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 13,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                5
+              ]
+            },
+            {
+              "t_step": 13,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 14,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                6
+              ]
+            },
+            {
+              "t_step": 14,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 36,
+          "violations": [],
+          "grid_size": [
+            14,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "merge_bottleneck::transfer_with_path_variant::buffer_lane_shift",
+      "source_task_family": "merge_bottleneck",
+      "shell_role": "transfer_with_path_variant"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_alignment_hold_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.107,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 9,
+          "violated_constraint": "min_distance",
+          "latency_ms": 0.107,
+          "steps_completed": 9
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 20,
+          "violations": [
+            {
+              "step": 9,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  8,
+                  3
+                ],
+                "agv_02": [
+                  8,
+                  3
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_alignment_variant::alignment_hold_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_gate_dock_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.071,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 5,
+          "violated_constraint": "obstacle_collision",
+          "latency_ms": 0.071,
+          "steps_completed": 6
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                2
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                11,
+                2
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                2
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 14,
+          "violations": [
+            {
+              "step": 5,
+              "constraint": "obstacle_collision",
+              "agv_id": "agv_01",
+              "position": [
+                11,
+                2
+              ]
+            },
+            {
+              "step": 6,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                12,
+                2
+              ],
+              "grid_size": [
+                12,
+                8
+              ]
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_alignment_variant::gate_dock_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_release_edge_swap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.054,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 0,
+          "violated_constraint": "edge_swap_conflict",
+          "latency_ms": 0.054,
+          "steps_completed": 1
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                2
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "total_events": 4,
+          "violations": [
+            {
+              "step": 0,
+              "constraint": "edge_swap_conflict",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": {
+                  "current": [
+                    8,
+                    2
+                  ],
+                  "next": [
+                    9,
+                    2
+                  ]
+                },
+                "agv_02": {
+                  "current": [
+                    9,
+                    2
+                  ],
+                  "next": [
+                    8,
+                    2
+                  ]
+                }
+              }
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_alignment_variant::release_edge_swap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_dock_clearance_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.069,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 0,
+          "violated_constraint": "min_distance",
+          "latency_ms": 0.069,
+          "steps_completed": 3
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 8,
+          "violations": [
+            {
+              "step": 0,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  9,
+                  2
+                ],
+                "agv_02": [
+                  9,
+                  2
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            },
+            {
+              "step": 3,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  9,
+                  2
+                ],
+                "agv_02": [
+                  9,
+                  2
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_nominal::dock_clearance_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_queue_gate_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.098,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 7,
+          "violated_constraint": "obstacle_collision",
+          "latency_ms": 0.098,
+          "steps_completed": 10
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                6
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                6
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 22,
+          "violations": [
+            {
+              "step": 7,
+              "constraint": "obstacle_collision",
+              "agv_id": "agv_01",
+              "position": [
+                7,
+                6
+              ]
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::dock_nominal::queue_gate_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_queue_priority_deadlock_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.059,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 0,
+          "violated_constraint": "deadlock_cycle",
+          "latency_ms": 0.059,
+          "steps_completed": 1
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_03_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_03_at",
+              "location": [
+                5,
+                5
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": true,
+          "deadlock_cycles": [
+            [
+              "agv_01",
+              "agv_02",
+              "agv_03"
+            ]
+          ],
+          "edge_conflicts": [],
+          "total_events": 6,
+          "violations": [
+            {
+              "step": 0,
+              "constraint": "deadlock_cycle",
+              "agv_cycle": [
+                "agv_01",
+                "agv_02",
+                "agv_03"
+              ],
+              "desired_positions": {
+                "agv_01": [
+                  6,
+                  5
+                ],
+                "agv_02": [
+                  7,
+                  5
+                ],
+                "agv_03": [
+                  5,
+                  5
+                ]
+              },
+              "positions": {
+                "agv_01": [
+                  5,
+                  5
+                ],
+                "agv_02": [
+                  6,
+                  5
+                ],
+                "agv_03": [
+                  7,
+                  5
+                ]
+              }
+            }
+          ],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 3,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::shared_zone_clear_crossing::queue_priority_deadlock",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "shared_zone_clear_crossing"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_shared_gate_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.075,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 5,
+          "violated_constraint": "min_distance",
+          "latency_ms": 0.075,
+          "steps_completed": 5
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                6
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 12,
+          "violations": [
+            {
+              "step": 5,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  6,
+                  6
+                ],
+                "agv_02": [
+                  6,
+                  6
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            }
+          ],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::shared_zone_clear_crossing::shared_gate_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "shared_zone_clear_crossing"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_staggered_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.084,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 4,
+          "violated_constraint": "min_distance",
+          "latency_ms": 0.084,
+          "steps_completed": 7
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                8
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                7
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 16,
+          "violations": [
+            {
+              "step": 4,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  6,
+                  5
+                ],
+                "agv_02": [
+                  6,
+                  5
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            }
+          ],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::shared_zone_nominal::staggered_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "shared_zone_nominal"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_west_to_east_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.078,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 4,
+          "violated_constraint": "min_distance",
+          "latency_ms": 0.078,
+          "steps_completed": 7
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 16,
+          "violations": [
+            {
+              "step": 4,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  6,
+                  5
+                ],
+                "agv_02": [
+                  6,
+                  5
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            }
+          ],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::shared_zone_nominal::west_to_east_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "shared_zone_nominal"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_transfer_reverse_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.115,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 4,
+          "violated_constraint": "obstacle_collision",
+          "latency_ms": 0.115,
+          "steps_completed": 14
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                7
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                6
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                11,
+                6
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                6
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                6
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                6
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                6
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                6
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                4
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                3
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                2
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 12,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                1
+              ]
+            },
+            {
+              "t_step": 12,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 13,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                0
+              ]
+            },
+            {
+              "t_step": 13,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 14,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                -1
+              ]
+            },
+            {
+              "t_step": 14,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 30,
+          "violations": [
+            {
+              "step": 4,
+              "constraint": "obstacle_collision",
+              "agv_id": "agv_01",
+              "position": [
+                9,
+                6
+              ]
+            },
+            {
+              "step": 14,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                6,
+                -1
+              ],
+              "grid_size": [
+                14,
+                10
+              ]
+            },
+            {
+              "step": 14,
+              "constraint": "agv_y_bounds",
+              "value": -1,
+              "limit": [
+                0.0,
+                9.0
+              ]
+            }
+          ],
+          "grid_size": [
+            14,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::transfer_nominal::transfer_reverse_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "transfer_nominal"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_transfer_source_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.16,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 13,
+          "violated_constraint": "grid_boundary",
+          "latency_ms": 0.16,
+          "steps_completed": 19
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                1
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                1
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                1
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                1
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                1
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                1
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                1
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                1
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                1
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                1
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                11,
+                1
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                1
+              ]
+            },
+            {
+              "t_step": 11,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 12,
+              "event": "agv_01_at",
+              "location": [
+                13,
+                1
+              ]
+            },
+            {
+              "t_step": 12,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 13,
+              "event": "agv_01_at",
+              "location": [
+                14,
+                1
+              ]
+            },
+            {
+              "t_step": 13,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 14,
+              "event": "agv_01_at",
+              "location": [
+                14,
+                2
+              ]
+            },
+            {
+              "t_step": 14,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 40,
+          "violations": [
+            {
+              "step": 13,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                14,
+                1
+              ],
+              "grid_size": [
+                14,
+                10
+              ]
+            },
+            {
+              "step": 13,
+              "constraint": "agv_x_bounds",
+              "value": 14,
+              "limit": [
+                0.0,
+                13.0
+              ]
+            },
+            {
+              "step": 14,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                14,
+                2
+              ],
+              "grid_size": [
+                14,
+                10
+              ]
+            },
+            {
+              "step": 14,
+              "constraint": "agv_x_bounds",
+              "value": 14,
+              "limit": [
+                0.0,
+                13.0
+              ]
+            },
+            {
+              "step": 15,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                14,
+                3
+              ],
+              "grid_size": [
+                14,
+                10
+              ]
+            },
+            {
+              "step": 15,
+              "constraint": "agv_x_bounds",
+              "value": 14,
+              "limit": [
+                0.0,
+                13.0
+              ]
+            },
+            {
+              "step": 16,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                14,
+                4
+              ],
+              "grid_size": [
+                14,
+                10
+              ]
+            },
+            {
+              "step": 16,
+              "constraint": "agv_x_bounds",
+              "value": 14,
+              "limit": [
+                0.0,
+                13.0
+              ]
+            },
+            {
+              "step": 17,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                14,
+                5
+              ],
+              "grid_size": [
+                14,
+                10
+              ]
+            },
+            {
+              "step": 17,
+              "constraint": "agv_x_bounds",
+              "value": 14,
+              "limit": [
+                0.0,
+                13.0
+              ]
+            }
+          ],
+          "grid_size": [
+            14,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::transfer_nominal::transfer_source_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "transfer_nominal"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_dock_occupancy_conflict_transfer_mid_overlap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.087,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 4,
+          "violated_constraint": "obstacle_collision",
+          "latency_ms": 0.087,
+          "steps_completed": 10
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                3
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                3
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                4
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                4
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                11,
+                4
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                4
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                5
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                6
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                7
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                13,
+                9
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 22,
+          "violations": [
+            {
+              "step": 4,
+              "constraint": "obstacle_collision",
+              "agv_id": "agv_01",
+              "position": [
+                9,
+                4
+              ]
+            }
+          ],
+          "grid_size": [
+            14,
+            10
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "dock_occupancy_conflict::transfer_with_path_variant::transfer_mid_overlap",
+      "source_task_family": "dock_occupancy_conflict",
+      "shell_role": "transfer_with_path_variant"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_docking_gate_to_dock_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.07,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 5,
+          "violated_constraint": "obstacle_collision",
+          "latency_ms": 0.07,
+          "steps_completed": 6
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                2
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                11,
+                2
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                2
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 14,
+          "violations": [
+            {
+              "step": 5,
+              "constraint": "obstacle_collision",
+              "agv_id": "agv_01",
+              "position": [
+                11,
+                2
+              ]
+            },
+            {
+              "step": 6,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                12,
+                2
+              ],
+              "grid_size": [
+                12,
+                8
+              ]
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_alignment_variant::dock_align_unsafe",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_docking_alignment_hold_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.097,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 9,
+          "violated_constraint": "min_distance",
+          "latency_ms": 0.097,
+          "steps_completed": 9
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                3
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 20,
+          "violations": [
+            {
+              "step": 9,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  8,
+                  3
+                ],
+                "agv_02": [
+                  8,
+                  3
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_alignment_variant::dock_approach_unsafe",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_unsafe_concurrent_docking_release_yield_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.047,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 0,
+          "violated_constraint": "edge_swap_conflict",
+          "latency_ms": 0.047,
+          "steps_completed": 1
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                2
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "total_events": 4,
+          "violations": [
+            {
+              "step": 0,
+              "constraint": "edge_swap_conflict",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": {
+                  "current": [
+                    8,
+                    2
+                  ],
+                  "next": [
+                    9,
+                    2
+                  ]
+                },
+                "agv_02": {
+                  "current": [
+                    9,
+                    2
+                  ],
+                  "next": [
+                    8,
+                    2
+                  ]
+                }
+              }
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_alignment_variant::dock_release_concurrent_unsafe",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_docking_queue_to_gate_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.089,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 7,
+          "violated_constraint": "obstacle_collision",
+          "latency_ms": 0.089,
+          "steps_completed": 10
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                1,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                2,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                3,
+                5
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                4,
+                5
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_01_at",
+              "location": [
+                7,
+                6
+              ]
+            },
+            {
+              "t_step": 7,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                6
+              ]
+            },
+            {
+              "t_step": 8,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                5
+              ]
+            },
+            {
+              "t_step": 9,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 10,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 22,
+          "violations": [
+            {
+              "step": 7,
+              "constraint": "obstacle_collision",
+              "agv_id": "agv_01",
+              "position": [
+                7,
+                6
+              ]
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_nominal::dock_approach_unsafe",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_docking_dock_to_clearance_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.068,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 0,
+          "violated_constraint": "min_distance",
+          "latency_ms": 0.068,
+          "steps_completed": 3
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 8,
+          "violations": [
+            {
+              "step": 0,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  9,
+                  2
+                ],
+                "agv_02": [
+                  9,
+                  2
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            },
+            {
+              "step": 3,
+              "constraint": "min_distance",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": [
+                  9,
+                  2
+                ],
+                "agv_02": [
+                  9,
+                  2
+                ]
+              },
+              "distance": 0.0,
+              "min_required": 1.0
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "docking_approach::dock_nominal::dock_release_unsafe",
+      "source_task_family": "docking_approach",
+      "shell_role": "dock_nominal"
+    },
+    {
+      "case_id": "agv_unsafe_concurrent_shared_zone_priority_sequence_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.055,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 0,
+          "violated_constraint": "deadlock_cycle",
+          "latency_ms": 0.055,
+          "steps_completed": 1
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                5,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_03_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                6,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                7,
+                5
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_03_at",
+              "location": [
+                5,
+                5
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": true,
+          "deadlock_cycles": [
+            [
+              "agv_01",
+              "agv_02",
+              "agv_03"
+            ]
+          ],
+          "edge_conflicts": [],
+          "total_events": 6,
+          "violations": [
+            {
+              "step": 0,
+              "constraint": "deadlock_cycle",
+              "agv_cycle": [
+                "agv_01",
+                "agv_02",
+                "agv_03"
+              ],
+              "desired_positions": {
+                "agv_01": [
+                  6,
+                  5
+                ],
+                "agv_02": [
+                  7,
+                  5
+                ],
+                "agv_03": [
+                  5,
+                  5
+                ]
+              },
+              "positions": {
+                "agv_01": [
+                  5,
+                  5
+                ],
+                "agv_02": [
+                  6,
+                  5
+                ],
+                "agv_03": [
+                  7,
+                  5
+                ]
+              }
+            }
+          ],
+          "grid_size": [
+            12,
+            10
+          ],
+          "agv_count": 3,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "intersection_conflict::shared_zone_clear_crossing::zone_priority_release_unsafe",
+      "source_task_family": "intersection_conflict",
+      "shell_role": "shared_zone_clear_crossing"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_merge_bottleneck_dock_edge_swap_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.046,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 0,
+          "violated_constraint": "edge_swap_conflict",
+          "latency_ms": 0.046,
+          "steps_completed": 1
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                8,
+                2
+              ]
+            }
+          ],
+          "collision_pairs": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [
+            [
+              "agv_01",
+              "agv_02"
+            ]
+          ],
+          "total_events": 4,
+          "violations": [
+            {
+              "step": 0,
+              "constraint": "edge_swap_conflict",
+              "agv_pair": [
+                "agv_01",
+                "agv_02"
+              ],
+              "positions": {
+                "agv_01": {
+                  "current": [
+                    8,
+                    2
+                  ],
+                  "next": [
+                    9,
+                    2
+                  ]
+                },
+                "agv_02": {
+                  "current": [
+                    9,
+                    2
+                  ],
+                  "next": [
+                    8,
+                    2
+                  ]
+                }
+              }
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "merge_bottleneck::dock_alignment_variant::dock_edge_swap",
+      "source_task_family": "merge_bottleneck",
+      "shell_role": "dock_alignment_variant"
+    },
+    {
+      "case_id": "agv_unsafe_warehouse_merge_bottleneck_gate_dock_conflict_001",
+      "asset_id": "agv_01",
+      "expected_status": "UNSAFE",
+      "expected_verdict": "UNSAFE",
+      "oracle_verdict": "UNSAFE",
+      "match": true,
+      "engine": "discrete_event",
+      "latency_ms": 0.071,
+      "preload_result": null,
+      "oracle_result": {
+        "verdict": "UNSAFE",
+        "engine": "discrete_event",
+        "common": {
+          "first_violation_step": 5,
+          "violated_constraint": "obstacle_collision",
+          "latency_ms": 0.071,
+          "steps_completed": 6
+        },
+        "details": {
+          "event_log": [
+            {
+              "t_step": 0,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                4
+              ]
+            },
+            {
+              "t_step": 0,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                3
+              ]
+            },
+            {
+              "t_step": 1,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_01_at",
+              "location": [
+                8,
+                2
+              ]
+            },
+            {
+              "t_step": 2,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_01_at",
+              "location": [
+                9,
+                2
+              ]
+            },
+            {
+              "t_step": 3,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_01_at",
+              "location": [
+                10,
+                2
+              ]
+            },
+            {
+              "t_step": 4,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_01_at",
+              "location": [
+                11,
+                2
+              ]
+            },
+            {
+              "t_step": 5,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_01_at",
+              "location": [
+                12,
+                2
+              ]
+            },
+            {
+              "t_step": 6,
+              "event": "agv_02_at",
+              "location": [
+                0,
+                0
+              ]
+            }
+          ],
+          "collision_pairs": [],
+          "deadlock_detected": false,
+          "deadlock_cycles": [],
+          "edge_conflicts": [],
+          "total_events": 14,
+          "violations": [
+            {
+              "step": 5,
+              "constraint": "obstacle_collision",
+              "agv_id": "agv_01",
+              "position": [
+                11,
+                2
+              ]
+            },
+            {
+              "step": 6,
+              "constraint": "grid_boundary",
+              "agv_id": "agv_01",
+              "position": [
+                12,
+                2
+              ],
+              "grid_size": [
+                12,
+                8
+              ]
+            }
+          ],
+          "grid_size": [
+            12,
+            8
+          ],
+          "agv_count": 2,
+          "visualization_enabled": false,
+          "visualization_rendered": false
+        }
+      },
+      "stratum": "merge_bottleneck::dock_alignment_variant::gate_dock_conflict",
+      "source_task_family": "merge_bottleneck",
+      "shell_role": "dock_alignment_variant"
+    }
+  ]
+}

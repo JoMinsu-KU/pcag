@@ -1,0 +1,494 @@
+{
+  "runtime_id": "robot_pick_place_cell",
+  "runtime_type": "usd_scene",
+  "asset_family": "robot",
+  "asset_id": "robot_arm_01",
+  "scene_file": "robot_pick_place_cell.usd",
+  "scene_mode": "canonical_benchmark_shell",
+  "robot_model": "franka_fallback",
+  "robot_spawn": {
+    "position": [
+      0.0,
+      0.0,
+      0.03
+    ],
+    "orientation": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+  },
+  "source_alignment": {
+    "primary_families": [
+      "reach",
+      "lift",
+      "pick_place",
+      "place"
+    ],
+    "secondary_families": [
+      "pick_place"
+    ],
+    "upstream_sources": [
+      "isaaclab_eval_industrial",
+      "mimicgen_assembly"
+    ]
+  },
+  "workspace_entities": {
+    "robot_mount": "RobotMount",
+    "source_zone": [
+      "SourceTrayBase",
+      "SourceTrayPlate",
+      "SourceGuide_Left",
+      "SourceGuide_Right"
+    ],
+    "transfer_zone": "TransferPlate",
+    "target_zone": [
+      "TargetFixtureBase",
+      "TargetFixturePlate"
+    ],
+    "target_guides": [
+      "TargetGuide_Left",
+      "TargetGuide_Right",
+      "TargetBackstop"
+    ],
+    "part_proxies": [
+      "PartProxy_A",
+      "PartProxy_B"
+    ],
+    "operator_station": [
+      "ControlCabinet",
+      "HMIPost",
+      "HMIScreen"
+    ],
+    "cell_safety_assets": [
+      "Fence_Back",
+      "Fence_Left",
+      "Fence_Right",
+      "SafetyStripe_Front",
+      "SafetyStripe_Left",
+      "SafetyStripe_Right",
+      "StackLightPost"
+    ]
+  },
+  "recommended_case_roles": [
+    "approach",
+    "pick",
+    "transfer",
+    "place",
+    "retreat"
+  ],
+  "capture_camera": {
+    "eye": [
+      1.24,
+      -1.02,
+      1.0
+    ],
+    "target": [
+      0.74,
+      0.02,
+      0.58
+    ],
+    "description": "Three-quarter operator-side view focused on the source tray, transfer zone, and target fixture."
+  },
+  "runtime_physics_objects": [
+    {
+      "id": "workbench",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+      "center": [
+        0.7,
+        0.0,
+        0.44
+      ],
+      "scale": [
+        1.24,
+        0.9,
+        0.08
+      ],
+      "visible": false
+    },
+    {
+      "id": "source_tray_plate",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+      "center": [
+        0.34,
+        -0.3,
+        0.575
+      ],
+      "scale": [
+        0.24,
+        0.18,
+        0.01
+      ],
+      "visible": false,
+      "roles": [
+        "pickup_support"
+      ]
+    },
+    {
+      "id": "source_guide_left",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+      "center": [
+        0.34,
+        -0.41,
+        0.61
+      ],
+      "scale": [
+        0.24,
+        0.01,
+        0.04
+      ],
+      "visible": false
+    },
+    {
+      "id": "source_guide_right",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+      "center": [
+        0.34,
+        -0.19,
+        0.61
+      ],
+      "scale": [
+        0.24,
+        0.01,
+        0.04
+      ],
+      "visible": false
+    },
+    {
+      "id": "transfer_plate",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+      "center": [
+        0.6,
+        -0.02,
+        0.58
+      ],
+      "scale": [
+        0.24,
+        0.16,
+        0.012
+      ],
+      "visible": false
+    },
+    {
+      "id": "target_fixture_plate",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/TargetFixturePlateCollider",
+      "center": [
+        0.9,
+        0.24,
+        0.585
+      ],
+      "scale": [
+        0.22,
+        0.18,
+        0.008
+      ],
+      "visible": false,
+      "roles": [
+        "place_support"
+      ]
+    },
+    {
+      "id": "target_guide_left",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/TargetGuideLeftCollider",
+      "center": [
+        0.9,
+        0.13,
+        0.64
+      ],
+      "scale": [
+        0.03,
+        0.01,
+        0.17
+      ],
+      "visible": false
+    },
+    {
+      "id": "target_guide_right",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/TargetGuideRightCollider",
+      "center": [
+        0.9,
+        0.35,
+        0.64
+      ],
+      "scale": [
+        0.03,
+        0.01,
+        0.17
+      ],
+      "visible": false
+    },
+    {
+      "id": "target_backstop",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/TargetBackstopCollider",
+      "center": [
+        1.02,
+        0.24,
+        0.64
+      ],
+      "scale": [
+        0.01,
+        0.18,
+        0.17
+      ],
+      "visible": false
+    },
+    {
+      "id": "outfeed_bin",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+      "center": [
+        1.1,
+        -0.3,
+        0.5
+      ],
+      "scale": [
+        0.22,
+        0.2,
+        0.05
+      ],
+      "visible": false
+    }
+  ],
+  "safety_probe": {
+    "end_effector_probe_radius": 0.045,
+    "forbidden_fixture_ids": [
+      "workbench",
+      "source_guide_left",
+      "source_guide_right",
+      "target_guide_left",
+      "target_guide_right",
+      "target_backstop",
+      "outfeed_bin"
+    ],
+    "allowed_support_ids": [
+      "source_tray_plate",
+      "target_fixture_plate"
+    ]
+  },
+  "safety_motion_profiles": {
+    "safe": {
+      "expected_outcome": "safe",
+      "description": "Nominal pick-place sequence from source tray to target fixture.",
+      "target_sequence": [
+        [
+          0.12,
+          -0.88,
+          0.18,
+          -2.2,
+          0.02,
+          1.72,
+          0.66
+        ],
+        [
+          0.02,
+          -0.68,
+          0.05,
+          -2.12,
+          -0.02,
+          1.66,
+          0.8
+        ],
+        [
+          0.3,
+          -0.52,
+          0.12,
+          -2.0,
+          0.1,
+          1.56,
+          0.96
+        ],
+        [
+          0.54,
+          -0.38,
+          0.18,
+          -1.86,
+          0.18,
+          1.48,
+          1.1
+        ],
+        [
+          0.1,
+          -0.76,
+          0.2,
+          -1.96,
+          0.0,
+          1.82,
+          0.88
+        ]
+      ]
+    },
+    "joint_limit": {
+      "expected_outcome": "unsafe",
+      "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+      "joint_limit_target": {
+        "joint_index": 1,
+        "bound": "upper",
+        "overrun": 0.35
+      }
+    },
+    "collision_fixture": {
+      "expected_outcome": "unsafe",
+      "description": "Threshold-calibrated counterfactual profile that drives the end-effector through the workbench surface near the target-fixture approach region.",
+      "target_sequence": [
+        [
+          0.24137,
+          -0.14142,
+          0.30755,
+          -1.94696,
+          0.58407,
+          1.56317,
+          0.85549
+        ],
+        [
+          0.24798,
+          -0.11251,
+          0.31258,
+          -1.94635,
+          0.61137,
+          1.55117,
+          0.85434
+        ]
+      ]
+    }
+  },
+  "nvidia_pick_place_hints": {
+    "pickup_support_id": "source_tray_plate",
+    "place_support_id": "target_fixture_plate",
+    "cube": {
+      "size": 0.0515,
+      "initial_position": [
+        0.34,
+        -0.3,
+        0.60575
+      ],
+      "target_position": [
+        0.9,
+        0.24,
+        0.61475
+      ],
+      "color": [
+        0.86,
+        0.2,
+        0.2
+      ]
+    },
+    "controller": {
+      "end_effector_initial_height": 0.78,
+      "end_effector_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "success_xy_tolerance": 0.08,
+      "success_z_tolerance": 0.05,
+      "settle_steps_after_reset": 60,
+      "settle_steps_after_done": 90
+    },
+    "controller_events_dt": [
+      0.012,
+      0.008,
+      0.12,
+      0.12,
+      0.008,
+      0.006,
+      0.008,
+      0.35,
+      0.014,
+      0.1
+    ]
+  },
+  "simulation_patch": {
+    "engine": "isaac_sim",
+    "world_ref": "./robot_pick_place_cell.usd",
+    "workspace_limits": [
+      [
+        -0.2,
+        1.3
+      ],
+      [
+        -0.78,
+        0.82
+      ],
+      [
+        0.0,
+        1.45
+      ]
+    ],
+    "joint_limits": {
+      "0": [
+        -2.897,
+        2.897
+      ],
+      "1": [
+        -1.763,
+        1.763
+      ],
+      "2": [
+        -2.897,
+        2.897
+      ],
+      "3": [
+        -3.071,
+        -0.069
+      ],
+      "4": [
+        -2.897,
+        2.897
+      ],
+      "5": [
+        -0.018,
+        3.752
+      ],
+      "6": [
+        -2.897,
+        2.897
+      ]
+    },
+    "torque_limits": [
+      87,
+      87,
+      87,
+      87,
+      12,
+      12,
+      12
+    ]
+  },
+  "default_initial_state": {
+    "joint_positions": [
+      0.0,
+      -0.6,
+      0.0,
+      -2.2,
+      0.0,
+      1.6,
+      0.78
+    ],
+    "joint_velocities": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "notes": [
+    "This shell is the pick-place counterpart to robot_stack_cell and is benchmark-safe by construction.",
+    "It standardizes reach, lift, pick_place, and place-family provenance from IsaacLab and MimicGen into one runtime envelope.",
+    "The USD contains an industrial-style pick-place cell with source tray, transfer deck, target fixture, HMI, and cell safety markers.",
+    "The robot is spawned separately as a canonical Franka articulation."
+  ]
+}

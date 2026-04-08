@@ -1,0 +1,51 @@
+{
+  "manifest_version": "v1-pre-acquisition",
+  "checked_on": "2026-03-18",
+  "verification_method": "git ls-remote HEAD",
+  "sources": [
+    {
+      "source_id": "isaaclab_eval_industrial",
+      "asset_family": "robot_manipulation",
+      "source_type": "external_benchmark_repo",
+      "upstream_url": "https://github.com/isaac-sim/IsaacLab.git",
+      "verified_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "local_target": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab",
+      "acquisition_mode": "clone",
+      "benchmark_role": "primary_robot_nominal_and_unsafe_provenance",
+      "status": "READY_FOR_EXTRACTION"
+    },
+    {
+      "source_id": "mimicgen_assembly",
+      "asset_family": "robot_manipulation",
+      "source_type": "external_benchmark_repo",
+      "upstream_url": "https://github.com/NVlabs/mimicgen.git",
+      "verified_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "local_target": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen",
+      "acquisition_mode": "clone",
+      "benchmark_role": "secondary_robot_assembly_provenance",
+      "status": "READY_FOR_EXTRACTION"
+    },
+    {
+      "source_id": "warehouse_world_curated",
+      "asset_family": "agv_logistics",
+      "source_type": "public_world_reference_plus_curated_cases",
+      "upstream_url": "https://github.com/semitable/robotic-warehouse.git",
+      "verified_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "local_target": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference",
+      "acquisition_mode": "reference_freeze",
+      "benchmark_role": "primary_agv_provenance_anchor",
+      "status": "READY_FOR_CURATION"
+    },
+    {
+      "source_id": "tep_process_curated",
+      "asset_family": "process_interlock",
+      "source_type": "public_process_reference_plus_curated_cases",
+      "upstream_url": "https://github.com/camaramm/tennessee-eastman-challenge.git",
+      "verified_ref": "a641419365eb292ab4f98888cdcbd7fbfbca890b",
+      "local_target": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/process/tennessee-eastman-reference",
+      "acquisition_mode": "reference_freeze",
+      "benchmark_role": "primary_process_interlock_provenance_anchor",
+      "status": "READY_FOR_CURATION"
+    }
+  ]
+}

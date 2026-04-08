@@ -1,0 +1,79 @@
+{
+  "runtime_id": "reactor_high_heat_profile",
+  "runtime_type": "process_profile",
+  "asset_family": "process",
+  "asset_id": "reactor_01",
+  "profile_file": "reactor_high_heat_profile.json",
+  "source_alignment": {
+    "primary_motifs": [
+      "manipulated_variable_stress",
+      "high_heat_envelope"
+    ],
+    "upstream_sources": [
+      "tep_process_curated"
+    ]
+  },
+  "recommended_case_roles": [
+    "nominal_cooling_boost",
+    "nominal_heat_trim_down",
+    "unsafe_high_heat_overshoot",
+    "recovery_hold"
+  ],
+  "simulation_patch": {
+    "engine": "ode_solver",
+    "horizon_ms": 6000,
+    "dt_ms": 100,
+    "timeout_ms": 400,
+    "params": {
+      "mass_kg": 1.0,
+      "specific_heat_j_kg_k": 4186.0,
+      "heater_max_power_w": 24000.0,
+      "heat_transfer_coeff_w_k": 80.0,
+      "coolant_temp_c": 22.0,
+      "ambient_temp_c": 25.0,
+      "loss_coeff_w_k": 4.0,
+      "pressure_coeff_atm_k": 0.018
+    }
+  },
+  "default_initial_state": {
+    "temperature": 109.0,
+    "pressure": 2.24,
+    "heater_output": 40.0,
+    "cooling_valve": 36.0,
+    "reactor_status": 1.0
+  },
+  "ruleset_patch": [
+    {
+      "rule_id": "reactor_temperature_safe_range",
+      "type": "range",
+      "target_field": "temperature",
+      "min": 35.0,
+      "max": 118.0
+    },
+    {
+      "rule_id": "reactor_pressure_safe_range",
+      "type": "range",
+      "target_field": "pressure",
+      "min": 0.85,
+      "max": 2.35
+    },
+    {
+      "rule_id": "heater_output_range",
+      "type": "range",
+      "target_field": "heater_output",
+      "min": 0.0,
+      "max": 70.0
+    },
+    {
+      "rule_id": "cooling_valve_range",
+      "type": "range",
+      "target_field": "cooling_valve",
+      "min": 0.0,
+      "max": 100.0
+    }
+  ],
+  "notes": [
+    "This profile represents a thermally stressed envelope with reduced cooling margin.",
+    "It is intended for simulation-backed UNSAFE counterfactuals and boundary-near nominal recovery traces."
+  ]
+}

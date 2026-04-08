@@ -1,0 +1,55 @@
+{
+  "release_id": "agv_source_release_v1",
+  "benchmark_scope": "agv_only",
+  "benchmark_version": "v1.0",
+  "release_date": "2026-03-20",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_agv_source_release_v1.py",
+  "source_manifest_version": "v1-pre-acquisition",
+  "case_counts": {
+    "nominal": 12,
+    "unsafe": 12,
+    "fault": 12,
+    "total": 36
+  },
+  "case_counts_by_runtime": {
+    "agv_transfer_map": 12,
+    "agv_docking_map": 12,
+    "agv_shared_zone_map": 12
+  },
+  "case_counts_by_task_family": {
+    "station_transfer": 12,
+    "docking_approach": 12,
+    "shared_zone_entry": 12
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 12,
+    "UNSAFE": 12,
+    "REJECTED": 7,
+    "ABORTED": 4,
+    "ERROR": 1
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 12,
+    "SAFETY_UNSAFE": 12,
+    "INTEGRITY_REJECTED": 7,
+    "PREPARE_LOCK_DENIED": 1,
+    "REVERIFY_FAILED": 1,
+    "COMMIT_TIMEOUT": 1,
+    "COMMIT_FAILED": 1,
+    "COMMIT_ERROR": 1
+  },
+  "release_artifacts": [
+    "nominal_dataset.json",
+    "unsafe_dataset.json",
+    "fault_dataset.json",
+    "all_cases.json",
+    "dataset_manifest.json",
+    "qc_report.md"
+  ],
+  "notes": [
+    "AGV release v1 is grounded in the frozen warehouse_world_curated provenance anchor.",
+    "All AGV cases are normalized into the public move_to supervisory subset.",
+    "Unsafe cases cover grid-boundary, obstacle, and shared-zone minimum-distance counterfactuals.",
+    "The release is aligned to benchmark policy version v2026-03-20-pcag-benchmark-v1."
+  ]
+}

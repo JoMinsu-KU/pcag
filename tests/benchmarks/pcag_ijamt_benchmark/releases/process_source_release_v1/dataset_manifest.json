@@ -1,0 +1,77 @@
+{
+  "release_id": "process_source_release_v1",
+  "benchmark_scope": "process_only",
+  "benchmark_version": "v1.0",
+  "release_date": "2026-03-20",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_process_source_release_v1.py",
+  "source_manifest_version": "v1-pre-acquisition",
+  "case_counts": {
+    "nominal": 12,
+    "unsafe": 12,
+    "fault": 12,
+    "total": 36
+  },
+  "case_counts_by_source": {
+    "tep_process_curated": 36
+  },
+  "case_counts_by_runtime": {
+    "reactor_nominal_profile": 12,
+    "reactor_high_heat_profile": 12,
+    "reactor_disturbance_profile": 12
+  },
+  "case_counts_by_task_family": {
+    "normal_operating_envelope": 12,
+    "interlock_compatible_recovery": 12,
+    "manipulated_variable_constraint_compliance": 6,
+    "disturbance_inspired_supervision": 6
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 12,
+    "UNSAFE": 12,
+    "REJECTED": 7,
+    "ABORTED": 4,
+    "ERROR": 1
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 12,
+    "SAFETY_UNSAFE": 12,
+    "INTEGRITY_REJECTED": 7,
+    "PREPARE_LOCK_DENIED": 1,
+    "REVERIFY_FAILED": 1,
+    "COMMIT_TIMEOUT": 1,
+    "COMMIT_FAILED": 1,
+    "COMMIT_ERROR": 1
+  },
+  "unsafe_case_counts_by_family": {
+    "manipulated_variable_constraint": 4,
+    "thermal_overshoot": 4,
+    "disturbance_pressure_amplification": 4
+  },
+  "covered_source_families": [
+    "disturbance_inspired_supervision",
+    "interlock_compatible_recovery",
+    "manipulated_variable_constraint_compliance",
+    "normal_operating_envelope"
+  ],
+  "outcome_coverage": {
+    "COMMITTED": true,
+    "UNSAFE": true,
+    "REJECTED": true,
+    "ABORTED": true,
+    "ERROR": true
+  },
+  "release_artifacts": [
+    "nominal_dataset.json",
+    "unsafe_dataset.json",
+    "fault_dataset.json",
+    "all_cases.json",
+    "dataset_manifest.json",
+    "qc_report.md"
+  ],
+  "normalization_rule": "All process cases are lowered to set_heater_output/set_cooling_valve and executed against canonical process profiles.",
+  "notes": [
+    "This release uses the Tennessee Eastman reference tree as a frozen provenance anchor rather than as a raw copied classification dataset.",
+    "A unified benchmark process envelope is enforced across all runtime profiles for consistent final-label interpretation.",
+    "The release is outcome-complete for process benchmark drafting: committed, unsafe, rejected, aborted, and infrastructure-error paths are all represented."
+  ]
+}

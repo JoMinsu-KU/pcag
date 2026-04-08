@@ -65,6 +65,10 @@ The current implementation includes several semantics that are especially import
 - evidence responses include `created_at`
 - logging is human-readable, service-aware, and source-aware
 - commit semantics are fail-closed and only finalize after successful execution
+- the Isaac policy model now supports optional fixture-collision constraints through `simulation.collision`
+
+For robot assets, `simulation.collision` currently means a policy-declared set of forbidden AABB fixtures checked against an end-effector spherical probe.
+This is intentionally narrower than a full contact-force model, but it gives the Safety Cluster a real policy-driven collision signal instead of a pure placeholder.
 
 ## Design Intent
 

@@ -26,6 +26,7 @@ from pcag.core.services.consensus_engine import evaluate_consensus
 from pcag.core.services.rules_validator import validate_rules
 from pcag.core.utils.config_loader import get_cbf_mappings, get_service_urls
 from pcag.plugins.simulation.none_backend import NoneBackend
+from pcag.plugins.simulation.isaac_runtime_shell import build_runtime_sim_config
 
 logger = logging.getLogger(__name__)
 
@@ -182,17 +183,21 @@ def _run_simulation_validator(
     action_sequence: list[dict[str, Any]],
     ruleset: list[Rule | dict[str, Any]],
     sim_config: dict[str, Any],
+    runtime_context: dict[str, Any] | None,
 ) -> dict[str, Any]:
     # Simulation 검증은 가장 비용이 큰 단계다.
     # 하지만 trajectory 수준의 위험을 잡을 수 있어서, Rules/CBF와 성격이 다르다.
     started = time.time()
-    sim_backend, sim_engine = _resolve_simulation_backend(sim_config)
+    effective_sim_config = build_runtime_sim_config(sim_config, runtime_context)
+    sim_backend, sim_engine = _resolve_simulation_backend(effective_sim_config)
     sim_constraints = {
         "ruleset": _serialize_ruleset(ruleset),
-        "world_ref": sim_config.get("world_ref"),
-        "workspace_limits": sim_config.get("workspace_limits"),
-        "torque_limits": sim_config.get("torque_limits"),
-        "joint_limits": sim_config.get("joint_limits"),
+        "world_ref": effective_sim_config.get("world_ref"),
+        "workspace_limits": effective_sim_config.get("workspace_limits"),
+        "torque_limits": effective_sim_config.get("torque_limits"),
+        "joint_limits": effective_sim_config.get("joint_limits"),
+        "collision": effective_sim_config.get("collision"),
+        "runtime_context": runtime_context,
     }
     result = sim_backend.validate_trajectory(
         current_state=current_sensor_snapshot,
@@ -226,6 +231,7 @@ def _run_validators_parallel(
     ruleset: list[Rule | dict[str, Any]],
     cbf_state_mappings: list[dict[str, Any]],
     sim_config: dict[str, Any],
+    runtime_context: dict[str, Any] | None,
 ) -> dict[str, dict[str, Any]]:
     # fan-out / fan-in 구조:
     # - 세 검증기를 동시에 시작해 전체 지연을 줄이고
@@ -234,7 +240,14 @@ def _run_validators_parallel(
         futures = {
             "rules": executor.submit(_run_rules_validator, current_sensor_snapshot, action_sequence, ruleset),
             "cbf": executor.submit(_run_cbf_validator, current_sensor_snapshot, action_sequence, ruleset, cbf_state_mappings),
-            "simulation": executor.submit(_run_simulation_validator, current_sensor_snapshot, action_sequence, ruleset, sim_config),
+            "simulation": executor.submit(
+                _run_simulation_validator,
+                current_sensor_snapshot,
+                action_sequence,
+                ruleset,
+                sim_config,
+                runtime_context,
+            ),
         }
 
         results: dict[str, dict[str, Any]] = {}
@@ -290,6 +303,7 @@ def run_safety_validation(
     policy_version_id: str,
     action_sequence: list[dict[str, Any]],
     current_sensor_snapshot: dict[str, Any],
+    runtime_context: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """
     Run safety validation and return a Gateway-facing response payload.
@@ -350,6 +364,7 @@ def run_safety_validation(
         ruleset=ruleset,
         cbf_state_mappings=cbf_state_mappings,
         sim_config=sim_config,
+        runtime_context=runtime_context,
     )
 
     # 개별 validator 결과를 공통 계약(ValidatorVerdict)으로 다시 감싼 뒤

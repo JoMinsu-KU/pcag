@@ -1,0 +1,58 @@
+{
+  "release_id": "agv_source_release_v3",
+  "benchmark_scope": "agv_only",
+  "benchmark_version": "v3.0",
+  "release_date": "2026-03-20",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_agv_source_release_v3.py",
+  "derived_from_release": "agv_source_release_v2",
+  "case_counts": {
+    "nominal": 40,
+    "unsafe": 52,
+    "fault": 36,
+    "total": 128
+  },
+  "case_counts_by_runtime": {
+    "agv_transfer_map": 39,
+    "agv_docking_map": 41,
+    "agv_shared_zone_map": 48
+  },
+  "case_counts_by_task_family": {
+    "station_transfer": 14,
+    "docking_approach": 14,
+    "shared_zone_entry": 14,
+    "intersection_conflict": 2,
+    "merge_bottleneck": 28,
+    "single_lane_corridor": 28,
+    "dock_occupancy_conflict": 28
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 40,
+    "UNSAFE": 52,
+    "REJECTED": 19,
+    "ABORTED": 13,
+    "ERROR": 4
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 40,
+    "SAFETY_UNSAFE": 52,
+    "INTEGRITY_REJECTED": 19,
+    "PREPARE_LOCK_DENIED": 4,
+    "REVERIFY_FAILED": 4,
+    "COMMIT_TIMEOUT": 3,
+    "COMMIT_FAILED": 2,
+    "COMMIT_ERROR": 4
+  },
+  "release_artifacts": [
+    "nominal_dataset.json",
+    "unsafe_dataset.json",
+    "fault_dataset.json",
+    "all_cases.json",
+    "dataset_manifest.json",
+    "qc_report.md"
+  ],
+  "notes": [
+    "AGV release v3 preserves the validated v2 outcome-complete benchmark and adds three single-asset expansion families.",
+    "The expansion families are merge_bottleneck, single_lane_corridor, and dock_occupancy_conflict.",
+    "v3 is built by templating validated v2 cases into richer supervisory families without introducing scenario-specific PCAG branching."
+  ]
+}

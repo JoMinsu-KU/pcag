@@ -1,0 +1,3749 @@
+[
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_reach_fixture_approach_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "approach",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "reach",
+      "source_unit": "manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka reach-family posture normalized into a fixture approach supervisory command.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "target approach / pre-grasp motion",
+        "selection_reason": "selected in source_task_selection.md for nominal approach cases"
+      },
+      "runtime_normalization": "Franka-native IsaacLab source family mapped directly into the canonical pick-place cell."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_pick_a",
+      "station_id": "fixture_station_01",
+      "mission_phase": "approach",
+      "task_family": "reach",
+      "shell_role": "approach",
+      "part_id": "housing_a",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.12,
+            -0.88,
+            0.18,
+            -2.2,
+            0.02,
+            1.72,
+            0.66
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_lift_source_pick_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "pick",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "lift",
+      "source_unit": "manager_based/manipulation/lift/config/franka/joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/lift/config/franka/joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka lift-family episode lowered into a source-tray pickup elevation posture.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "pickup or post-grasp elevation",
+        "selection_reason": "selected in source_task_selection.md for nominal elevation cases"
+      },
+      "runtime_normalization": "Franka-native IsaacLab source family mapped directly into the canonical pick-place cell."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_pick_a",
+      "station_id": "source_tray_01",
+      "mission_phase": "pick",
+      "task_family": "lift",
+      "shell_role": "pick",
+      "part_id": "housing_a",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.02,
+            -0.68,
+            0.05,
+            -2.12,
+            -0.02,
+            1.66,
+            0.8
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_pick_place_transfer_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "transfer",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "pick_place",
+      "source_unit": "manager_based/manipulation/pick_place/pickplace_gr1t2_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/pick_place/pickplace_gr1t2_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Industrial pick-place provenance lowered into a transfer posture inside the canonical pick-place shell.",
+      "source_semantics": {
+        "upstream_robot_family": "gr1t2",
+        "semantic_role": "pick-and-place transfer motion",
+        "selection_reason": "selected in source_task_selection.md as a primary nominal motion family"
+      },
+      "runtime_normalization": "Non-Franka upstream family normalized into the public Franka fallback runtime according to the frozen shell strategy."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_pick_a",
+      "station_id": "transfer_lane_01",
+      "mission_phase": "transfer",
+      "task_family": "pick_place",
+      "shell_role": "transfer",
+      "part_id": "housing_a",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.3,
+            -0.52,
+            0.12,
+            -2.0,
+            0.1,
+            1.56,
+            0.96
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_place_output_fixture_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "place",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "place",
+      "source_unit": "manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Place-family deposition semantics converted into a fixture-aligned placement posture.",
+      "source_semantics": {
+        "upstream_robot_family": "agibot",
+        "semantic_role": "final alignment and deposition",
+        "selection_reason": "selected in source_task_selection.md for precise placement semantics"
+      },
+      "runtime_normalization": "Non-Franka upstream family normalized into the public Franka fallback runtime according to the frozen shell strategy."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_pick_a",
+      "station_id": "output_fixture_01",
+      "mission_phase": "place",
+      "task_family": "place",
+      "shell_role": "place",
+      "part_id": "housing_a",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.54,
+            -0.38,
+            0.18,
+            -1.86,
+            0.18,
+            1.48,
+            1.1
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_stack_conveyor_pick_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_stack_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/robot_stack_cell.usd",
+      "shell_role": "conveyor_pick",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "stack",
+      "source_unit": "manager_based/manipulation/stack/config/franka/stack_joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/stack/config/franka/stack_joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka stack-family pickup posture normalized into the conveyor-side stack-cell shell.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "stack-family conveyor pickup",
+        "selection_reason": "selected in source_task_selection.md as a primary assembly-style family"
+      },
+      "runtime_normalization": "Franka-native stack source family mapped directly into the canonical stack shell."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_stack_a",
+      "station_id": "infeed_conveyor_01",
+      "mission_phase": "pick",
+      "task_family": "stack",
+      "shell_role": "conveyor_pick",
+      "part_id": "block_blue",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.02,
+        -0.58,
+        0.01,
+        -2.24,
+        -0.03,
+        1.69,
+        0.76
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.18,
+            -0.54,
+            0.08,
+            -2.06,
+            0.1,
+            1.7,
+            0.82
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_stack_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_milk_pick_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "pick",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_1_grasp_milk",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen pick-place milk grasp lowered into a source-tray pickup posture.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "grasp milk object",
+        "object_ref": "milk",
+        "subtask_signal": "grasp_milk"
+      },
+      "runtime_normalization": "Robosuite single-arm provenance normalized into the public Franka fallback runtime."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_pick_a",
+      "station_id": "source_tray_02",
+      "mission_phase": "pick",
+      "task_family": "pick_place",
+      "shell_role": "pick",
+      "part_id": "milk_proxy",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.02,
+            -0.68,
+            0.05,
+            -2.12,
+            -0.02,
+            1.66,
+            0.8
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_milk_place_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "place",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_2_place_milk",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen milk placement lowered into an alternate station transfer pose in the pick-place shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "place milk object",
+        "object_ref": "milk",
+        "subtask_signal": "place_milk"
+      },
+      "runtime_normalization": "Robosuite single-arm provenance normalized into the public Franka fallback runtime."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_pick_a",
+      "station_id": "alternate_fixture_02",
+      "mission_phase": "place",
+      "task_family": "pick_place",
+      "shell_role": "place",
+      "part_id": "milk_proxy",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.36,
+            -0.26,
+            0.16,
+            -1.92,
+            0.26,
+            1.44,
+            1.04
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_cereal_transfer_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "transfer",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_3_grasp_cereal",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen cereal pick semantics converted into a nominal transfer posture.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "grasp cereal object",
+        "object_ref": "cereal",
+        "subtask_signal": "grasp_cereal"
+      },
+      "runtime_normalization": "Robosuite single-arm provenance normalized into the public Franka fallback runtime."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_pick_a",
+      "station_id": "transfer_lane_02",
+      "mission_phase": "transfer",
+      "task_family": "pick_place",
+      "shell_role": "transfer",
+      "part_id": "cereal_proxy",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.3,
+            -0.52,
+            0.12,
+            -2.0,
+            0.1,
+            1.56,
+            0.96
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_stack_cubeA_transfer_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_stack_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/robot_stack_cell.usd",
+      "shell_role": "conveyor_pick",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "stack",
+      "source_unit": "robosuite/stack.json#subtask_1_cubeA_grasp",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/stack.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen stack cubeA grasp lowered into a conveyor-pick posture inside the stack shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "stack source-object grasp",
+        "object_ref": "cubeA",
+        "subtask_signal": "grasp"
+      },
+      "runtime_normalization": "Robosuite single-arm provenance normalized into the public Franka fallback runtime."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_stack_a",
+      "station_id": "infeed_conveyor_02",
+      "mission_phase": "pick",
+      "task_family": "stack",
+      "shell_role": "conveyor_pick",
+      "part_id": "cubeA_proxy",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.02,
+        -0.58,
+        0.01,
+        -2.24,
+        -0.03,
+        1.69,
+        0.76
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.28,
+            -0.86,
+            0.22,
+            -2.18,
+            -0.18,
+            1.74,
+            0.58
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_stack_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_stack_retreat_clearance_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_stack_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/robot_stack_cell.usd",
+      "shell_role": "retreat",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "stack",
+      "source_unit": "robosuite/stack.json#derived_retreat_clearance",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/stack.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen stack family augmented with a retreat-to-clearance supervisory posture after nominal placement.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "post-placement clearance",
+        "object_ref": "cubeB",
+        "subtask_signal": "derived_retreat"
+      },
+      "runtime_normalization": "Robosuite single-arm provenance normalized into the public Franka fallback runtime."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_stack_a",
+      "station_id": "clearance_lane_01",
+      "mission_phase": "retreat",
+      "task_family": "stack",
+      "shell_role": "retreat",
+      "part_id": "cubeB_proxy",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.02,
+        -0.58,
+        0.01,
+        -2.24,
+        -0.03,
+        1.69,
+        0.76
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.22,
+            -0.7,
+            0.18,
+            -2.08,
+            -0.04,
+            1.86,
+            0.86
+          ],
+          "joint_speed_scale": 0.25,
+          "goal_tolerance": 0.02
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_stack_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "robot_nominal_safe",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_reach_narrow_clearance_approach_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_narrow_clearance_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/robot_narrow_clearance_cell.usd",
+      "shell_role": "narrow_approach",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "reach",
+      "source_unit": "manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka reach-family posture normalized into a fixture approach supervisory command. Recontextualized into the narrow-clearance robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "target approach / pre-grasp motion",
+        "selection_reason": "selected in source_task_selection.md for nominal approach cases",
+        "benchmark_family": "narrow_clearance_approach",
+        "benchmark_phase": "narrow_approach",
+        "benchmark_semantic_role": "narrow-clearance approach to the fixture mouth"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_narrow_clearance_cell` for the phase-A single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_narrow_a",
+      "station_id": "narrow_fixture_entry_01",
+      "mission_phase": "approach",
+      "task_family": "reach",
+      "shell_role": "narrow_approach",
+      "part_id": "slim_insert_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "narrow_clearance_approach",
+      "clearance_profile": "narrow_slot_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.12,
+            -0.88,
+            0.18,
+            -2.2,
+            0.02,
+            1.72,
+            0.66
+          ],
+          "joint_speed_scale": 0.2,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_narrow_clearance_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_reach_fixture_approach_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_phase_a_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_narrow_clearance",
+      "expansion_family": "narrow_clearance_approach",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_place_narrow_clearance_pre_insert_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_narrow_clearance_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/robot_narrow_clearance_cell.usd",
+      "shell_role": "pre_insert",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "place",
+      "source_unit": "manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Place-family deposition semantics converted into a fixture-aligned placement posture. Recontextualized into the narrow-clearance robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "agibot",
+        "semantic_role": "final alignment and deposition",
+        "selection_reason": "selected in source_task_selection.md for precise placement semantics",
+        "benchmark_family": "narrow_clearance_approach",
+        "benchmark_phase": "pre_insert",
+        "benchmark_semantic_role": "tight corridor alignment before insertion-like placement"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_narrow_clearance_cell` for the phase-A single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_narrow_a",
+      "station_id": "narrow_fixture_align_01",
+      "mission_phase": "pre_insert",
+      "task_family": "place",
+      "shell_role": "pre_insert",
+      "part_id": "slim_insert_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "narrow_clearance_approach",
+      "clearance_profile": "narrow_slot_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.12,
+        -0.88,
+        0.18,
+        -2.2,
+        0.02,
+        1.72,
+        0.66
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.26,
+            -0.6,
+            0.14,
+            -2.04,
+            0.14,
+            1.54,
+            0.92
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.016
+        }
+      },
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.42,
+            -0.46,
+            0.18,
+            -1.96,
+            0.2,
+            1.4,
+            1.04
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.016
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_narrow_clearance_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_place_output_fixture_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_phase_a_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_narrow_clearance",
+      "expansion_family": "narrow_clearance_approach",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_narrow_clearance_insert_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_narrow_clearance_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/robot_narrow_clearance_cell.usd",
+      "shell_role": "insert",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_3_grasp_cereal",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen cereal pick semantics converted into a nominal transfer posture. Recontextualized into the narrow-clearance robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "grasp cereal object",
+        "object_ref": "cereal",
+        "subtask_signal": "grasp_cereal",
+        "benchmark_family": "narrow_clearance_approach",
+        "benchmark_phase": "insert",
+        "benchmark_semantic_role": "final insertion-adjacent descent inside a narrow slot"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_narrow_clearance_cell` for the phase-A single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_narrow_a",
+      "station_id": "narrow_fixture_slot_01",
+      "mission_phase": "insert",
+      "task_family": "pick_place",
+      "shell_role": "insert",
+      "part_id": "slim_insert_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "narrow_clearance_approach",
+      "clearance_profile": "narrow_slot_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.42,
+        -0.46,
+        0.18,
+        -1.96,
+        0.2,
+        1.4,
+        1.04
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.46,
+            -0.4,
+            0.22,
+            -1.92,
+            0.24,
+            1.34,
+            1.07
+          ],
+          "joint_speed_scale": 0.16,
+          "goal_tolerance": 0.014
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_narrow_clearance_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_cereal_transfer_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_phase_a_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_narrow_clearance",
+      "expansion_family": "narrow_clearance_approach",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_narrow_clearance_retreat_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_narrow_clearance_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/robot_narrow_clearance_cell.usd",
+      "shell_role": "retreat",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_2_place_milk",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen milk placement lowered into an alternate station transfer pose in the pick-place shell. Recontextualized into the narrow-clearance robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "place milk object",
+        "object_ref": "milk",
+        "subtask_signal": "place_milk",
+        "benchmark_family": "narrow_clearance_approach",
+        "benchmark_phase": "retreat",
+        "benchmark_semantic_role": "retreat from the narrow slot after a completed insertion-like motion"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_narrow_clearance_cell` for the phase-A single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_narrow_a",
+      "station_id": "narrow_fixture_exit_01",
+      "mission_phase": "retreat",
+      "task_family": "pick_place",
+      "shell_role": "retreat",
+      "part_id": "slim_insert_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "narrow_clearance_approach",
+      "clearance_profile": "narrow_slot_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.42,
+        -0.46,
+        0.18,
+        -1.96,
+        0.2,
+        1.4,
+        1.04
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.24,
+            -0.66,
+            0.18,
+            -1.99,
+            0.08,
+            1.64,
+            0.92
+          ],
+          "joint_speed_scale": 0.2,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_narrow_clearance_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_milk_place_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_phase_a_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_narrow_clearance",
+      "expansion_family": "narrow_clearance_approach",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_reach_narrow_clearance_approach_left_bias_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_narrow_clearance_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/robot_narrow_clearance_cell.usd",
+      "shell_role": "narrow_approach",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "reach",
+      "source_unit": "manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka reach-family posture normalized into a fixture approach supervisory command. Recontextualized into the narrow-clearance robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "target approach / pre-grasp motion",
+        "selection_reason": "selected in source_task_selection.md for nominal approach cases",
+        "benchmark_family": "narrow_clearance_approach",
+        "benchmark_phase": "narrow_approach",
+        "benchmark_semantic_role": "left-biased narrow-clearance approach near the guide wall"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_narrow_clearance_cell` for the phase-A single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_narrow_a",
+      "station_id": "narrow_fixture_entry_02",
+      "mission_phase": "approach_left_bias",
+      "task_family": "reach",
+      "shell_role": "narrow_approach",
+      "part_id": "slim_insert_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "narrow_clearance_approach",
+      "clearance_profile": "narrow_slot_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.16,
+            -0.82,
+            0.2,
+            -2.16,
+            0.06,
+            1.68,
+            0.72
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_narrow_clearance_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_reach_fixture_approach_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_phase_a_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_narrow_clearance",
+      "expansion_family": "narrow_clearance_approach",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_place_narrow_clearance_pre_insert_shallow_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_narrow_clearance_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/robot_narrow_clearance_cell.usd",
+      "shell_role": "pre_insert",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "place",
+      "source_unit": "manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Place-family deposition semantics converted into a fixture-aligned placement posture. Recontextualized into the narrow-clearance robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "agibot",
+        "semantic_role": "final alignment and deposition",
+        "selection_reason": "selected in source_task_selection.md for precise placement semantics",
+        "benchmark_family": "narrow_clearance_approach",
+        "benchmark_phase": "pre_insert",
+        "benchmark_semantic_role": "shallower pre-insert alignment before entering the narrow slot"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_narrow_clearance_cell` for the phase-A single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_narrow_a",
+      "station_id": "narrow_fixture_align_02",
+      "mission_phase": "pre_insert_shallow",
+      "task_family": "place",
+      "shell_role": "pre_insert",
+      "part_id": "slim_insert_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "narrow_clearance_approach",
+      "clearance_profile": "narrow_slot_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.12,
+        -0.88,
+        0.18,
+        -2.2,
+        0.02,
+        1.72,
+        0.66
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.24,
+            -0.66,
+            0.16,
+            -2.06,
+            0.12,
+            1.58,
+            0.88
+          ],
+          "joint_speed_scale": 0.16,
+          "goal_tolerance": 0.016
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_narrow_clearance_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_place_output_fixture_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_phase_a_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_narrow_clearance",
+      "expansion_family": "narrow_clearance_approach",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_narrow_clearance_insert_mid_slot_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_narrow_clearance_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/robot_narrow_clearance_cell.usd",
+      "shell_role": "insert",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_3_grasp_cereal",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen cereal pick semantics converted into a nominal transfer posture. Recontextualized into the narrow-clearance robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "grasp cereal object",
+        "object_ref": "cereal",
+        "subtask_signal": "grasp_cereal",
+        "benchmark_family": "narrow_clearance_approach",
+        "benchmark_phase": "insert",
+        "benchmark_semantic_role": "mid-slot insertion posture with slightly larger clearance margin"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_narrow_clearance_cell` for the phase-A single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_narrow_a",
+      "station_id": "narrow_fixture_slot_02",
+      "mission_phase": "insert_mid_slot",
+      "task_family": "pick_place",
+      "shell_role": "insert",
+      "part_id": "slim_insert_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "narrow_clearance_approach",
+      "clearance_profile": "narrow_slot_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.42,
+        -0.46,
+        0.18,
+        -1.96,
+        0.2,
+        1.4,
+        1.04
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.44,
+            -0.43,
+            0.2,
+            -1.94,
+            0.22,
+            1.36,
+            1.05
+          ],
+          "joint_speed_scale": 0.15,
+          "goal_tolerance": 0.014
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_narrow_clearance_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_cereal_transfer_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_phase_a_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_narrow_clearance",
+      "expansion_family": "narrow_clearance_approach",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_narrow_clearance_retreat_short_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_narrow_clearance_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_narrow_clearance_cell/robot_narrow_clearance_cell.usd",
+      "shell_role": "retreat",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_2_place_milk",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen milk placement lowered into an alternate station transfer pose in the pick-place shell. Recontextualized into the narrow-clearance robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "place milk object",
+        "object_ref": "milk",
+        "subtask_signal": "place_milk",
+        "benchmark_family": "narrow_clearance_approach",
+        "benchmark_phase": "retreat",
+        "benchmark_semantic_role": "short retreat that clears the slot mouth without fully resetting the arm"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_narrow_clearance_cell` for the phase-A single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_narrow_a",
+      "station_id": "narrow_fixture_exit_02",
+      "mission_phase": "retreat_short",
+      "task_family": "pick_place",
+      "shell_role": "retreat",
+      "part_id": "slim_insert_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "narrow_clearance_approach",
+      "clearance_profile": "narrow_slot_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.42,
+        -0.46,
+        0.18,
+        -1.96,
+        0.2,
+        1.4,
+        1.04
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.32,
+            -0.58,
+            0.18,
+            -1.98,
+            0.12,
+            1.54,
+            0.96
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_narrow_clearance_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_milk_place_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_phase_a_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_narrow_clearance",
+      "expansion_family": "narrow_clearance_approach",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_reach_fixture_insertion_align_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_fixture_insertion_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/robot_fixture_insertion_cell.usd",
+      "shell_role": "align",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "reach",
+      "source_unit": "manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka reach-family posture normalized into a fixture approach supervisory command. Recontextualized into the fixture-insertion robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "target approach / pre-grasp motion",
+        "selection_reason": "selected in source_task_selection.md for nominal approach cases",
+        "benchmark_family": "fixture_insertion",
+        "benchmark_phase": "align",
+        "benchmark_semantic_role": "alignment to the fixture insertion mouth with bounded lateral margin"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_fixture_insertion_cell` for the robot single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_insertion_a",
+      "station_id": "insertion_fixture_entry_01",
+      "mission_phase": "align",
+      "task_family": "reach",
+      "shell_role": "align",
+      "part_id": "insert_pin_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "fixture_insertion",
+      "clearance_profile": "fixture_insertion_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.12,
+            -0.88,
+            0.18,
+            -2.2,
+            0.02,
+            1.72,
+            0.66
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_fixture_insertion_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_reach_fixture_approach_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_fixture_insertion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_fixture_insertion",
+      "expansion_family": "fixture_insertion",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_place_fixture_insertion_pre_insert_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_fixture_insertion_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/robot_fixture_insertion_cell.usd",
+      "shell_role": "pre_insert",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "place",
+      "source_unit": "manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Place-family deposition semantics converted into a fixture-aligned placement posture. Recontextualized into the fixture-insertion robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "agibot",
+        "semantic_role": "final alignment and deposition",
+        "selection_reason": "selected in source_task_selection.md for precise placement semantics",
+        "benchmark_family": "fixture_insertion",
+        "benchmark_phase": "pre_insert",
+        "benchmark_semantic_role": "pre-insert alignment inside the insertion corridor before bounded depth entry"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_fixture_insertion_cell` for the robot single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_insertion_a",
+      "station_id": "insertion_fixture_align_01",
+      "mission_phase": "pre_insert",
+      "task_family": "place",
+      "shell_role": "pre_insert",
+      "part_id": "insert_pin_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "fixture_insertion",
+      "clearance_profile": "fixture_insertion_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.12,
+        -0.88,
+        0.18,
+        -2.2,
+        0.02,
+        1.72,
+        0.66
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.24,
+            -0.68,
+            0.14,
+            -2.08,
+            0.1,
+            1.6,
+            0.86
+          ],
+          "joint_speed_scale": 0.16,
+          "goal_tolerance": 0.016
+        }
+      },
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.4,
+            -0.48,
+            0.16,
+            -1.96,
+            0.16,
+            1.44,
+            1.0
+          ],
+          "joint_speed_scale": 0.16,
+          "goal_tolerance": 0.016
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_fixture_insertion_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_place_output_fixture_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_fixture_insertion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_fixture_insertion",
+      "expansion_family": "fixture_insertion",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_fixture_insertion_insert_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_fixture_insertion_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/robot_fixture_insertion_cell.usd",
+      "shell_role": "insert",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_3_grasp_cereal",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen cereal pick semantics converted into a nominal transfer posture. Recontextualized into the fixture-insertion robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "grasp cereal object",
+        "object_ref": "cereal",
+        "subtask_signal": "grasp_cereal",
+        "benchmark_family": "fixture_insertion",
+        "benchmark_phase": "insert",
+        "benchmark_semantic_role": "bounded insertion into the deeper fixture corridor without contacting the side walls"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_fixture_insertion_cell` for the robot single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_insertion_a",
+      "station_id": "insertion_fixture_slot_01",
+      "mission_phase": "insert",
+      "task_family": "pick_place",
+      "shell_role": "insert",
+      "part_id": "insert_pin_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "fixture_insertion",
+      "clearance_profile": "fixture_insertion_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.4,
+        -0.48,
+        0.16,
+        -1.96,
+        0.16,
+        1.44,
+        1.0
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.52,
+            -0.34,
+            0.2,
+            -1.88,
+            0.22,
+            1.3,
+            1.08
+          ],
+          "joint_speed_scale": 0.15,
+          "goal_tolerance": 0.014
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_fixture_insertion_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_cereal_transfer_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_fixture_insertion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_fixture_insertion",
+      "expansion_family": "fixture_insertion",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_fixture_insertion_withdraw_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_fixture_insertion_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/robot_fixture_insertion_cell.usd",
+      "shell_role": "withdraw",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_2_place_milk",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen milk placement lowered into an alternate station transfer pose in the pick-place shell. Recontextualized into the fixture-insertion robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "place milk object",
+        "object_ref": "milk",
+        "subtask_signal": "place_milk",
+        "benchmark_family": "fixture_insertion",
+        "benchmark_phase": "withdraw",
+        "benchmark_semantic_role": "controlled withdrawal out of the insertion corridor after bounded entry"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_fixture_insertion_cell` for the robot single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_insertion_a",
+      "station_id": "insertion_fixture_exit_01",
+      "mission_phase": "withdraw",
+      "task_family": "pick_place",
+      "shell_role": "withdraw",
+      "part_id": "insert_pin_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "fixture_insertion",
+      "clearance_profile": "fixture_insertion_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.52,
+        -0.34,
+        0.2,
+        -1.88,
+        0.22,
+        1.3,
+        1.08
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.3,
+            -0.62,
+            0.18,
+            -1.98,
+            0.1,
+            1.58,
+            0.92
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_fixture_insertion_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_milk_place_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_fixture_insertion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_fixture_insertion",
+      "expansion_family": "fixture_insertion",
+      "inherited_from_release": "robot_source_release_v3"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_reach_fixture_insertion_align_left_bias_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_fixture_insertion_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/robot_fixture_insertion_cell.usd",
+      "shell_role": "align",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "reach",
+      "source_unit": "manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/reach/config/franka/joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka reach-family posture normalized into a fixture approach supervisory command. Recontextualized into the fixture-insertion robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "target approach / pre-grasp motion",
+        "selection_reason": "selected in source_task_selection.md for nominal approach cases",
+        "benchmark_family": "fixture_insertion",
+        "benchmark_phase": "align",
+        "benchmark_semantic_role": "left-biased alignment near the insertion guide wall with bounded lateral margin"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_fixture_insertion_cell` for the robot single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_insertion_a",
+      "station_id": "insertion_fixture_entry_02",
+      "mission_phase": "align_left_bias",
+      "task_family": "reach",
+      "shell_role": "align",
+      "part_id": "insert_pin_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "fixture_insertion",
+      "clearance_profile": "fixture_insertion_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.16,
+            -0.84,
+            0.19,
+            -2.16,
+            0.06,
+            1.68,
+            0.72
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_fixture_insertion_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_reach_fixture_approach_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_fixture_insertion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_fixture_insertion",
+      "expansion_family": "fixture_insertion"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_place_fixture_insertion_pre_insert_shallow_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_fixture_insertion_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/robot_fixture_insertion_cell.usd",
+      "shell_role": "pre_insert",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "place",
+      "source_unit": "manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/place/config/agibot/place_toy2box_rmp_rel_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Place-family deposition semantics converted into a fixture-aligned placement posture. Recontextualized into the fixture-insertion robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "agibot",
+        "semantic_role": "final alignment and deposition",
+        "selection_reason": "selected in source_task_selection.md for precise placement semantics",
+        "benchmark_family": "fixture_insertion",
+        "benchmark_phase": "pre_insert",
+        "benchmark_semantic_role": "shallower pre-insert pose that keeps a larger depth margin before corridor entry"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_fixture_insertion_cell` for the robot single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_insertion_a",
+      "station_id": "insertion_fixture_align_02",
+      "mission_phase": "pre_insert_shallow",
+      "task_family": "place",
+      "shell_role": "pre_insert",
+      "part_id": "insert_pin_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "fixture_insertion",
+      "clearance_profile": "fixture_insertion_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.12,
+        -0.88,
+        0.18,
+        -2.2,
+        0.02,
+        1.72,
+        0.66
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.24,
+            -0.68,
+            0.14,
+            -2.08,
+            0.1,
+            1.6,
+            0.86
+          ],
+          "joint_speed_scale": 0.15,
+          "goal_tolerance": 0.016
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_fixture_insertion_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_place_output_fixture_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_fixture_insertion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_fixture_insertion",
+      "expansion_family": "fixture_insertion"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_fixture_insertion_insert_mid_depth_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_fixture_insertion_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/robot_fixture_insertion_cell.usd",
+      "shell_role": "insert",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_3_grasp_cereal",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen cereal pick semantics converted into a nominal transfer posture. Recontextualized into the fixture-insertion robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "grasp cereal object",
+        "object_ref": "cereal",
+        "subtask_signal": "grasp_cereal",
+        "benchmark_family": "fixture_insertion",
+        "benchmark_phase": "insert",
+        "benchmark_semantic_role": "mid-depth insertion posture with increased orientation margin before the final depth stop"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_fixture_insertion_cell` for the robot single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_insertion_a",
+      "station_id": "insertion_fixture_slot_02",
+      "mission_phase": "insert_mid_depth",
+      "task_family": "pick_place",
+      "shell_role": "insert",
+      "part_id": "insert_pin_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "fixture_insertion",
+      "clearance_profile": "fixture_insertion_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.4,
+        -0.48,
+        0.16,
+        -1.96,
+        0.16,
+        1.44,
+        1.0
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.46,
+            -0.4,
+            0.18,
+            -1.9,
+            0.18,
+            1.36,
+            1.04
+          ],
+          "joint_speed_scale": 0.15,
+          "goal_tolerance": 0.014
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_fixture_insertion_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_cereal_transfer_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_fixture_insertion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_fixture_insertion",
+      "expansion_family": "fixture_insertion"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_fixture_insertion_withdraw_short_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_fixture_insertion_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_fixture_insertion_cell/robot_fixture_insertion_cell.usd",
+      "shell_role": "withdraw",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_2_place_milk",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen milk placement lowered into an alternate station transfer pose in the pick-place shell. Recontextualized into the fixture-insertion robot expansion shell.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "place milk object",
+        "object_ref": "milk",
+        "subtask_signal": "place_milk",
+        "benchmark_family": "fixture_insertion",
+        "benchmark_phase": "withdraw",
+        "benchmark_semantic_role": "short withdrawal that clears the fixture mouth while keeping the arm near the corridor"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_fixture_insertion_cell` for the robot single-asset expansion benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_insertion_a",
+      "station_id": "insertion_fixture_exit_02",
+      "mission_phase": "withdraw_short",
+      "task_family": "pick_place",
+      "shell_role": "withdraw",
+      "part_id": "insert_pin_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "fixture_insertion",
+      "clearance_profile": "fixture_insertion_v1"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.52,
+        -0.34,
+        0.2,
+        -1.88,
+        0.22,
+        1.3,
+        1.08
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.4,
+            -0.48,
+            0.18,
+            -1.92,
+            0.14,
+            1.46,
+            0.98
+          ],
+          "joint_speed_scale": 0.16,
+          "goal_tolerance": 0.016
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_fixture_insertion_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_milk_place_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_fixture_insertion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_fixture_insertion",
+      "expansion_family": "fixture_insertion"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_stack_conveyor_timing_pick_early_window_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_stack_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/robot_stack_cell.usd",
+      "shell_role": "conveyor_pick",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "stack",
+      "source_unit": "manager_based/manipulation/stack/config/franka/stack_joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/stack/config/franka/stack_joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka stack-family pickup posture normalized into the conveyor-side stack-cell shell. Recontextualized into the conveyor-timing robot family.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "stack-family conveyor pickup",
+        "selection_reason": "selected in source_task_selection.md as a primary assembly-style family",
+        "benchmark_family": "conveyor_timing_pick",
+        "benchmark_phase": "conveyor_pick",
+        "benchmark_semantic_role": "early timing-window approach to the conveyor pickup zone before the part reaches the nominal capture point"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_stack_cell` and `robot_pick_place_cell` timing-window variants for the conveyor-timing single-asset benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_conveyor_a",
+      "station_id": "conveyor_infeed_01",
+      "mission_phase": "early_window",
+      "task_family": "stack",
+      "shell_role": "conveyor_pick",
+      "part_id": "conveyor_box_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "conveyor_timing_pick",
+      "timing_profile": "conveyor_window_v1",
+      "pickup_window": "early"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.02,
+        -0.58,
+        0.01,
+        -2.24,
+        -0.03,
+        1.69,
+        0.76
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.28,
+            -0.86,
+            0.22,
+            -2.18,
+            -0.18,
+            1.74,
+            0.58
+          ],
+          "joint_speed_scale": 0.22,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_stack_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_stack_conveyor_pick_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_conveyor_timing_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_conveyor_timing_pick",
+      "expansion_family": "conveyor_timing_pick"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_stack_conveyor_timing_pick_nominal_window_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_stack_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/robot_stack_cell.usd",
+      "shell_role": "conveyor_pick",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "stack",
+      "source_unit": "manager_based/manipulation/stack/config/franka/stack_joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/stack/config/franka/stack_joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka stack-family pickup posture normalized into the conveyor-side stack-cell shell. Recontextualized into the conveyor-timing robot family.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "stack-family conveyor pickup",
+        "selection_reason": "selected in source_task_selection.md as a primary assembly-style family",
+        "benchmark_family": "conveyor_timing_pick",
+        "benchmark_phase": "conveyor_pick",
+        "benchmark_semantic_role": "nominal timing-window capture at the conveyor pickup zone"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_stack_cell` and `robot_pick_place_cell` timing-window variants for the conveyor-timing single-asset benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_conveyor_a",
+      "station_id": "conveyor_infeed_01",
+      "mission_phase": "nominal_window",
+      "task_family": "stack",
+      "shell_role": "conveyor_pick",
+      "part_id": "conveyor_box_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "conveyor_timing_pick",
+      "timing_profile": "conveyor_window_v1",
+      "pickup_window": "nominal"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.28,
+        -0.86,
+        0.22,
+        -2.18,
+        -0.18,
+        1.74,
+        0.58
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.18,
+            -0.54,
+            0.08,
+            -2.06,
+            0.1,
+            1.7,
+            0.82
+          ],
+          "joint_speed_scale": 0.2,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_stack_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_stack_conveyor_pick_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_conveyor_timing_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_conveyor_timing_pick",
+      "expansion_family": "conveyor_timing_pick"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_stack_conveyor_timing_pick_late_window_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_stack_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/robot_stack_cell.usd",
+      "shell_role": "first_layer_place",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "stack",
+      "source_unit": "manager_based/manipulation/stack/config/franka/stack_joint_pos_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/stack/config/franka/stack_joint_pos_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Franka stack-family pickup posture normalized into the conveyor-side stack-cell shell. Recontextualized into the conveyor-timing robot family.",
+      "source_semantics": {
+        "upstream_robot_family": "franka",
+        "semantic_role": "stack-family conveyor pickup",
+        "selection_reason": "selected in source_task_selection.md as a primary assembly-style family",
+        "benchmark_family": "conveyor_timing_pick",
+        "benchmark_phase": "first_layer_place",
+        "benchmark_semantic_role": "late but still safe pickup window that uses a softened transition pose before the part leaves the lane"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_stack_cell` and `robot_pick_place_cell` timing-window variants for the conveyor-timing single-asset benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_conveyor_a",
+      "station_id": "conveyor_infeed_02",
+      "mission_phase": "late_window",
+      "task_family": "stack",
+      "shell_role": "first_layer_place",
+      "part_id": "conveyor_box_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "conveyor_timing_pick",
+      "timing_profile": "conveyor_window_v1",
+      "pickup_window": "late_safe"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.18,
+        -0.54,
+        0.08,
+        -2.06,
+        0.1,
+        1.7,
+        0.82
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.3,
+            -0.49,
+            0.14,
+            -2.0,
+            0.14,
+            1.64,
+            0.92
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_stack_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_stack_conveyor_pick_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_conveyor_timing_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_conveyor_timing_pick",
+      "expansion_family": "conveyor_timing_pick"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_stack_conveyor_timing_pick_buffer_transfer_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_stack_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_stack_cell/robot_stack_cell.usd",
+      "shell_role": "first_layer_place",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "stack",
+      "source_unit": "robosuite/stack.json#subtask_1_cubeA_grasp",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/stack.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen stack cubeA grasp lowered into a conveyor-pick posture inside the stack shell. Recontextualized into the conveyor-timing robot family.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "stack source-object grasp",
+        "object_ref": "cubeA",
+        "subtask_signal": "grasp",
+        "benchmark_family": "conveyor_timing_pick",
+        "benchmark_phase": "first_layer_place",
+        "benchmark_semantic_role": "buffered transfer after conveyor pickup with a softened second-step transition that stays inside the safe stack corridor"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_stack_cell` and `robot_pick_place_cell` timing-window variants for the conveyor-timing single-asset benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_conveyor_a",
+      "station_id": "conveyor_buffer_01",
+      "mission_phase": "buffer_transfer",
+      "task_family": "stack",
+      "shell_role": "first_layer_place",
+      "part_id": "conveyor_box_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "conveyor_timing_pick",
+      "timing_profile": "conveyor_window_v1",
+      "pickup_window": "buffered"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.28,
+        -0.86,
+        0.22,
+        -2.18,
+        -0.18,
+        1.74,
+        0.58
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.18,
+            -0.54,
+            0.08,
+            -2.06,
+            0.1,
+            1.7,
+            0.82
+          ],
+          "joint_speed_scale": 0.2,
+          "goal_tolerance": 0.018
+        }
+      },
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.3,
+            -0.49,
+            0.14,
+            -2.0,
+            0.14,
+            1.64,
+            0.92
+          ],
+          "joint_speed_scale": 0.2,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_stack_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_stack_cubeA_transfer_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_conveyor_timing_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_conveyor_timing_pick",
+      "expansion_family": "conveyor_timing_pick"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_isaaclab_pick_place_conveyor_timing_pick_source_capture_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "pick",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "isaaclab_eval_industrial",
+      "source_name": "IsaacLab",
+      "task_family": "pick_place",
+      "source_unit": "manager_based/manipulation/pick_place/pickplace_gr1t2_env_cfg.py",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/source/isaaclab_tasks/isaaclab_tasks/manager_based/manipulation/pick_place/pickplace_gr1t2_env_cfg.py",
+      "upstream_ref": "f4aa17f87e2e5db5484f0b5974918573e8918ce2",
+      "provenance_note": "Industrial pick-place provenance lowered into a transfer posture inside the canonical pick-place shell. Recontextualized into the conveyor-timing robot family.",
+      "source_semantics": {
+        "upstream_robot_family": "gr1t2",
+        "semantic_role": "pick-and-place transfer motion",
+        "selection_reason": "selected in source_task_selection.md as a primary nominal motion family",
+        "benchmark_family": "conveyor_timing_pick",
+        "benchmark_phase": "pick",
+        "benchmark_semantic_role": "source-side conveyor capture with a two-step approach into the pickup window"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_stack_cell` and `robot_pick_place_cell` timing-window variants for the conveyor-timing single-asset benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_conveyor_a",
+      "station_id": "conveyor_source_01",
+      "mission_phase": "source_capture",
+      "task_family": "pick_place",
+      "shell_role": "pick",
+      "part_id": "conveyor_pack_a",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "conveyor_timing_pick",
+      "timing_profile": "conveyor_window_v1",
+      "pickup_window": "source_capture"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.0,
+        -0.6,
+        0.0,
+        -2.2,
+        0.0,
+        1.6,
+        0.78
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "shell_default"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.12,
+            -0.88,
+            0.18,
+            -2.2,
+            0.02,
+            1.72,
+            0.66
+          ],
+          "joint_speed_scale": 0.22,
+          "goal_tolerance": 0.018
+        }
+      },
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.02,
+            -0.68,
+            0.05,
+            -2.12,
+            -0.02,
+            1.66,
+            0.8
+          ],
+          "joint_speed_scale": 0.22,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_isaaclab_pick_place_transfer_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_conveyor_timing_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_conveyor_timing_pick",
+      "expansion_family": "conveyor_timing_pick"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_conveyor_timing_pick_mid_transfer_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "transfer",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_3_grasp_cereal",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen cereal pick semantics converted into a nominal transfer posture. Recontextualized into the conveyor-timing robot family.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "grasp cereal object",
+        "object_ref": "cereal",
+        "subtask_signal": "grasp_cereal",
+        "benchmark_family": "conveyor_timing_pick",
+        "benchmark_phase": "transfer",
+        "benchmark_semantic_role": "mid-transfer timing handoff after a successful conveyor pickup"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_stack_cell` and `robot_pick_place_cell` timing-window variants for the conveyor-timing single-asset benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_conveyor_a",
+      "station_id": "conveyor_handoff_01",
+      "mission_phase": "mid_transfer",
+      "task_family": "pick_place",
+      "shell_role": "transfer",
+      "part_id": "conveyor_pack_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "conveyor_timing_pick",
+      "timing_profile": "conveyor_window_v1",
+      "pickup_window": "transfer_mid"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.02,
+        -0.68,
+        0.05,
+        -2.12,
+        -0.02,
+        1.66,
+        0.8
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.3,
+            -0.52,
+            0.12,
+            -2.0,
+            0.1,
+            1.56,
+            0.96
+          ],
+          "joint_speed_scale": 0.2,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_cereal_transfer_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_conveyor_timing_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_conveyor_timing_pick",
+      "expansion_family": "conveyor_timing_pick"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_conveyor_timing_pick_handoff_window_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "transfer",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_3_grasp_cereal",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen cereal pick semantics converted into a nominal transfer posture. Recontextualized into the conveyor-timing robot family.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "grasp cereal object",
+        "object_ref": "cereal",
+        "subtask_signal": "grasp_cereal",
+        "benchmark_family": "conveyor_timing_pick",
+        "benchmark_phase": "transfer",
+        "benchmark_semantic_role": "handoff-window transfer into the downstream placement corridor"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_stack_cell` and `robot_pick_place_cell` timing-window variants for the conveyor-timing single-asset benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_conveyor_a",
+      "station_id": "conveyor_handoff_02",
+      "mission_phase": "handoff_window",
+      "task_family": "pick_place",
+      "shell_role": "transfer",
+      "part_id": "conveyor_pack_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "conveyor_timing_pick",
+      "timing_profile": "conveyor_window_v1",
+      "pickup_window": "handoff"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.3,
+        -0.52,
+        0.12,
+        -2.0,
+        0.1,
+        1.56,
+        0.96
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.54,
+            -0.38,
+            0.18,
+            -1.86,
+            0.18,
+            1.48,
+            1.1
+          ],
+          "joint_speed_scale": 0.18,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_cereal_transfer_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_conveyor_timing_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_conveyor_timing_pick",
+      "expansion_family": "conveyor_timing_pick"
+    }
+  },
+  {
+    "benchmark_release": "robot_source_release_v4",
+    "benchmark_version": "v4.0",
+    "case_id": "robot_nominal_mimicgen_pick_place_conveyor_timing_pick_clear_reset_001",
+    "case_group": "nominal",
+    "asset_id": "robot_arm_01",
+    "scenario_family": "robot_manipulation",
+    "runtime_context": {
+      "runtime_id": "robot_pick_place_cell",
+      "runtime_type": "usd_scene",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/shell_config.json",
+      "scene_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/robot/robot_pick_place_cell/robot_pick_place_cell.usd",
+      "shell_role": "place",
+      "robot_model": "franka_fallback",
+      "executable_action_subset": "move_joint"
+    },
+    "source_benchmark": {
+      "source_id": "mimicgen_assembly",
+      "source_name": "MimicGen",
+      "task_family": "pick_place",
+      "source_unit": "robosuite/pick_place.json#subtask_2_place_milk",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/mimicgen/exps/templates/robosuite/pick_place.json",
+      "upstream_ref": "72bd767c255545f462e7ccfb2731f2e5d4c1d9bb",
+      "provenance_note": "MimicGen milk placement lowered into an alternate station transfer pose in the pick-place shell. Recontextualized into the conveyor-timing robot family.",
+      "source_semantics": {
+        "upstream_robot_family": "robosuite_single_arm",
+        "semantic_role": "place milk object",
+        "object_ref": "milk",
+        "subtask_signal": "place_milk",
+        "benchmark_family": "conveyor_timing_pick",
+        "benchmark_phase": "place",
+        "benchmark_semantic_role": "reset motion that clears the conveyor zone after a time-constrained pickup and handoff"
+      },
+      "runtime_normalization": "Frozen public-source manipulation provenance normalized into `robot_stack_cell` and `robot_pick_place_cell` timing-window variants for the conveyor-timing single-asset benchmark."
+    },
+    "operation_context": {
+      "cell_id": "assembly_cell_conveyor_a",
+      "station_id": "conveyor_clear_01",
+      "mission_phase": "clear_reset",
+      "task_family": "pick_place",
+      "shell_role": "place",
+      "part_id": "conveyor_pack_b",
+      "operator_mode": "autonomous_supervision",
+      "benchmark_family": "conveyor_timing_pick",
+      "timing_profile": "conveyor_window_v1",
+      "pickup_window": "clear_reset"
+    },
+    "initial_state": {
+      "joint_positions": [
+        0.54,
+        -0.38,
+        0.18,
+        -1.86,
+        0.18,
+        1.48,
+        1.1
+      ],
+      "joint_velocities": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "state_origin": "case_override"
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_joint",
+        "params": {
+          "target_positions": [
+            0.1,
+            -0.76,
+            0.2,
+            -1.96,
+            0.0,
+            1.82,
+            0.88
+          ],
+          "joint_speed_scale": 0.2,
+          "goal_tolerance": 0.018
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "robot_pick_place_cell",
+      "executor_mode": "mock_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": "robot_nominal_mimicgen_pick_place_milk_place_001",
+      "mutation_rule": null,
+      "qc_status": "drafted_from_conveyor_timing_expansion",
+      "runtime_validation_status": "shell_profile_declared",
+      "paper_role": "robot_nominal_conveyor_timing_pick",
+      "expansion_family": "conveyor_timing_pick"
+    }
+  }
+]

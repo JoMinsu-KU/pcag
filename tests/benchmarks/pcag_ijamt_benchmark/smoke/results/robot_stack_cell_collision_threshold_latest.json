@@ -1,0 +1,325 @@
+{
+  "shell_runtime_id": "robot_stack_cell",
+  "world_ref": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_stack_cell\\robot_stack_cell.usd",
+  "headless": false,
+  "camera_applied": true,
+  "source_search_result": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\smoke\\results\\robot_stack_cell_collision_search_latest.json",
+  "safe_lower_bound_target": [
+    0.46,
+    -0.44,
+    0.22,
+    -1.9,
+    0.18,
+    1.57,
+    1.08,
+    0.0,
+    0.0
+  ],
+  "hit_upper_bound_target": [
+    0.46794,
+    0.12291,
+    -0.09989,
+    -1.9417,
+    0.40046,
+    1.14736,
+    1.35927,
+    0.0,
+    0.0
+  ],
+  "threshold_alpha": 0.552734,
+  "margin_alpha": 0.03,
+  "threshold_eval": {
+    "candidate_target": [
+      0.46439,
+      -0.12886,
+      0.04319,
+      -1.92305,
+      0.30186,
+      1.33639,
+      1.23436,
+      0.0,
+      0.0
+    ],
+    "hit": true,
+    "first_violation": {
+      "frame_index": 89,
+      "penetrated_fixture_id": "workbench",
+      "end_effector_position": [
+        0.41215,
+        0.20167,
+        0.52489
+      ],
+      "target_joint_positions": [
+        0.46439,
+        -0.12886,
+        0.04319,
+        -1.92305,
+        0.30186,
+        1.33639,
+        1.23436,
+        0.0,
+        0.0
+      ]
+    },
+    "best_gap_m": -0.00011,
+    "best_gap_fixture_id": "workbench",
+    "final_end_effector_position": [
+      0.41215,
+      0.20167,
+      0.52489
+    ]
+  },
+  "recommended_safe_alpha": 0.522734,
+  "recommended_unsafe_alpha": 0.582734,
+  "recommended_safe_eval": {
+    "candidate_target": [
+      0.46415,
+      -0.14575,
+      0.05278,
+      -1.9218,
+      0.29524,
+      1.34907,
+      1.22598,
+      0.0,
+      0.0
+    ],
+    "hit": false,
+    "first_violation": null,
+    "best_gap_m": 0.00286,
+    "best_gap_fixture_id": "workbench",
+    "final_end_effector_position": [
+      0.41398,
+      0.20457,
+      0.52786
+    ]
+  },
+  "recommended_unsafe_eval": {
+    "candidate_target": [
+      0.46463,
+      -0.11197,
+      0.03359,
+      -1.9243,
+      0.30847,
+      1.32371,
+      1.24274,
+      0.0,
+      0.0
+    ],
+    "hit": true,
+    "first_violation": {
+      "frame_index": 83,
+      "penetrated_fixture_id": "workbench",
+      "end_effector_position": [
+        0.40428,
+        0.19444,
+        0.52493
+      ],
+      "target_joint_positions": [
+        0.46463,
+        -0.11197,
+        0.03359,
+        -1.9243,
+        0.30847,
+        1.32371,
+        1.24274,
+        0.0,
+        0.0
+      ]
+    },
+    "best_gap_m": -7e-05,
+    "best_gap_fixture_id": "workbench",
+    "final_end_effector_position": [
+      0.40428,
+      0.19444,
+      0.52493
+    ]
+  },
+  "recommended_safe_target_joints_json": "[[0.46415, -0.14575, 0.05278, -1.9218, 0.29524, 1.34907, 1.22598, 0.0, 0.0]]",
+  "recommended_unsafe_target_joints_json": "[[0.46463, -0.11197, 0.03359, -1.9243, 0.30847, 1.32371, 1.24274, 0.0, 0.0]]",
+  "iteration_trace": [
+    {
+      "iteration": 0,
+      "alpha": 0.5,
+      "hit": false,
+      "best_gap_m": 0.00413,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46397,
+        -0.15854,
+        0.06005,
+        -1.92085,
+        0.29023,
+        1.35868,
+        1.21964,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 1,
+      "alpha": 0.75,
+      "hit": true,
+      "best_gap_m": -3e-05,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46596,
+        -0.01782,
+        -0.01992,
+        -1.93127,
+        0.34534,
+        1.25302,
+        1.28945,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 2,
+      "alpha": 0.625,
+      "hit": true,
+      "best_gap_m": -4e-05,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46496,
+        -0.08818,
+        0.02007,
+        -1.92606,
+        0.31779,
+        1.30585,
+        1.25454,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 3,
+      "alpha": 0.5625,
+      "hit": true,
+      "best_gap_m": -0.00023,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46447,
+        -0.12336,
+        0.04006,
+        -1.92346,
+        0.30401,
+        1.33227,
+        1.23709,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 4,
+      "alpha": 0.53125,
+      "hit": false,
+      "best_gap_m": 0.00197,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46422,
+        -0.14095,
+        0.05006,
+        -1.92215,
+        0.29712,
+        1.34547,
+        1.22836,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 5,
+      "alpha": 0.546875,
+      "hit": false,
+      "best_gap_m": 0.00092,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46434,
+        -0.13216,
+        0.04506,
+        -1.9228,
+        0.30056,
+        1.33887,
+        1.23273,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 6,
+      "alpha": 0.554688,
+      "hit": true,
+      "best_gap_m": -3e-05,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.4644,
+        -0.12776,
+        0.04256,
+        -1.92313,
+        0.30229,
+        1.33557,
+        1.23491,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 7,
+      "alpha": 0.550781,
+      "hit": false,
+      "best_gap_m": 0.00046,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46437,
+        -0.12996,
+        0.04381,
+        -1.92297,
+        0.30143,
+        1.33722,
+        1.23382,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 8,
+      "alpha": 0.552734,
+      "hit": true,
+      "best_gap_m": -0.00011,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46439,
+        -0.12886,
+        0.04319,
+        -1.92305,
+        0.30186,
+        1.33639,
+        1.23436,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "iteration": 9,
+      "alpha": 0.551758,
+      "hit": false,
+      "best_gap_m": 0.00026,
+      "best_gap_fixture_id": "workbench",
+      "candidate_target": [
+        0.46438,
+        -0.12941,
+        0.0435,
+        -1.92301,
+        0.30164,
+        1.33681,
+        1.23409,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "result_files": {
+    "latest": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\smoke\\results\\robot_stack_cell_collision_threshold_latest.json",
+    "archive": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\smoke\\results\\robot_stack_cell_collision_threshold_20260319_115436.json"
+  }
+}

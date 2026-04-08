@@ -1,0 +1,54 @@
+{
+  "release_id": "agv_pcag_execution_release_v3",
+  "derived_from_release": "agv_source_release_v3",
+  "source_entrypoint": "all_cases.json",
+  "benchmark_scope": "agv_only",
+  "benchmark_version": "v3.0",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_agv_pcag_execution_dataset_v3.py",
+  "case_counts": {
+    "nominal": 40,
+    "unsafe": 52,
+    "fault": 36,
+    "total": 128
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 40,
+    "UNSAFE": 52,
+    "REJECTED": 19,
+    "ABORTED": 13,
+    "ERROR": 4
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 40,
+    "SAFETY_UNSAFE": 52,
+    "INTEGRITY_REJECTED": 19,
+    "PREPARE_LOCK_DENIED": 4,
+    "REVERIFY_FAILED": 4,
+    "COMMIT_TIMEOUT": 3,
+    "COMMIT_FAILED": 2,
+    "COMMIT_ERROR": 4
+  },
+  "case_counts_by_runtime": {
+    "agv_transfer_map": 39,
+    "agv_docking_map": 41,
+    "agv_shared_zone_map": 48
+  },
+  "additional_requirement_counts": {
+    "generic_runtime_context_transport": 128,
+    "generic_runtime_preload": 128,
+    "generic_sensor_alignment": 128,
+    "benchmark_policy_sensor_divergence_thresholds": 2,
+    "generic_fault_injection_hook": 17
+  },
+  "libraries": {
+    "action_sequences": 128,
+    "runtime_contexts": 3,
+    "initial_states": 128,
+    "sensor_snapshots": 2
+  },
+  "notes": [
+    "This execution dataset is derived directly from agv_source_release_v3/all_cases.json.",
+    "The AGV v3 expansion families remain Gateway-compatible and reuse the same runtime-preload contract.",
+    "The same benchmark policy version is reused; no scenario-specific PCAG branching is introduced."
+  ]
+}

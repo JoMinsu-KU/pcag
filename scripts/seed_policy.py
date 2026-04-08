@@ -393,6 +393,12 @@ def build_initial_policy() -> dict:
                         "7": [0.0, 0.04],
                         "8": [0.0, 0.04],
                     },
+                    "collision": {
+                        "enabled": False,
+                        "mode": "end_effector_sphere",
+                        "probe_radius_m": 0.045,
+                        "forbidden_objects": [],
+                    },
                 },
                 "execution": {
                     "lock_ttl_ms": 5000,

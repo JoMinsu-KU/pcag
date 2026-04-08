@@ -41,6 +41,18 @@ class ManagedModbusConnection:
         return f"{self.host}:{self.port}"
 
 
+@dataclass
+class VirtualAssetRuntime:
+    asset_id: str
+    register_image: dict[int, int] = field(default_factory=dict)
+    runtime_context: dict[str, Any] = field(default_factory=dict)
+    last_preload_ms: int = 0
+
+    @property
+    def connection_key(self) -> str:
+        return f"virtual:{self.asset_id}"
+
+
 class PlcAdapterService:
     def __init__(self) -> None:
         # _connections: 실제 TCP 연결 객체 저장소
@@ -49,6 +61,7 @@ class PlcAdapterService:
         self._sensor_assets: dict[str, dict[str, Any]] = {}
         self._sensor_asset_connections: dict[str, str] = {}
         self._executor_assets: dict[str, dict[str, Any]] = {}
+        self._virtual_assets: dict[str, VirtualAssetRuntime] = {}
         self._initialized = False
 
     def initialize(self) -> None:
@@ -83,6 +96,7 @@ class PlcAdapterService:
                         logger.debug("PLC adapter close ignored | connection=%s", connection.key, exc_info=True)
                 connection.client = None
                 connection.connected = False
+        self._virtual_assets.clear()
         self._initialized = False
 
     def get_health(self) -> dict[str, Any]:
@@ -96,13 +110,71 @@ class PlcAdapterService:
             }
             for connection in self._connections.values()
         ]
-        if not connections:
+        virtual_assets = [
+            {
+                "connection_key": runtime.connection_key,
+                "connected": True,
+                "last_error": None,
+                "mode": "virtual",
+                "asset_id": runtime.asset_id,
+            }
+            for runtime in self._virtual_assets.values()
+        ]
+        all_connections = connections + virtual_assets
+        if not all_connections:
             status = "ERROR"
-        elif any(item["last_error"] for item in connections):
+        elif any(item["last_error"] for item in all_connections):
             status = "DEGRADED"
         else:
             status = "OK"
-        return {"status": status, "connections": connections}
+        return {"status": status, "connections": all_connections}
+
+    def preload_runtime(
+        self,
+        *,
+        asset_id: str,
+        runtime_context: dict[str, Any] | None,
+        initial_state: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        if not self._initialized:
+            self.initialize()
+
+        sensor_asset = self._sensor_assets.get(asset_id)
+        executor_asset = self._executor_assets.get(asset_id)
+        if not sensor_asset or not executor_asset:
+            raise KeyError(f"No PLC mapping configured for asset {asset_id}")
+
+        register_image: dict[int, int] = {}
+        for mapping in sensor_asset.get("mappings", []):
+            value = (initial_state or {}).get(mapping["field"], 0.0)
+            encoded = self._encode_value_to_registers(value, mapping)
+            for offset, raw_value in enumerate(encoded):
+                register_image[mapping["register"] + offset] = raw_value
+
+        runtime = VirtualAssetRuntime(
+            asset_id=asset_id,
+            register_image=register_image,
+            runtime_context=dict(runtime_context or {}),
+            last_preload_ms=int(time.time() * 1000),
+        )
+        self._virtual_assets[asset_id] = runtime
+
+        snapshot = self._read_virtual_snapshot(asset_id)
+        logger.info(
+            "PLC runtime preload ready | asset=%s runtime_id=%s connection=%s field_count=%s",
+            asset_id,
+            (runtime_context or {}).get("runtime_id"),
+            runtime.connection_key,
+            len(snapshot),
+        )
+        return {
+            "asset_id": asset_id,
+            "status": "READY",
+            "runtime_id": (runtime_context or {}).get("runtime_id"),
+            "source": "virtual_plc",
+            "connection_key": runtime.connection_key,
+            "current_state": snapshot,
+        }
 
     def read_snapshot(self, asset_id: str) -> tuple[dict[str, Any], str]:
         if not self._initialized:
@@ -111,6 +183,17 @@ class PlcAdapterService:
         asset_config = self._sensor_assets.get(asset_id)
         if not asset_config:
             raise KeyError(f"No PLC sensor mapping configured for asset {asset_id}")
+
+        virtual_runtime = self._virtual_assets.get(asset_id)
+        if virtual_runtime is not None:
+            snapshot = self._read_virtual_snapshot(asset_id)
+            logger.info(
+                "PLC snapshot read (virtual) | asset=%s connection=%s field_count=%s",
+                asset_id,
+                virtual_runtime.connection_key,
+                len(snapshot),
+            )
+            return snapshot, virtual_runtime.connection_key
 
         connection = self._get_connection(self._sensor_asset_connections[asset_id])
         mappings = asset_config.get("mappings", [])
@@ -155,6 +238,32 @@ class PlcAdapterService:
 
         connection = self._get_connection(asset_config["connection_key"])
         action_mappings = asset_config["action_mappings"]
+        virtual_runtime = self._virtual_assets.get(asset_id)
+
+        if virtual_runtime is not None:
+            try:
+                for action in action_sequence:
+                    low_level_actions = self._normalize_actions(asset_id, action, action_mappings)
+                    for low_level_action in low_level_actions:
+                        self._apply_low_level_action_to_virtual(asset_id, low_level_action)
+                logger.info(
+                    "PLC execute success (virtual) | tx=%s asset=%s connection=%s action_count=%s",
+                    transaction_id,
+                    asset_id,
+                    virtual_runtime.connection_key,
+                    len(action_sequence),
+                )
+                return True, None, virtual_runtime.connection_key
+            except Exception as exc:
+                logger.error(
+                    "PLC execute failed (virtual) | tx=%s asset=%s connection=%s error=%s",
+                    transaction_id,
+                    asset_id,
+                    virtual_runtime.connection_key,
+                    exc,
+                    exc_info=True,
+                )
+                return False, str(exc), virtual_runtime.connection_key
 
         # 고수준 action_sequence를 저수준 register write로 바꾼 뒤 직렬 실행한다.
         def _perform() -> bool:
@@ -205,6 +314,59 @@ class PlcAdapterService:
         connection = self._get_connection(asset_config["connection_key"])
 
         # safe_state는 장애 복구 경로이므로, 일반 실행과 같은 연결 복구 정책을 탄다.
+        def _perform() -> bool:
+            for action in actions:
+                self._execute_low_level_action(connection, asset_id, f"SAFE_STATE_{asset_id}", action)
+            return True
+
+        try:
+            self._run_with_recovery(
+                connection,
+                operation="safe_state",
+                context={"asset_id": asset_id},
+                fn=_perform,
+            )
+            logger.warning("PLC safe state success | asset=%s connection=%s", asset_id, connection.key)
+            return True, None, connection.key
+        except Exception as exc:
+            logger.error("PLC safe state failed | asset=%s connection=%s error=%s", asset_id, connection.key, exc, exc_info=True)
+            return False, str(exc), connection.key
+
+    def safe_state(self, asset_id: str) -> tuple[bool, str | None, str]:
+        if not self._initialized:
+            self.initialize()
+
+        asset_config = self._executor_assets.get(asset_id)
+        if not asset_config:
+            raise KeyError(f"No PLC executor mapping configured for asset {asset_id}")
+
+        actions = asset_config["safe_state_actions"]
+        if not actions:
+            raise RuntimeError(f"No safe state actions configured for asset {asset_id}")
+
+        virtual_runtime = self._virtual_assets.get(asset_id)
+        if virtual_runtime is not None:
+            try:
+                for action in actions:
+                    self._apply_low_level_action_to_virtual(asset_id, action)
+                logger.warning(
+                    "PLC safe state success (virtual) | asset=%s connection=%s",
+                    asset_id,
+                    virtual_runtime.connection_key,
+                )
+                return True, None, virtual_runtime.connection_key
+            except Exception as exc:
+                logger.error(
+                    "PLC safe state failed (virtual) | asset=%s connection=%s error=%s",
+                    asset_id,
+                    virtual_runtime.connection_key,
+                    exc,
+                    exc_info=True,
+                )
+                return False, str(exc), virtual_runtime.connection_key
+
+        connection = self._get_connection(asset_config["connection_key"])
+
         def _perform() -> bool:
             for action in actions:
                 self._execute_low_level_action(connection, asset_id, f"SAFE_STATE_{asset_id}", action)
@@ -423,6 +585,88 @@ class PlcAdapterService:
 
         if result.isError():
             raise RuntimeError(f"Modbus write error for asset={asset_id} register={register}: {result}")
+
+    def _read_virtual_snapshot(self, asset_id: str) -> dict[str, Any]:
+        runtime = self._virtual_assets.get(asset_id)
+        sensor_asset = self._sensor_assets.get(asset_id)
+        if runtime is None or sensor_asset is None:
+            raise KeyError(f"No virtual PLC runtime configured for asset {asset_id}")
+
+        snapshot: dict[str, Any] = {}
+        for mapping in sensor_asset.get("mappings", []):
+            count = mapping.get("register_count", 1)
+            registers = [
+                int(runtime.register_image.get(mapping["register"] + offset, 0))
+                for offset in range(count)
+            ]
+            snapshot[mapping["field"]] = self._decode_registers(registers, mapping)
+
+        if "position_x" in snapshot and "position_y" in snapshot:
+            snapshot.setdefault(
+                "agv_01",
+                {
+                    "x": snapshot.get("position_x", 0),
+                    "y": snapshot.get("position_y", 0),
+                },
+            )
+
+        sensor_overlay = runtime.runtime_context.get("sensor_state_overlay")
+        if isinstance(sensor_overlay, dict):
+            snapshot = self._merge_dicts(snapshot, sensor_overlay)
+        return snapshot
+
+    def _apply_low_level_action_to_virtual(self, asset_id: str, action: dict[str, Any]) -> None:
+        runtime = self._virtual_assets.get(asset_id)
+        if runtime is None:
+            raise KeyError(f"No virtual PLC runtime configured for asset {asset_id}")
+
+        register = action.get("register")
+        if register is None:
+            raise ValueError(f"Missing register in action: {action}")
+
+        action_type = action.get("type")
+        if action_type == "write_register":
+            value = action.get("value")
+            if value is None:
+                raise ValueError(f"Missing value in action: {action}")
+            runtime.register_image[int(register)] = int(value)
+            return
+
+        if action_type == "write_registers":
+            values = action.get("values")
+            if values is None:
+                raise ValueError(f"Missing values in action: {action}")
+            for offset, raw_value in enumerate(values):
+                runtime.register_image[int(register) + offset] = int(raw_value)
+            return
+
+        raise ValueError(f"Unsupported action type: {action_type}")
+
+    @staticmethod
+    def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+        merged = dict(base)
+        for key, value in override.items():
+            if isinstance(merged.get(key), dict) and isinstance(value, dict):
+                merged[key] = PlcAdapterService._merge_dicts(merged[key], value)
+            else:
+                merged[key] = value
+        return merged
+
+    @staticmethod
+    def _encode_value_to_registers(value: Any, mapping: dict[str, Any]) -> list[int]:
+        dtype = mapping.get("data_type", "uint16")
+        count = mapping.get("register_count", 1)
+        scale = mapping.get("scale", 1.0)
+
+        if dtype == "float32" and count == 2:
+            packed = struct.pack(">f", float(value))
+            high, low = struct.unpack(">HH", packed)
+            return [high, low]
+
+        scaled_value = int(round(float(value) / scale)) if scale not in {0, 0.0} else int(round(float(value)))
+        if dtype == "int16" and scaled_value < 0:
+            scaled_value = (1 << 16) + scaled_value
+        return [scaled_value]
 
     @staticmethod
     def _decode_registers(registers: list[int], mapping: dict[str, Any]) -> Any:

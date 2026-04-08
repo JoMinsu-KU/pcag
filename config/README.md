@@ -35,6 +35,7 @@ It defines:
 - which endpoint should be used for readiness probing
 - dashboard refresh and aggregation settings
 - shared runtime assumptions used by evaluation tooling and monitoring
+- benchmark runtime toggles such as centralized digital-twin GUI boot
 
 ### Current convention
 
@@ -42,6 +43,39 @@ The repository uses `127.0.0.1` instead of `localhost`.
 
 This is intentional.
 On Windows, `localhost` may resolve through IPv6 first, which can introduce avoidable connection delays when services are only listening on IPv4.
+
+### Environment-variable convention
+
+The repository also supports a lightweight root-level `.env` file.
+
+`pcag/core/utils/config_loader.py` loads `.env` first, then applies
+`${ENV:default}` substitution while parsing YAML config files.
+
+That means benchmark runtime toggles can be managed in either place:
+
+- directly in `.env`
+- or in `services.yaml` through `benchmark_runtime`
+
+Current benchmark GUI toggles are:
+
+- `PCAG_ENABLE_ISAAC`
+- `PCAG_ENABLE_BENCHMARK_TWIN_GUIS`
+- `PCAG_ENABLE_AGV_GUI`
+- `PCAG_ENABLE_PROCESS_GUI`
+
+The AGV and process simulation backends also honor the legacy runtime flags:
+
+- `PCAG_AGV_GUI`
+- `PCAG_PROCESS_GUI`
+
+The Safety Cluster startup path now keeps these aliases synchronized, so using
+the `PCAG_ENABLE_*` variables in `.env` or `services.yaml` is sufficient.
+
+Precedence is effectively:
+
+1. shell-exported environment variables
+2. root `.env`
+3. defaults written in `services.yaml`
 
 ### When to restart services
 

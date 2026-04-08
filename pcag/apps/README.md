@@ -46,6 +46,9 @@ It currently provides:
 - SIL-aware consensus
 - Isaac worker/proxy isolation
 
+On the robot path, the Isaac validator currently evaluates more than joint limits alone.
+It can use policy-supplied workspace limits, torque limits, command-divergence checks, and optional fixture-collision probes declared in the asset policy under `simulation.collision`.
+
 This service runs in the separate `pcag-isaac` environment because of Isaac runtime requirements.
 
 ### [`policy_store/`](policy_store)

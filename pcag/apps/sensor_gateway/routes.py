@@ -159,6 +159,7 @@ def get_latest_snapshot(asset_id: str):
         
         # 1. 현재 자산의 실데이터를 읽는다.
         sensor_data = source.read_snapshot(asset_id)
+        integrity_hash_payload = sensor_data.pop("__integrity_hash_payload", None)
         
         # Source Name 확인 (Composite인 경우)
         source_name = "unknown"
@@ -166,7 +167,9 @@ def get_latest_snapshot(asset_id: str):
             source_name = source.get_source_name(asset_id)
         
         # 2. Gateway 무결성 검증에서 사용할 해시를 계산한다.
-        snapshot_hash = compute_sensor_hash(sensor_data)
+        snapshot_hash = compute_sensor_hash(
+            integrity_hash_payload if isinstance(integrity_hash_payload, dict) and integrity_hash_payload else sensor_data
+        )
         
         # 타임스탬프
         timestamp_ms = int(time.time() * 1000)

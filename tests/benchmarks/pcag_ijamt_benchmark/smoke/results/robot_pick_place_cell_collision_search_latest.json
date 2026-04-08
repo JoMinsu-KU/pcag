@@ -1,0 +1,356 @@
+{
+  "shell_runtime_id": "robot_pick_place_cell",
+  "world_ref": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd",
+  "headless": false,
+  "camera_applied": true,
+  "candidate_count": 41,
+  "first_hit": {
+    "candidate_target": [
+      0.24651,
+      -0.11892,
+      0.31147,
+      -1.94649,
+      0.60532,
+      1.55383,
+      0.85459,
+      0.0,
+      0.0
+    ],
+    "hit": true,
+    "first_violation": {
+      "frame_index": 89,
+      "penetrated_fixture_id": "workbench",
+      "end_effector_position": [
+        0.45168,
+        0.26851,
+        0.52499
+      ],
+      "target_joint_positions": [
+        0.24651,
+        -0.11892,
+        0.31147,
+        -1.94649,
+        0.60532,
+        1.55383,
+        0.85459,
+        0.0,
+        0.0
+      ]
+    },
+    "best_gap_m": -1e-05,
+    "best_gap_fixture_id": "workbench",
+    "final_end_effector_position": [
+      0.45168,
+      0.26851,
+      0.52499
+    ],
+    "candidate_index": 40
+  },
+  "best_candidate": {
+    "candidate_target": [
+      0.53471,
+      -0.14841,
+      0.07785,
+      -2.03789,
+      -0.5166,
+      2.19659,
+      1.24645,
+      0.0,
+      0.0
+    ],
+    "hit": false,
+    "first_violation": null,
+    "best_gap_m": 0.00329,
+    "best_gap_fixture_id": "workbench",
+    "final_end_effector_position": [
+      0.48603,
+      0.28672,
+      0.52829
+    ],
+    "candidate_index": 38
+  },
+  "suggested_target_joints_json": "[[0.24651, -0.11892, 0.31147, -1.94649, 0.60532, 1.55383, 0.85459, 0.0, 0.0]]",
+  "results_preview": [
+    {
+      "candidate_target": [
+        0.4,
+        -0.54,
+        0.26,
+        -1.8,
+        0.4,
+        1.76,
+        1.06,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05287,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.26686,
+        0.32757,
+        0.76277
+      ],
+      "candidate_index": 0
+    },
+    {
+      "candidate_target": [
+        0.46,
+        -0.46,
+        0.3,
+        -1.74,
+        0.52,
+        1.7,
+        1.12,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05282,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.23332,
+        0.38,
+        0.75458
+      ],
+      "candidate_index": 1
+    },
+    {
+      "candidate_target": [
+        0.28,
+        -0.34,
+        0.16,
+        -1.76,
+        0.64,
+        1.64,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05229,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.36913,
+        0.29398,
+        0.70877
+      ],
+      "candidate_index": 2
+    },
+    {
+      "candidate_target": [
+        0.56,
+        -0.64,
+        0.36,
+        -1.86,
+        0.72,
+        1.58,
+        1.18,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.0528,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.08872,
+        0.38945,
+        0.74641
+      ],
+      "candidate_index": 3
+    },
+    {
+      "candidate_target": [
+        0.38,
+        -0.82,
+        0.4,
+        -2.04,
+        0.84,
+        1.64,
+        1.32,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05267,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.10044,
+        0.36733,
+        0.71984
+      ],
+      "candidate_index": 4
+    },
+    {
+      "candidate_target": [
+        0.62,
+        -0.68,
+        0.44,
+        -2.08,
+        0.92,
+        1.52,
+        1.26,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05194,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.04031,
+        0.40543,
+        0.65445
+      ],
+      "candidate_index": 5
+    },
+    {
+      "candidate_target": [
+        0.52904,
+        -0.6405,
+        0.13969,
+        -2.13812,
+        0.44983,
+        1.582,
+        0.90285,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05162,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.22978,
+        0.28751,
+        0.62623
+      ],
+      "candidate_index": 6
+    },
+    {
+      "candidate_target": [
+        0.31899,
+        -0.56406,
+        0.27852,
+        -1.93892,
+        0.1139,
+        1.81298,
+        1.14422,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.0524,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.31948,
+        0.27636,
+        0.70455
+      ],
+      "candidate_index": 7
+    },
+    {
+      "candidate_target": [
+        -0.44959,
+        -1.27582,
+        -0.20518,
+        -2.00702,
+        -0.33418,
+        1.8851,
+        0.93957,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05449,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.019,
+        -0.17616,
+        0.87354
+      ],
+      "candidate_index": 8
+    },
+    {
+      "candidate_target": [
+        0.03783,
+        -0.7794,
+        0.22493,
+        -2.26603,
+        0.15577,
+        1.58516,
+        0.57264,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05152,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.30054,
+        0.12425,
+        0.59528
+      ],
+      "candidate_index": 9
+    },
+    {
+      "candidate_target": [
+        0.44125,
+        -0.40624,
+        0.07161,
+        -1.98234,
+        0.80948,
+        1.83531,
+        0.41448,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05172,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.35296,
+        0.31842,
+        0.66773
+      ],
+      "candidate_index": 10
+    },
+    {
+      "candidate_target": [
+        -0.34116,
+        -0.41625,
+        0.22626,
+        -2.08829,
+        1.86027,
+        2.00294,
+        0.42427,
+        0.0,
+        0.0
+      ],
+      "hit": false,
+      "first_violation": null,
+      "best_gap_m": 0.05145,
+      "best_gap_fixture_id": "workbench",
+      "final_end_effector_position": [
+        0.5076,
+        0.07585,
+        0.72929
+      ],
+      "candidate_index": 11
+    }
+  ],
+  "result_files": {
+    "latest": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\smoke\\results\\robot_pick_place_cell_collision_search_latest.json",
+    "archive": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\smoke\\results\\robot_pick_place_cell_collision_search_20260319_114841.json",
+    "explicit": null
+  }
+}

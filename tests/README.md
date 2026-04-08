@@ -57,6 +57,35 @@ Location:
 
 - `tests/e2e/`
 
+## Benchmark artifacts
+
+Location:
+
+- `tests/benchmarks/pcag_ijamt_benchmark/`
+
+Purpose:
+
+- freeze the action vocabulary and label taxonomy for the IJAMT benchmark package
+- provide a stable artifact location for frozen benchmark releases
+- prevent ad hoc action names or label drift during paper-oriented experiment expansion
+- freeze source provenance before any benchmark case extraction begins
+
+The generated benchmark releases currently available are:
+
+- `tests/benchmarks/pcag_ijamt_benchmark/releases/robot_source_release_v1/`
+- `tests/benchmarks/pcag_ijamt_benchmark/releases/agv_source_release_v1/`
+
+These releases include frozen nominal, unsafe, fault, and mixed evaluation
+bundles. For mixed-outcome experiments, prefer:
+
+- `tests/benchmarks/pcag_ijamt_benchmark/releases/robot_source_release_v1/all_cases.json`
+- `tests/benchmarks/pcag_ijamt_benchmark/releases/agv_source_release_v1/all_cases.json`
+
+The corresponding live full-PCAG runners are:
+
+- `tests/benchmarks/pcag_ijamt_benchmark/run_robot_pcag_benchmark.py`
+- `tests/benchmarks/pcag_ijamt_benchmark/run_agv_pcag_benchmark.py`
+
 This folder contains two especially important families of runners.
 
 ### 1. Document-conformance mock evaluation
@@ -124,9 +153,10 @@ For current verification work, prefer:
 If you are new to the repository, this is a good order:
 
 1. [`../README.md`](../README.md)
-2. [`e2e/README_live_gateway_eval.md`](e2e/README_live_gateway_eval.md)
-3. [`e2e/README_document_conformance_eval.md`](e2e/README_document_conformance_eval.md)
-4. browse `tests/unit/` by subsystem
+2. [`benchmarks/pcag_ijamt_benchmark/README.md`](benchmarks/pcag_ijamt_benchmark/README.md)
+3. [`e2e/README_live_gateway_eval.md`](e2e/README_live_gateway_eval.md)
+4. [`e2e/README_document_conformance_eval.md`](e2e/README_document_conformance_eval.md)
+5. browse `tests/unit/` by subsystem
 
 ## Related Documentation
 

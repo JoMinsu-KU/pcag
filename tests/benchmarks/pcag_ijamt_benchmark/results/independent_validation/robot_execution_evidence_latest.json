@@ -1,0 +1,6396 @@
+{
+  "generated_at": "2026-03-22 03:34:11",
+  "dataset_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\releases\\integrated_benchmark_release_v2\\pcag_execution_dataset.json",
+  "policy_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\policies\\pcag_benchmark_policy_v1.json",
+  "summary": {
+    "total_cases": 10,
+    "safe_cases": 10,
+    "non_safe_cases": 0
+  },
+  "results": [
+    {
+      "case_id": "robot_nominal_isaaclab_lift_source_pick_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 606.154,
+      "preload_result": {
+        "runtime_id": "robot_pick_place_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_pick_place_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_pick_place_cell.usd",
+          "scene_mode": "canonical_benchmark_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "reach",
+              "lift",
+              "pick_place",
+              "place"
+            ],
+            "secondary_families": [
+              "pick_place"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "TargetFixtureBase",
+              "TargetFixturePlate"
+            ],
+            "target_guides": [
+              "TargetGuide_Left",
+              "TargetGuide_Right",
+              "TargetBackstop"
+            ],
+            "part_proxies": [
+              "PartProxy_A",
+              "PartProxy_B"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "approach",
+            "pick",
+            "transfer",
+            "place",
+            "retreat"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.24,
+              -1.02,
+              1.0
+            ],
+            "target": [
+              0.74,
+              0.02,
+              0.58
+            ],
+            "description": "Three-quarter operator-side view focused on the source tray, transfer zone, and target fixture."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.7,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.24,
+                0.9,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.6,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.24,
+                0.16,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetFixturePlateCollider",
+              "center": [
+                0.9,
+                0.24,
+                0.585
+              ],
+              "scale": [
+                0.22,
+                0.18,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "place_support"
+              ]
+            },
+            {
+              "id": "target_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideLeftCollider",
+              "center": [
+                0.9,
+                0.13,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideRightCollider",
+              "center": [
+                0.9,
+                0.35,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetBackstopCollider",
+              "center": [
+                1.02,
+                0.24,
+                0.64
+              ],
+              "scale": [
+                0.01,
+                0.18,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.1,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.045,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "target_guide_left",
+              "target_guide_right",
+              "target_backstop",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "target_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal pick-place sequence from source tray to target fixture.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.02,
+                  -0.68,
+                  0.05,
+                  -2.12,
+                  -0.02,
+                  1.66,
+                  0.8
+                ],
+                [
+                  0.3,
+                  -0.52,
+                  0.12,
+                  -2.0,
+                  0.1,
+                  1.56,
+                  0.96
+                ],
+                [
+                  0.54,
+                  -0.38,
+                  0.18,
+                  -1.86,
+                  0.18,
+                  1.48,
+                  1.1
+                ],
+                [
+                  0.1,
+                  -0.76,
+                  0.2,
+                  -1.96,
+                  0.0,
+                  1.82,
+                  0.88
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Threshold-calibrated counterfactual profile that drives the end-effector through the workbench surface near the target-fixture approach region.",
+              "target_sequence": [
+                [
+                  0.24137,
+                  -0.14142,
+                  0.30755,
+                  -1.94696,
+                  0.58407,
+                  1.56317,
+                  0.85549
+                ],
+                [
+                  0.24798,
+                  -0.11251,
+                  0.31258,
+                  -1.94635,
+                  0.61137,
+                  1.55117,
+                  0.85434
+                ]
+              ]
+            }
+          },
+          "nvidia_pick_place_hints": {
+            "pickup_support_id": "source_tray_plate",
+            "place_support_id": "target_fixture_plate",
+            "cube": {
+              "size": 0.0515,
+              "initial_position": [
+                0.34,
+                -0.3,
+                0.60575
+              ],
+              "target_position": [
+                0.9,
+                0.24,
+                0.61475
+              ],
+              "color": [
+                0.86,
+                0.2,
+                0.2
+              ]
+            },
+            "controller": {
+              "end_effector_initial_height": 0.78,
+              "end_effector_offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "success_xy_tolerance": 0.08,
+              "success_z_tolerance": 0.05,
+              "settle_steps_after_reset": 60,
+              "settle_steps_after_done": 90
+            },
+            "controller_events_dt": [
+              0.012,
+              0.008,
+              0.12,
+              0.12,
+              0.008,
+              0.006,
+              0.008,
+              0.35,
+              0.014,
+              0.1
+            ]
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_pick_place_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.3
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.45
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell is the pick-place counterpart to robot_stack_cell and is benchmark-safe by construction.",
+            "It standardizes reach, lift, pick_place, and place-family provenance from IsaacLab and MimicGen into one runtime envelope.",
+            "The USD contains an industrial-style pick-place cell with source tray, transfer deck, target fixture, HMI, and cell safety markers.",
+            "The robot is spawned separately as a canonical Franka articulation."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          1.6364930244261444e-12,
+          -0.5999820232391357,
+          2.365385838587475e-11,
+          -2.2000057697296143,
+          -3.87535976642539e-08,
+          1.6000001430511475,
+          0.7800008058547974,
+          1.8744492180644556e-08,
+          1.8928238532112118e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            1.6364930244261444e-12,
+            -0.5999820232391357,
+            2.365385838587475e-11,
+            -2.2000057697296143,
+            -3.87535976642539e-08,
+            1.6000001430511475,
+            0.7800008058547974,
+            1.8744492180644556e-08,
+            1.8928238532112118e-08
+          ],
+          "joint_velocities": [
+            2.2631189366961735e-08,
+            -0.0018614950822666287,
+            -1.3699287260138249e-09,
+            0.0005566648906096816,
+            3.913921773346374e-06,
+            -2.25648454943439e-06,
+            -1.610028812137898e-05,
+            -7.347192365614319e-08,
+            -7.347191655071583e-08
+          ],
+          "joint_efforts": [
+            -2.931122082827642e-07,
+            -7.4670562744140625,
+            -3.843759714072803e-06,
+            20.651626586914062,
+            -2.889100869651884e-07,
+            0.9424424171447754,
+            9.094947017729282e-11,
+            -2.1372511582740117e-07,
+            -1.0874191502807662e-07
+          ],
+          "ee_position": [
+            0.36391156911849976,
+            1.37375522513139e-07,
+            0.5762320756912231
+          ],
+          "timestamp": 1774118019.1826818,
+          "runtime_id": "robot_pick_place_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 606.154,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                -0.0,
+                -0.6,
+                0.0,
+                -2.2,
+                -0.0,
+                1.6,
+                0.78,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.02,
+                -0.68,
+                0.05,
+                -2.12,
+                -0.02,
+                1.66,
+                0.8,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.02,
+                -0.68,
+                0.05,
+                -2.12,
+                -0.02,
+                1.66,
+                0.8,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "lift",
+      "shell_role": "pick",
+      "stratum": "lift::pick::pick"
+    },
+    {
+      "case_id": "robot_nominal_mimicgen_pick_place_fixture_insertion_insert_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 549.791,
+      "preload_result": {
+        "runtime_id": "robot_fixture_insertion_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_fixture_insertion_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_fixture_insertion_cell\\robot_fixture_insertion_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_fixture_insertion_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_fixture_insertion_cell.usd",
+          "scene_mode": "benchmark_expansion_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "pick_place",
+              "place"
+            ],
+            "secondary_families": [
+              "reach"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "InsertionFixtureBase",
+              "InsertionFixturePlate"
+            ],
+            "target_guides": [
+              "InsertionGuide_Left",
+              "InsertionGuide_Right",
+              "InsertionFrontBrace",
+              "InsertionBackstop",
+              "InsertionCeiling",
+              "InsertionDepthStop"
+            ],
+            "part_proxies": [
+              "InsertionProxy"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "align",
+            "pre_insert",
+            "insert",
+            "withdraw"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.22,
+              -0.98,
+              1.0
+            ],
+            "target": [
+              0.94,
+              0.22,
+              0.66
+            ],
+            "description": "Three-quarter view centered on the insertion corridor and depth stop."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.7,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.24,
+                0.9,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.6,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.24,
+                0.16,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionFixturePlateCollider",
+              "center": [
+                0.92,
+                0.22,
+                0.586
+              ],
+              "scale": [
+                0.18,
+                0.12,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "insert_support"
+              ]
+            },
+            {
+              "id": "insertion_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionGuideLeftCollider",
+              "center": [
+                0.92,
+                0.154,
+                0.654
+              ],
+              "scale": [
+                0.05,
+                0.012,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionGuideRightCollider",
+              "center": [
+                0.92,
+                0.286,
+                0.654
+              ],
+              "scale": [
+                0.05,
+                0.012,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_front_brace",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionFrontBraceCollider",
+              "center": [
+                0.852,
+                0.22,
+                0.654
+              ],
+              "scale": [
+                0.008,
+                0.12,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionBackstopCollider",
+              "center": [
+                1.028,
+                0.22,
+                0.654
+              ],
+              "scale": [
+                0.01,
+                0.12,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_ceiling",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionCeilingCollider",
+              "center": [
+                0.94,
+                0.22,
+                0.748
+              ],
+              "scale": [
+                0.18,
+                0.12,
+                0.008
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_depth_stop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionDepthStopCollider",
+              "center": [
+                0.985,
+                0.22,
+                0.618
+              ],
+              "scale": [
+                0.012,
+                0.08,
+                0.06
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.1,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.04,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "insertion_guide_left",
+              "insertion_guide_right",
+              "insertion_front_brace",
+              "insertion_backstop",
+              "insertion_ceiling",
+              "insertion_depth_stop",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "insertion_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal insertion alignment, bounded entry, and controlled withdrawal sequence.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.24,
+                  -0.68,
+                  0.14,
+                  -2.08,
+                  0.1,
+                  1.6,
+                  0.86
+                ],
+                [
+                  0.4,
+                  -0.48,
+                  0.16,
+                  -1.96,
+                  0.16,
+                  1.44,
+                  1.0
+                ],
+                [
+                  0.52,
+                  -0.34,
+                  0.2,
+                  -1.88,
+                  0.22,
+                  1.3,
+                  1.08
+                ],
+                [
+                  0.3,
+                  -0.62,
+                  0.18,
+                  -1.98,
+                  0.1,
+                  1.58,
+                  0.92
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that drives the end-effector into the insertion side wall and brace.",
+              "target_sequence": [
+                [
+                  0.58,
+                  -0.28,
+                  0.24,
+                  -1.82,
+                  0.3,
+                  1.2,
+                  1.12
+                ],
+                [
+                  0.62,
+                  -0.2,
+                  0.28,
+                  -1.76,
+                  0.38,
+                  1.1,
+                  1.18
+                ]
+              ]
+            }
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_fixture_insertion_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.3
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.45
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell extends the validated robot benchmark with a deeper insertion corridor.",
+            "It is intended for insertion-depth, orientation-margin, and side-contact stress cases.",
+            "The shell preserves the same Franka fallback runtime contract used by the robot benchmark."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          0.40000155568122864,
+          -0.47997868061065674,
+          0.16000674664974213,
+          -1.960005521774292,
+          0.16000069677829742,
+          1.439998984336853,
+          0.9999992251396179,
+          9.425468761037337e-08,
+          6.103158511905349e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            0.40000155568122864,
+            -0.47997868061065674,
+            0.16000674664974213,
+            -1.960005521774292,
+            0.16000069677829742,
+            1.439998984336853,
+            0.9999992251396179,
+            9.425468761037337e-08,
+            6.103158511905349e-08
+          ],
+          "joint_velocities": [
+            -0.00023430059081874788,
+            -0.0022048274986445904,
+            -0.000693169014994055,
+            0.0005564565071836114,
+            -6.9154251832515e-05,
+            2.341253639315255e-05,
+            1.7238229702343233e-05,
+            -4.0669073086974095e-07,
+            -4.066907024480315e-07
+          ],
+          "joint_efforts": [
+            1.2516975402832031e-05,
+            -10.29567813873291,
+            -2.0169477462768555,
+            20.016273498535156,
+            0.07310531288385391,
+            0.9048901796340942,
+            2.421438694000244e-08,
+            -0.010220509953796864,
+            0.01022069901227951
+          ],
+          "ee_position": [
+            0.30502623319625854,
+            0.23920999467372894,
+            0.6270055174827576
+          ],
+          "timestamp": 1774118022.7558377,
+          "runtime_id": "robot_fixture_insertion_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_fixture_insertion_cell\\robot_fixture_insertion_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 549.791,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                0.4,
+                -0.48,
+                0.16,
+                -1.96,
+                0.16,
+                1.44,
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.52,
+                -0.34,
+                0.2,
+                -1.88,
+                0.22,
+                1.3,
+                1.08,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.52,
+                -0.34,
+                0.2,
+                -1.88,
+                0.22,
+                1.3,
+                1.08,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "insert",
+      "stratum": "pick_place::insert::insert"
+    },
+    {
+      "case_id": "robot_nominal_mimicgen_pick_place_fixture_insertion_insert_mid_depth_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 502.947,
+      "preload_result": {
+        "runtime_id": "robot_fixture_insertion_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_fixture_insertion_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_fixture_insertion_cell\\robot_fixture_insertion_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_fixture_insertion_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_fixture_insertion_cell.usd",
+          "scene_mode": "benchmark_expansion_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "pick_place",
+              "place"
+            ],
+            "secondary_families": [
+              "reach"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "InsertionFixtureBase",
+              "InsertionFixturePlate"
+            ],
+            "target_guides": [
+              "InsertionGuide_Left",
+              "InsertionGuide_Right",
+              "InsertionFrontBrace",
+              "InsertionBackstop",
+              "InsertionCeiling",
+              "InsertionDepthStop"
+            ],
+            "part_proxies": [
+              "InsertionProxy"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "align",
+            "pre_insert",
+            "insert",
+            "withdraw"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.22,
+              -0.98,
+              1.0
+            ],
+            "target": [
+              0.94,
+              0.22,
+              0.66
+            ],
+            "description": "Three-quarter view centered on the insertion corridor and depth stop."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.7,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.24,
+                0.9,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.6,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.24,
+                0.16,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionFixturePlateCollider",
+              "center": [
+                0.92,
+                0.22,
+                0.586
+              ],
+              "scale": [
+                0.18,
+                0.12,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "insert_support"
+              ]
+            },
+            {
+              "id": "insertion_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionGuideLeftCollider",
+              "center": [
+                0.92,
+                0.154,
+                0.654
+              ],
+              "scale": [
+                0.05,
+                0.012,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionGuideRightCollider",
+              "center": [
+                0.92,
+                0.286,
+                0.654
+              ],
+              "scale": [
+                0.05,
+                0.012,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_front_brace",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionFrontBraceCollider",
+              "center": [
+                0.852,
+                0.22,
+                0.654
+              ],
+              "scale": [
+                0.008,
+                0.12,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionBackstopCollider",
+              "center": [
+                1.028,
+                0.22,
+                0.654
+              ],
+              "scale": [
+                0.01,
+                0.12,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_ceiling",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionCeilingCollider",
+              "center": [
+                0.94,
+                0.22,
+                0.748
+              ],
+              "scale": [
+                0.18,
+                0.12,
+                0.008
+              ],
+              "visible": false
+            },
+            {
+              "id": "insertion_depth_stop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/InsertionDepthStopCollider",
+              "center": [
+                0.985,
+                0.22,
+                0.618
+              ],
+              "scale": [
+                0.012,
+                0.08,
+                0.06
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.1,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.04,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "insertion_guide_left",
+              "insertion_guide_right",
+              "insertion_front_brace",
+              "insertion_backstop",
+              "insertion_ceiling",
+              "insertion_depth_stop",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "insertion_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal insertion alignment, bounded entry, and controlled withdrawal sequence.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.24,
+                  -0.68,
+                  0.14,
+                  -2.08,
+                  0.1,
+                  1.6,
+                  0.86
+                ],
+                [
+                  0.4,
+                  -0.48,
+                  0.16,
+                  -1.96,
+                  0.16,
+                  1.44,
+                  1.0
+                ],
+                [
+                  0.52,
+                  -0.34,
+                  0.2,
+                  -1.88,
+                  0.22,
+                  1.3,
+                  1.08
+                ],
+                [
+                  0.3,
+                  -0.62,
+                  0.18,
+                  -1.98,
+                  0.1,
+                  1.58,
+                  0.92
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that drives the end-effector into the insertion side wall and brace.",
+              "target_sequence": [
+                [
+                  0.58,
+                  -0.28,
+                  0.24,
+                  -1.82,
+                  0.3,
+                  1.2,
+                  1.12
+                ],
+                [
+                  0.62,
+                  -0.2,
+                  0.28,
+                  -1.76,
+                  0.38,
+                  1.1,
+                  1.18
+                ]
+              ]
+            }
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_fixture_insertion_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.3
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.45
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell extends the validated robot benchmark with a deeper insertion corridor.",
+            "It is intended for insertion-depth, orientation-margin, and side-contact stress cases.",
+            "The shell preserves the same Franka fallback runtime contract used by the robot benchmark."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          0.40000155568122864,
+          -0.47997868061065674,
+          0.16000674664974213,
+          -1.960005521774292,
+          0.16000069677829742,
+          1.439998984336853,
+          0.9999992251396179,
+          9.425468761037337e-08,
+          6.103158511905349e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            0.40000155568122864,
+            -0.47997868061065674,
+            0.16000674664974213,
+            -1.960005521774292,
+            0.16000069677829742,
+            1.439998984336853,
+            0.9999992251396179,
+            9.425468761037337e-08,
+            6.103158511905349e-08
+          ],
+          "joint_velocities": [
+            -0.00023430059081874788,
+            -0.0022048274986445904,
+            -0.000693169014994055,
+            0.0005564565071836114,
+            -6.9154251832515e-05,
+            2.341253639315255e-05,
+            1.7238229702343233e-05,
+            -4.0669073086974095e-07,
+            -4.066907024480315e-07
+          ],
+          "joint_efforts": [
+            1.2516975402832031e-05,
+            -10.29567813873291,
+            -2.0169477462768555,
+            20.016273498535156,
+            0.07310531288385391,
+            0.9048901796340942,
+            2.421438694000244e-08,
+            -0.010220509953796864,
+            0.01022069901227951
+          ],
+          "ee_position": [
+            0.30502623319625854,
+            0.23920999467372894,
+            0.6270055174827576
+          ],
+          "timestamp": 1774118026.1305783,
+          "runtime_id": "robot_fixture_insertion_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_fixture_insertion_cell\\robot_fixture_insertion_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 502.947,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                0.4,
+                -0.48,
+                0.16,
+                -1.96,
+                0.16,
+                1.44,
+                1.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.46,
+                -0.4,
+                0.18,
+                -1.9,
+                0.18,
+                1.36,
+                1.04,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.46,
+                -0.4,
+                0.18,
+                -1.9,
+                0.18,
+                1.36,
+                1.04,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "insert",
+      "stratum": "pick_place::insert::insert_mid_depth"
+    },
+    {
+      "case_id": "robot_nominal_mimicgen_pick_place_narrow_clearance_insert_mid_slot_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 514.999,
+      "preload_result": {
+        "runtime_id": "robot_narrow_clearance_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\robot_narrow_clearance_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_narrow_clearance_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_narrow_clearance_cell.usd",
+          "scene_mode": "benchmark_expansion_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "pick_place",
+              "place",
+              "reach"
+            ],
+            "secondary_families": [
+              "lift"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "NarrowFixtureBase",
+              "NarrowFixturePlate"
+            ],
+            "target_guides": [
+              "NarrowGuide_Left",
+              "NarrowGuide_Right",
+              "NarrowBackstop",
+              "NarrowSlotCeiling",
+              "NarrowSideGuard_Left",
+              "NarrowSideGuard_Right"
+            ],
+            "part_proxies": [
+              "PartProxy_Slim"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "narrow_approach",
+            "pre_insert",
+            "insert",
+            "retreat"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.2,
+              -0.96,
+              1.02
+            ],
+            "target": [
+              0.9,
+              0.22,
+              0.64
+            ],
+            "description": "Three-quarter view centered on the narrow-clearance target fixture and insertion corridor."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.72,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.3,
+                0.92,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.62,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.22,
+                0.14,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowFixturePlateCollider",
+              "center": [
+                0.93,
+                0.24,
+                0.586
+              ],
+              "scale": [
+                0.16,
+                0.1,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "insert_support"
+              ]
+            },
+            {
+              "id": "narrow_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowGuideLeftCollider",
+              "center": [
+                0.93,
+                0.182,
+                0.652
+              ],
+              "scale": [
+                0.04,
+                0.012,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowGuideRightCollider",
+              "center": [
+                0.93,
+                0.298,
+                0.652
+              ],
+              "scale": [
+                0.04,
+                0.012,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowBackstopCollider",
+              "center": [
+                1.024,
+                0.24,
+                0.652
+              ],
+              "scale": [
+                0.01,
+                0.1,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_slot_ceiling",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSlotCeilingCollider",
+              "center": [
+                0.93,
+                0.24,
+                0.742
+              ],
+              "scale": [
+                0.16,
+                0.1,
+                0.008
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_side_guard_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSideGuardLeftCollider",
+              "center": [
+                0.87,
+                0.144,
+                0.622
+              ],
+              "scale": [
+                0.12,
+                0.01,
+                0.11
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_side_guard_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSideGuardRightCollider",
+              "center": [
+                0.87,
+                0.336,
+                0.622
+              ],
+              "scale": [
+                0.12,
+                0.01,
+                0.11
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.14,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.042,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "narrow_guide_left",
+              "narrow_guide_right",
+              "narrow_backstop",
+              "narrow_slot_ceiling",
+              "narrow_side_guard_left",
+              "narrow_side_guard_right",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "narrow_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal narrow-clearance approach and insertion-adjacent sequence.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.26,
+                  -0.6,
+                  0.14,
+                  -2.04,
+                  0.14,
+                  1.54,
+                  0.92
+                ],
+                [
+                  0.42,
+                  -0.46,
+                  0.18,
+                  -1.96,
+                  0.2,
+                  1.4,
+                  1.04
+                ],
+                [
+                  0.5,
+                  -0.34,
+                  0.26,
+                  -1.88,
+                  0.28,
+                  1.28,
+                  1.1
+                ],
+                [
+                  0.18,
+                  -0.72,
+                  0.2,
+                  -1.98,
+                  0.04,
+                  1.8,
+                  0.86
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Provisional collision profile that narrows the insertion corridor until a side-guide penetration is expected.",
+              "target_sequence": [
+                [
+                  0.46,
+                  -0.3,
+                  0.29,
+                  -1.9,
+                  0.34,
+                  1.24,
+                  1.12
+                ],
+                [
+                  0.52,
+                  -0.24,
+                  0.31,
+                  -1.87,
+                  0.4,
+                  1.18,
+                  1.16
+                ]
+              ]
+            }
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_narrow_clearance_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.34
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.48
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell is the first single-asset robot-expansion shell beyond the validated v1 release.",
+            "It increases fixture density around the target zone so narrow-clearance approach motions become meaningful DT cases.",
+            "The shell preserves the same Franka fallback runtime contract used by the public robot benchmark."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          0.4200019836425781,
+          -0.45997849106788635,
+          0.18000800907611847,
+          -1.960005521774292,
+          0.20000074803829193,
+          1.399998664855957,
+          1.0399987697601318,
+          1.149422033108749e-07,
+          7.488158360047237e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            0.4200019836425781,
+            -0.45997849106788635,
+            0.18000800907611847,
+            -1.960005521774292,
+            0.20000074803829193,
+            1.399998664855957,
+            1.0399987697601318,
+            1.149422033108749e-07,
+            7.488158360047237e-08
+          ],
+          "joint_velocities": [
+            -0.0003246043052058667,
+            -0.0022241331171244383,
+            -0.0008261649054475129,
+            0.0005232372204773128,
+            -7.085628021741286e-05,
+            2.8863101761089638e-05,
+            2.6294652343494818e-05,
+            -6.546579811583797e-07,
+            -6.546579243149608e-07
+          ],
+          "joint_efforts": [
+            2.3126602172851562e-05,
+            -10.91147232055664,
+            -2.1855268478393555,
+            20.077367782592773,
+            0.10610014945268631,
+            0.8528776168823242,
+            -1.3737007975578308e-08,
+            -0.012322228401899338,
+            0.012322083115577698
+          ],
+          "ee_position": [
+            0.2896941900253296,
+            0.2570968568325043,
+            0.6163144707679749
+          ],
+          "timestamp": 1774118029.3551996,
+          "runtime_id": "robot_narrow_clearance_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\robot_narrow_clearance_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 514.999,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                0.42,
+                -0.46,
+                0.18,
+                -1.96,
+                0.2,
+                1.4,
+                1.04,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.44,
+                -0.43,
+                0.2,
+                -1.94,
+                0.22,
+                1.36,
+                1.05,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.4389,
+                -0.43,
+                0.2,
+                -1.94,
+                0.22,
+                1.36,
+                1.05,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "insert",
+      "stratum": "pick_place::insert::insert_mid_slot"
+    },
+    {
+      "case_id": "robot_nominal_mimicgen_pick_place_milk_pick_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 577.651,
+      "preload_result": {
+        "runtime_id": "robot_pick_place_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_pick_place_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_pick_place_cell.usd",
+          "scene_mode": "canonical_benchmark_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "reach",
+              "lift",
+              "pick_place",
+              "place"
+            ],
+            "secondary_families": [
+              "pick_place"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "TargetFixtureBase",
+              "TargetFixturePlate"
+            ],
+            "target_guides": [
+              "TargetGuide_Left",
+              "TargetGuide_Right",
+              "TargetBackstop"
+            ],
+            "part_proxies": [
+              "PartProxy_A",
+              "PartProxy_B"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "approach",
+            "pick",
+            "transfer",
+            "place",
+            "retreat"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.24,
+              -1.02,
+              1.0
+            ],
+            "target": [
+              0.74,
+              0.02,
+              0.58
+            ],
+            "description": "Three-quarter operator-side view focused on the source tray, transfer zone, and target fixture."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.7,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.24,
+                0.9,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.6,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.24,
+                0.16,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetFixturePlateCollider",
+              "center": [
+                0.9,
+                0.24,
+                0.585
+              ],
+              "scale": [
+                0.22,
+                0.18,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "place_support"
+              ]
+            },
+            {
+              "id": "target_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideLeftCollider",
+              "center": [
+                0.9,
+                0.13,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideRightCollider",
+              "center": [
+                0.9,
+                0.35,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetBackstopCollider",
+              "center": [
+                1.02,
+                0.24,
+                0.64
+              ],
+              "scale": [
+                0.01,
+                0.18,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.1,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.045,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "target_guide_left",
+              "target_guide_right",
+              "target_backstop",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "target_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal pick-place sequence from source tray to target fixture.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.02,
+                  -0.68,
+                  0.05,
+                  -2.12,
+                  -0.02,
+                  1.66,
+                  0.8
+                ],
+                [
+                  0.3,
+                  -0.52,
+                  0.12,
+                  -2.0,
+                  0.1,
+                  1.56,
+                  0.96
+                ],
+                [
+                  0.54,
+                  -0.38,
+                  0.18,
+                  -1.86,
+                  0.18,
+                  1.48,
+                  1.1
+                ],
+                [
+                  0.1,
+                  -0.76,
+                  0.2,
+                  -1.96,
+                  0.0,
+                  1.82,
+                  0.88
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Threshold-calibrated counterfactual profile that drives the end-effector through the workbench surface near the target-fixture approach region.",
+              "target_sequence": [
+                [
+                  0.24137,
+                  -0.14142,
+                  0.30755,
+                  -1.94696,
+                  0.58407,
+                  1.56317,
+                  0.85549
+                ],
+                [
+                  0.24798,
+                  -0.11251,
+                  0.31258,
+                  -1.94635,
+                  0.61137,
+                  1.55117,
+                  0.85434
+                ]
+              ]
+            }
+          },
+          "nvidia_pick_place_hints": {
+            "pickup_support_id": "source_tray_plate",
+            "place_support_id": "target_fixture_plate",
+            "cube": {
+              "size": 0.0515,
+              "initial_position": [
+                0.34,
+                -0.3,
+                0.60575
+              ],
+              "target_position": [
+                0.9,
+                0.24,
+                0.61475
+              ],
+              "color": [
+                0.86,
+                0.2,
+                0.2
+              ]
+            },
+            "controller": {
+              "end_effector_initial_height": 0.78,
+              "end_effector_offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "success_xy_tolerance": 0.08,
+              "success_z_tolerance": 0.05,
+              "settle_steps_after_reset": 60,
+              "settle_steps_after_done": 90
+            },
+            "controller_events_dt": [
+              0.012,
+              0.008,
+              0.12,
+              0.12,
+              0.008,
+              0.006,
+              0.008,
+              0.35,
+              0.014,
+              0.1
+            ]
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_pick_place_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.3
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.45
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell is the pick-place counterpart to robot_stack_cell and is benchmark-safe by construction.",
+            "It standardizes reach, lift, pick_place, and place-family provenance from IsaacLab and MimicGen into one runtime envelope.",
+            "The USD contains an industrial-style pick-place cell with source tray, transfer deck, target fixture, HMI, and cell safety markers.",
+            "The robot is spawned separately as a canonical Franka articulation."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          1.6364930244261444e-12,
+          -0.5999820232391357,
+          2.365385838587475e-11,
+          -2.2000057697296143,
+          -3.87535976642539e-08,
+          1.6000001430511475,
+          0.7800008058547974,
+          1.8744492180644556e-08,
+          1.8928238532112118e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            1.6364930244261444e-12,
+            -0.5999820232391357,
+            2.365385838587475e-11,
+            -2.2000057697296143,
+            -3.87535976642539e-08,
+            1.6000001430511475,
+            0.7800008058547974,
+            1.8744492180644556e-08,
+            1.8928238532112118e-08
+          ],
+          "joint_velocities": [
+            2.2631189366961735e-08,
+            -0.0018614950822666287,
+            -1.3699287260138249e-09,
+            0.0005566648906096816,
+            3.913921773346374e-06,
+            -2.25648454943439e-06,
+            -1.610028812137898e-05,
+            -7.347192365614319e-08,
+            -7.347191655071583e-08
+          ],
+          "joint_efforts": [
+            -2.931122082827642e-07,
+            -7.4670562744140625,
+            -3.843759714072803e-06,
+            20.651626586914062,
+            -2.889100869651884e-07,
+            0.9424424171447754,
+            9.094947017729282e-11,
+            -2.1372511582740117e-07,
+            -1.0874191502807662e-07
+          ],
+          "ee_position": [
+            0.36391156911849976,
+            1.37375522513139e-07,
+            0.5762320756912231
+          ],
+          "timestamp": 1774118032.489696,
+          "runtime_id": "robot_pick_place_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 577.651,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                -0.0,
+                -0.6,
+                0.0,
+                -2.2,
+                -0.0,
+                1.6,
+                0.78,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.02,
+                -0.68,
+                0.05,
+                -2.12,
+                -0.02,
+                1.66,
+                0.8,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.02,
+                -0.68,
+                0.05,
+                -2.12,
+                -0.02,
+                1.66,
+                0.8,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "pick",
+      "stratum": "pick_place::pick::pick"
+    },
+    {
+      "case_id": "robot_nominal_isaaclab_pick_place_conveyor_timing_pick_source_capture_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 598.072,
+      "preload_result": {
+        "runtime_id": "robot_pick_place_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_pick_place_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_pick_place_cell.usd",
+          "scene_mode": "canonical_benchmark_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "reach",
+              "lift",
+              "pick_place",
+              "place"
+            ],
+            "secondary_families": [
+              "pick_place"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "TargetFixtureBase",
+              "TargetFixturePlate"
+            ],
+            "target_guides": [
+              "TargetGuide_Left",
+              "TargetGuide_Right",
+              "TargetBackstop"
+            ],
+            "part_proxies": [
+              "PartProxy_A",
+              "PartProxy_B"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "approach",
+            "pick",
+            "transfer",
+            "place",
+            "retreat"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.24,
+              -1.02,
+              1.0
+            ],
+            "target": [
+              0.74,
+              0.02,
+              0.58
+            ],
+            "description": "Three-quarter operator-side view focused on the source tray, transfer zone, and target fixture."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.7,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.24,
+                0.9,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.6,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.24,
+                0.16,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetFixturePlateCollider",
+              "center": [
+                0.9,
+                0.24,
+                0.585
+              ],
+              "scale": [
+                0.22,
+                0.18,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "place_support"
+              ]
+            },
+            {
+              "id": "target_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideLeftCollider",
+              "center": [
+                0.9,
+                0.13,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideRightCollider",
+              "center": [
+                0.9,
+                0.35,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetBackstopCollider",
+              "center": [
+                1.02,
+                0.24,
+                0.64
+              ],
+              "scale": [
+                0.01,
+                0.18,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.1,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.045,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "target_guide_left",
+              "target_guide_right",
+              "target_backstop",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "target_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal pick-place sequence from source tray to target fixture.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.02,
+                  -0.68,
+                  0.05,
+                  -2.12,
+                  -0.02,
+                  1.66,
+                  0.8
+                ],
+                [
+                  0.3,
+                  -0.52,
+                  0.12,
+                  -2.0,
+                  0.1,
+                  1.56,
+                  0.96
+                ],
+                [
+                  0.54,
+                  -0.38,
+                  0.18,
+                  -1.86,
+                  0.18,
+                  1.48,
+                  1.1
+                ],
+                [
+                  0.1,
+                  -0.76,
+                  0.2,
+                  -1.96,
+                  0.0,
+                  1.82,
+                  0.88
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Threshold-calibrated counterfactual profile that drives the end-effector through the workbench surface near the target-fixture approach region.",
+              "target_sequence": [
+                [
+                  0.24137,
+                  -0.14142,
+                  0.30755,
+                  -1.94696,
+                  0.58407,
+                  1.56317,
+                  0.85549
+                ],
+                [
+                  0.24798,
+                  -0.11251,
+                  0.31258,
+                  -1.94635,
+                  0.61137,
+                  1.55117,
+                  0.85434
+                ]
+              ]
+            }
+          },
+          "nvidia_pick_place_hints": {
+            "pickup_support_id": "source_tray_plate",
+            "place_support_id": "target_fixture_plate",
+            "cube": {
+              "size": 0.0515,
+              "initial_position": [
+                0.34,
+                -0.3,
+                0.60575
+              ],
+              "target_position": [
+                0.9,
+                0.24,
+                0.61475
+              ],
+              "color": [
+                0.86,
+                0.2,
+                0.2
+              ]
+            },
+            "controller": {
+              "end_effector_initial_height": 0.78,
+              "end_effector_offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "success_xy_tolerance": 0.08,
+              "success_z_tolerance": 0.05,
+              "settle_steps_after_reset": 60,
+              "settle_steps_after_done": 90
+            },
+            "controller_events_dt": [
+              0.012,
+              0.008,
+              0.12,
+              0.12,
+              0.008,
+              0.006,
+              0.008,
+              0.35,
+              0.014,
+              0.1
+            ]
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_pick_place_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.3
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.45
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell is the pick-place counterpart to robot_stack_cell and is benchmark-safe by construction.",
+            "It standardizes reach, lift, pick_place, and place-family provenance from IsaacLab and MimicGen into one runtime envelope.",
+            "The USD contains an industrial-style pick-place cell with source tray, transfer deck, target fixture, HMI, and cell safety markers.",
+            "The robot is spawned separately as a canonical Franka articulation."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          1.6364930244261444e-12,
+          -0.5999820232391357,
+          2.365385838587475e-11,
+          -2.2000057697296143,
+          -3.87535976642539e-08,
+          1.6000001430511475,
+          0.7800008058547974,
+          1.8744492180644556e-08,
+          1.8928238532112118e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            1.6364930244261444e-12,
+            -0.5999820232391357,
+            2.365385838587475e-11,
+            -2.2000057697296143,
+            -3.87535976642539e-08,
+            1.6000001430511475,
+            0.7800008058547974,
+            1.8744492180644556e-08,
+            1.8928238532112118e-08
+          ],
+          "joint_velocities": [
+            2.2631189366961735e-08,
+            -0.0018614950822666287,
+            -1.3699287260138249e-09,
+            0.0005566648906096816,
+            3.913921773346374e-06,
+            -2.25648454943439e-06,
+            -1.610028812137898e-05,
+            -7.347192365614319e-08,
+            -7.347191655071583e-08
+          ],
+          "joint_efforts": [
+            -2.931122082827642e-07,
+            -7.4670562744140625,
+            -3.843759714072803e-06,
+            20.651626586914062,
+            -2.889100869651884e-07,
+            0.9424424171447754,
+            9.094947017729282e-11,
+            -2.1372511582740117e-07,
+            -1.0874191502807662e-07
+          ],
+          "ee_position": [
+            0.36391156911849976,
+            1.37375522513139e-07,
+            0.5762320756912231
+          ],
+          "timestamp": 1774118035.6095324,
+          "runtime_id": "robot_pick_place_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 598.072,
+          "steps_completed": 2
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                -0.0,
+                -0.6,
+                0.0,
+                -2.2,
+                -0.0,
+                1.6,
+                0.78,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.12,
+                -0.88,
+                0.18,
+                -2.2,
+                0.02,
+                1.72,
+                0.66,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.12,
+                -0.88,
+                0.18,
+                -2.2,
+                0.02,
+                1.72,
+                0.66,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 1,
+              "action": "move_joint",
+              "target": [
+                0.02,
+                -0.68,
+                0.05,
+                -2.12,
+                -0.02,
+                1.66,
+                0.8,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.02,
+                -0.68,
+                0.05,
+                -2.12,
+                -0.02,
+                1.66,
+                0.8,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "pick",
+      "stratum": "pick_place::pick::source_capture"
+    },
+    {
+      "case_id": "robot_nominal_mimicgen_pick_place_conveyor_timing_pick_clear_reset_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 542.693,
+      "preload_result": {
+        "runtime_id": "robot_pick_place_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_pick_place_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_pick_place_cell.usd",
+          "scene_mode": "canonical_benchmark_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "reach",
+              "lift",
+              "pick_place",
+              "place"
+            ],
+            "secondary_families": [
+              "pick_place"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "TargetFixtureBase",
+              "TargetFixturePlate"
+            ],
+            "target_guides": [
+              "TargetGuide_Left",
+              "TargetGuide_Right",
+              "TargetBackstop"
+            ],
+            "part_proxies": [
+              "PartProxy_A",
+              "PartProxy_B"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "approach",
+            "pick",
+            "transfer",
+            "place",
+            "retreat"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.24,
+              -1.02,
+              1.0
+            ],
+            "target": [
+              0.74,
+              0.02,
+              0.58
+            ],
+            "description": "Three-quarter operator-side view focused on the source tray, transfer zone, and target fixture."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.7,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.24,
+                0.9,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.6,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.24,
+                0.16,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetFixturePlateCollider",
+              "center": [
+                0.9,
+                0.24,
+                0.585
+              ],
+              "scale": [
+                0.22,
+                0.18,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "place_support"
+              ]
+            },
+            {
+              "id": "target_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideLeftCollider",
+              "center": [
+                0.9,
+                0.13,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideRightCollider",
+              "center": [
+                0.9,
+                0.35,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetBackstopCollider",
+              "center": [
+                1.02,
+                0.24,
+                0.64
+              ],
+              "scale": [
+                0.01,
+                0.18,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.1,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.045,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "target_guide_left",
+              "target_guide_right",
+              "target_backstop",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "target_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal pick-place sequence from source tray to target fixture.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.02,
+                  -0.68,
+                  0.05,
+                  -2.12,
+                  -0.02,
+                  1.66,
+                  0.8
+                ],
+                [
+                  0.3,
+                  -0.52,
+                  0.12,
+                  -2.0,
+                  0.1,
+                  1.56,
+                  0.96
+                ],
+                [
+                  0.54,
+                  -0.38,
+                  0.18,
+                  -1.86,
+                  0.18,
+                  1.48,
+                  1.1
+                ],
+                [
+                  0.1,
+                  -0.76,
+                  0.2,
+                  -1.96,
+                  0.0,
+                  1.82,
+                  0.88
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Threshold-calibrated counterfactual profile that drives the end-effector through the workbench surface near the target-fixture approach region.",
+              "target_sequence": [
+                [
+                  0.24137,
+                  -0.14142,
+                  0.30755,
+                  -1.94696,
+                  0.58407,
+                  1.56317,
+                  0.85549
+                ],
+                [
+                  0.24798,
+                  -0.11251,
+                  0.31258,
+                  -1.94635,
+                  0.61137,
+                  1.55117,
+                  0.85434
+                ]
+              ]
+            }
+          },
+          "nvidia_pick_place_hints": {
+            "pickup_support_id": "source_tray_plate",
+            "place_support_id": "target_fixture_plate",
+            "cube": {
+              "size": 0.0515,
+              "initial_position": [
+                0.34,
+                -0.3,
+                0.60575
+              ],
+              "target_position": [
+                0.9,
+                0.24,
+                0.61475
+              ],
+              "color": [
+                0.86,
+                0.2,
+                0.2
+              ]
+            },
+            "controller": {
+              "end_effector_initial_height": 0.78,
+              "end_effector_offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "success_xy_tolerance": 0.08,
+              "success_z_tolerance": 0.05,
+              "settle_steps_after_reset": 60,
+              "settle_steps_after_done": 90
+            },
+            "controller_events_dt": [
+              0.012,
+              0.008,
+              0.12,
+              0.12,
+              0.008,
+              0.006,
+              0.008,
+              0.35,
+              0.014,
+              0.1
+            ]
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_pick_place_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.3
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.45
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell is the pick-place counterpart to robot_stack_cell and is benchmark-safe by construction.",
+            "It standardizes reach, lift, pick_place, and place-family provenance from IsaacLab and MimicGen into one runtime envelope.",
+            "The USD contains an industrial-style pick-place cell with source tray, transfer deck, target fixture, HMI, and cell safety markers.",
+            "The robot is spawned separately as a canonical Franka articulation."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          0.5400026440620422,
+          -0.3799765408039093,
+          0.1800105720758438,
+          -1.8600059747695923,
+          0.1800011247396469,
+          1.4799985885620117,
+          1.0999983549118042,
+          1.3035648294135171e-07,
+          6.941240116020708e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            0.5400026440620422,
+            -0.3799765408039093,
+            0.1800105720758438,
+            -1.8600059747695923,
+            0.1800011247396469,
+            1.4799985885620117,
+            1.0999983549118042,
+            1.3035648294135171e-07,
+            6.941240116020708e-08
+          ],
+          "joint_velocities": [
+            -0.0006741795805282891,
+            -0.002437798772007227,
+            -0.0010984113905578852,
+            0.0006121587357483804,
+            -0.00011212376557523385,
+            3.2852454751264304e-05,
+            3.420907523832284e-05,
+            -6.950785973458551e-07,
+            -6.950787110326928e-07
+          ],
+          "joint_efforts": [
+            -1.430511474609375e-06,
+            -13.45310115814209,
+            -1.8449735641479492,
+            20.057825088500977,
+            0.09226937592029572,
+            0.9325958490371704,
+            4.470348358154297e-08,
+            -0.014547611586749554,
+            0.014547663740813732
+          ],
+          "ee_position": [
+            0.29002273082733154,
+            0.31269362568855286,
+            0.6363820433616638
+          ],
+          "timestamp": 1774118038.6606033,
+          "runtime_id": "robot_pick_place_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 542.693,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                0.54,
+                -0.38,
+                0.18,
+                -1.86,
+                0.18,
+                1.48,
+                1.1,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.1,
+                -0.76,
+                0.2,
+                -1.96,
+                0.0,
+                1.82,
+                0.88,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.1,
+                -0.76,
+                0.2,
+                -1.96,
+                0.0,
+                1.82,
+                0.88,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "place",
+      "stratum": "pick_place::place::clear_reset"
+    },
+    {
+      "case_id": "robot_nominal_mimicgen_pick_place_milk_place_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 502.513,
+      "preload_result": {
+        "runtime_id": "robot_pick_place_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_pick_place_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_pick_place_cell.usd",
+          "scene_mode": "canonical_benchmark_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "reach",
+              "lift",
+              "pick_place",
+              "place"
+            ],
+            "secondary_families": [
+              "pick_place"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "TargetFixtureBase",
+              "TargetFixturePlate"
+            ],
+            "target_guides": [
+              "TargetGuide_Left",
+              "TargetGuide_Right",
+              "TargetBackstop"
+            ],
+            "part_proxies": [
+              "PartProxy_A",
+              "PartProxy_B"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "approach",
+            "pick",
+            "transfer",
+            "place",
+            "retreat"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.24,
+              -1.02,
+              1.0
+            ],
+            "target": [
+              0.74,
+              0.02,
+              0.58
+            ],
+            "description": "Three-quarter operator-side view focused on the source tray, transfer zone, and target fixture."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.7,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.24,
+                0.9,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.6,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.24,
+                0.16,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetFixturePlateCollider",
+              "center": [
+                0.9,
+                0.24,
+                0.585
+              ],
+              "scale": [
+                0.22,
+                0.18,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "place_support"
+              ]
+            },
+            {
+              "id": "target_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideLeftCollider",
+              "center": [
+                0.9,
+                0.13,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetGuideRightCollider",
+              "center": [
+                0.9,
+                0.35,
+                0.64
+              ],
+              "scale": [
+                0.03,
+                0.01,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "target_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TargetBackstopCollider",
+              "center": [
+                1.02,
+                0.24,
+                0.64
+              ],
+              "scale": [
+                0.01,
+                0.18,
+                0.17
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.1,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.045,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "target_guide_left",
+              "target_guide_right",
+              "target_backstop",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "target_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal pick-place sequence from source tray to target fixture.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.02,
+                  -0.68,
+                  0.05,
+                  -2.12,
+                  -0.02,
+                  1.66,
+                  0.8
+                ],
+                [
+                  0.3,
+                  -0.52,
+                  0.12,
+                  -2.0,
+                  0.1,
+                  1.56,
+                  0.96
+                ],
+                [
+                  0.54,
+                  -0.38,
+                  0.18,
+                  -1.86,
+                  0.18,
+                  1.48,
+                  1.1
+                ],
+                [
+                  0.1,
+                  -0.76,
+                  0.2,
+                  -1.96,
+                  0.0,
+                  1.82,
+                  0.88
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Threshold-calibrated counterfactual profile that drives the end-effector through the workbench surface near the target-fixture approach region.",
+              "target_sequence": [
+                [
+                  0.24137,
+                  -0.14142,
+                  0.30755,
+                  -1.94696,
+                  0.58407,
+                  1.56317,
+                  0.85549
+                ],
+                [
+                  0.24798,
+                  -0.11251,
+                  0.31258,
+                  -1.94635,
+                  0.61137,
+                  1.55117,
+                  0.85434
+                ]
+              ]
+            }
+          },
+          "nvidia_pick_place_hints": {
+            "pickup_support_id": "source_tray_plate",
+            "place_support_id": "target_fixture_plate",
+            "cube": {
+              "size": 0.0515,
+              "initial_position": [
+                0.34,
+                -0.3,
+                0.60575
+              ],
+              "target_position": [
+                0.9,
+                0.24,
+                0.61475
+              ],
+              "color": [
+                0.86,
+                0.2,
+                0.2
+              ]
+            },
+            "controller": {
+              "end_effector_initial_height": 0.78,
+              "end_effector_offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "success_xy_tolerance": 0.08,
+              "success_z_tolerance": 0.05,
+              "settle_steps_after_reset": 60,
+              "settle_steps_after_done": 90
+            },
+            "controller_events_dt": [
+              0.012,
+              0.008,
+              0.12,
+              0.12,
+              0.008,
+              0.006,
+              0.008,
+              0.35,
+              0.014,
+              0.1
+            ]
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_pick_place_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.3
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.45
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell is the pick-place counterpart to robot_stack_cell and is benchmark-safe by construction.",
+            "It standardizes reach, lift, pick_place, and place-family provenance from IsaacLab and MimicGen into one runtime envelope.",
+            "The USD contains an industrial-style pick-place cell with source tray, transfer deck, target fixture, HMI, and cell safety markers.",
+            "The robot is spawned separately as a canonical Franka articulation."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          1.6364930244261444e-12,
+          -0.5999820232391357,
+          2.365385838587475e-11,
+          -2.2000057697296143,
+          -3.87535976642539e-08,
+          1.6000001430511475,
+          0.7800008058547974,
+          1.8744492180644556e-08,
+          1.8928238532112118e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            1.6364930244261444e-12,
+            -0.5999820232391357,
+            2.365385838587475e-11,
+            -2.2000057697296143,
+            -3.87535976642539e-08,
+            1.6000001430511475,
+            0.7800008058547974,
+            1.8744492180644556e-08,
+            1.8928238532112118e-08
+          ],
+          "joint_velocities": [
+            2.2631189366961735e-08,
+            -0.0018614950822666287,
+            -1.3699287260138249e-09,
+            0.0005566648906096816,
+            3.913921773346374e-06,
+            -2.25648454943439e-06,
+            -1.610028812137898e-05,
+            -7.347192365614319e-08,
+            -7.347191655071583e-08
+          ],
+          "joint_efforts": [
+            -2.931122082827642e-07,
+            -7.4670562744140625,
+            -3.843759714072803e-06,
+            20.651626586914062,
+            -2.889100869651884e-07,
+            0.9424424171447754,
+            9.094947017729282e-11,
+            -2.1372511582740117e-07,
+            -1.0874191502807662e-07
+          ],
+          "ee_position": [
+            0.36391156911849976,
+            1.37375522513139e-07,
+            0.5762320756912231
+          ],
+          "timestamp": 1774118041.7408712,
+          "runtime_id": "robot_pick_place_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_pick_place_cell\\robot_pick_place_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 502.513,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                -0.0,
+                -0.6,
+                0.0,
+                -2.2,
+                -0.0,
+                1.6,
+                0.78,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.36,
+                -0.26,
+                0.16,
+                -1.92,
+                0.26,
+                1.44,
+                1.04,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.36,
+                -0.26,
+                0.16,
+                -1.92,
+                0.26,
+                1.44,
+                1.04,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "place",
+      "stratum": "pick_place::place::place"
+    },
+    {
+      "case_id": "robot_nominal_mimicgen_pick_place_narrow_clearance_retreat_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 490.314,
+      "preload_result": {
+        "runtime_id": "robot_narrow_clearance_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\robot_narrow_clearance_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_narrow_clearance_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_narrow_clearance_cell.usd",
+          "scene_mode": "benchmark_expansion_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "pick_place",
+              "place",
+              "reach"
+            ],
+            "secondary_families": [
+              "lift"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "NarrowFixtureBase",
+              "NarrowFixturePlate"
+            ],
+            "target_guides": [
+              "NarrowGuide_Left",
+              "NarrowGuide_Right",
+              "NarrowBackstop",
+              "NarrowSlotCeiling",
+              "NarrowSideGuard_Left",
+              "NarrowSideGuard_Right"
+            ],
+            "part_proxies": [
+              "PartProxy_Slim"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "narrow_approach",
+            "pre_insert",
+            "insert",
+            "retreat"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.2,
+              -0.96,
+              1.02
+            ],
+            "target": [
+              0.9,
+              0.22,
+              0.64
+            ],
+            "description": "Three-quarter view centered on the narrow-clearance target fixture and insertion corridor."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.72,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.3,
+                0.92,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.62,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.22,
+                0.14,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowFixturePlateCollider",
+              "center": [
+                0.93,
+                0.24,
+                0.586
+              ],
+              "scale": [
+                0.16,
+                0.1,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "insert_support"
+              ]
+            },
+            {
+              "id": "narrow_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowGuideLeftCollider",
+              "center": [
+                0.93,
+                0.182,
+                0.652
+              ],
+              "scale": [
+                0.04,
+                0.012,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowGuideRightCollider",
+              "center": [
+                0.93,
+                0.298,
+                0.652
+              ],
+              "scale": [
+                0.04,
+                0.012,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowBackstopCollider",
+              "center": [
+                1.024,
+                0.24,
+                0.652
+              ],
+              "scale": [
+                0.01,
+                0.1,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_slot_ceiling",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSlotCeilingCollider",
+              "center": [
+                0.93,
+                0.24,
+                0.742
+              ],
+              "scale": [
+                0.16,
+                0.1,
+                0.008
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_side_guard_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSideGuardLeftCollider",
+              "center": [
+                0.87,
+                0.144,
+                0.622
+              ],
+              "scale": [
+                0.12,
+                0.01,
+                0.11
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_side_guard_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSideGuardRightCollider",
+              "center": [
+                0.87,
+                0.336,
+                0.622
+              ],
+              "scale": [
+                0.12,
+                0.01,
+                0.11
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.14,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.042,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "narrow_guide_left",
+              "narrow_guide_right",
+              "narrow_backstop",
+              "narrow_slot_ceiling",
+              "narrow_side_guard_left",
+              "narrow_side_guard_right",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "narrow_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal narrow-clearance approach and insertion-adjacent sequence.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.26,
+                  -0.6,
+                  0.14,
+                  -2.04,
+                  0.14,
+                  1.54,
+                  0.92
+                ],
+                [
+                  0.42,
+                  -0.46,
+                  0.18,
+                  -1.96,
+                  0.2,
+                  1.4,
+                  1.04
+                ],
+                [
+                  0.5,
+                  -0.34,
+                  0.26,
+                  -1.88,
+                  0.28,
+                  1.28,
+                  1.1
+                ],
+                [
+                  0.18,
+                  -0.72,
+                  0.2,
+                  -1.98,
+                  0.04,
+                  1.8,
+                  0.86
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Provisional collision profile that narrows the insertion corridor until a side-guide penetration is expected.",
+              "target_sequence": [
+                [
+                  0.46,
+                  -0.3,
+                  0.29,
+                  -1.9,
+                  0.34,
+                  1.24,
+                  1.12
+                ],
+                [
+                  0.52,
+                  -0.24,
+                  0.31,
+                  -1.87,
+                  0.4,
+                  1.18,
+                  1.16
+                ]
+              ]
+            }
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_narrow_clearance_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.34
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.48
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell is the first single-asset robot-expansion shell beyond the validated v1 release.",
+            "It increases fixture density around the target zone so narrow-clearance approach motions become meaningful DT cases.",
+            "The shell preserves the same Franka fallback runtime contract used by the public robot benchmark."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          0.4200019836425781,
+          -0.45997849106788635,
+          0.18000800907611847,
+          -1.960005521774292,
+          0.20000074803829193,
+          1.399998664855957,
+          1.0399987697601318,
+          1.149422033108749e-07,
+          7.488158360047237e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            0.4200019836425781,
+            -0.45997849106788635,
+            0.18000800907611847,
+            -1.960005521774292,
+            0.20000074803829193,
+            1.399998664855957,
+            1.0399987697601318,
+            1.149422033108749e-07,
+            7.488158360047237e-08
+          ],
+          "joint_velocities": [
+            -0.0003246043052058667,
+            -0.0022241331171244383,
+            -0.0008261649054475129,
+            0.0005232372204773128,
+            -7.085628021741286e-05,
+            2.8863101761089638e-05,
+            2.6294652343494818e-05,
+            -6.546579811583797e-07,
+            -6.546579243149608e-07
+          ],
+          "joint_efforts": [
+            2.3126602172851562e-05,
+            -10.91147232055664,
+            -2.1855268478393555,
+            20.077367782592773,
+            0.10610014945268631,
+            0.8528776168823242,
+            -1.3737007975578308e-08,
+            -0.012322228401899338,
+            0.012322083115577698
+          ],
+          "ee_position": [
+            0.2896941900253296,
+            0.2570968568325043,
+            0.6163144707679749
+          ],
+          "timestamp": 1774118044.7155154,
+          "runtime_id": "robot_narrow_clearance_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\robot_narrow_clearance_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 490.314,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                0.42,
+                -0.46,
+                0.18,
+                -1.96,
+                0.2,
+                1.4,
+                1.04,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.24,
+                -0.66,
+                0.18,
+                -1.99,
+                0.08,
+                1.64,
+                0.92,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.24,
+                -0.66,
+                0.18,
+                -1.99,
+                0.08,
+                1.64,
+                0.92,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "retreat",
+      "stratum": "pick_place::retreat::retreat"
+    },
+    {
+      "case_id": "robot_nominal_mimicgen_pick_place_narrow_clearance_retreat_short_001",
+      "asset_id": "robot_arm_01",
+      "expected_status": "COMMITTED",
+      "expected_verdict": "SAFE",
+      "oracle_verdict": "SAFE",
+      "match": true,
+      "engine": "isaac_sim",
+      "latency_ms": 470.158,
+      "preload_result": {
+        "runtime_id": "robot_narrow_clearance_cell",
+        "shell_config_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\shell_config.json",
+        "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\robot_narrow_clearance_cell.usd",
+        "shell_config": {
+          "runtime_id": "robot_narrow_clearance_cell",
+          "runtime_type": "usd_scene",
+          "asset_family": "robot",
+          "asset_id": "robot_arm_01",
+          "scene_file": "robot_narrow_clearance_cell.usd",
+          "scene_mode": "benchmark_expansion_shell",
+          "robot_model": "franka_fallback",
+          "robot_spawn": {
+            "position": [
+              0.0,
+              0.0,
+              0.03
+            ],
+            "orientation": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+          },
+          "source_alignment": {
+            "primary_families": [
+              "pick_place",
+              "place",
+              "reach"
+            ],
+            "secondary_families": [
+              "lift"
+            ],
+            "upstream_sources": [
+              "isaaclab_eval_industrial",
+              "mimicgen_assembly"
+            ]
+          },
+          "workspace_entities": {
+            "robot_mount": "RobotMount",
+            "source_zone": [
+              "SourceTrayBase",
+              "SourceTrayPlate",
+              "SourceGuide_Left",
+              "SourceGuide_Right"
+            ],
+            "transfer_zone": "TransferPlate",
+            "target_zone": [
+              "NarrowFixtureBase",
+              "NarrowFixturePlate"
+            ],
+            "target_guides": [
+              "NarrowGuide_Left",
+              "NarrowGuide_Right",
+              "NarrowBackstop",
+              "NarrowSlotCeiling",
+              "NarrowSideGuard_Left",
+              "NarrowSideGuard_Right"
+            ],
+            "part_proxies": [
+              "PartProxy_Slim"
+            ],
+            "operator_station": [
+              "ControlCabinet",
+              "HMIPost",
+              "HMIScreen"
+            ],
+            "cell_safety_assets": [
+              "Fence_Back",
+              "Fence_Left",
+              "Fence_Right",
+              "SafetyStripe_Front",
+              "SafetyStripe_Left",
+              "SafetyStripe_Right",
+              "StackLightPost"
+            ]
+          },
+          "recommended_case_roles": [
+            "narrow_approach",
+            "pre_insert",
+            "insert",
+            "retreat"
+          ],
+          "capture_camera": {
+            "eye": [
+              1.2,
+              -0.96,
+              1.02
+            ],
+            "target": [
+              0.9,
+              0.22,
+              0.64
+            ],
+            "description": "Three-quarter view centered on the narrow-clearance target fixture and insertion corridor."
+          },
+          "runtime_physics_objects": [
+            {
+              "id": "workbench",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+              "center": [
+                0.72,
+                0.0,
+                0.44
+              ],
+              "scale": [
+                1.3,
+                0.92,
+                0.08
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_tray_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+              "center": [
+                0.34,
+                -0.3,
+                0.575
+              ],
+              "scale": [
+                0.24,
+                0.18,
+                0.01
+              ],
+              "visible": false,
+              "roles": [
+                "pickup_support"
+              ]
+            },
+            {
+              "id": "source_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+              "center": [
+                0.34,
+                -0.41,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "source_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+              "center": [
+                0.34,
+                -0.19,
+                0.61
+              ],
+              "scale": [
+                0.24,
+                0.01,
+                0.04
+              ],
+              "visible": false
+            },
+            {
+              "id": "transfer_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+              "center": [
+                0.62,
+                -0.02,
+                0.58
+              ],
+              "scale": [
+                0.22,
+                0.14,
+                0.012
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_fixture_plate",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowFixturePlateCollider",
+              "center": [
+                0.93,
+                0.24,
+                0.586
+              ],
+              "scale": [
+                0.16,
+                0.1,
+                0.008
+              ],
+              "visible": false,
+              "roles": [
+                "insert_support"
+              ]
+            },
+            {
+              "id": "narrow_guide_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowGuideLeftCollider",
+              "center": [
+                0.93,
+                0.182,
+                0.652
+              ],
+              "scale": [
+                0.04,
+                0.012,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_guide_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowGuideRightCollider",
+              "center": [
+                0.93,
+                0.298,
+                0.652
+              ],
+              "scale": [
+                0.04,
+                0.012,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_backstop",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowBackstopCollider",
+              "center": [
+                1.024,
+                0.24,
+                0.652
+              ],
+              "scale": [
+                0.01,
+                0.1,
+                0.16
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_slot_ceiling",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSlotCeilingCollider",
+              "center": [
+                0.93,
+                0.24,
+                0.742
+              ],
+              "scale": [
+                0.16,
+                0.1,
+                0.008
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_side_guard_left",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSideGuardLeftCollider",
+              "center": [
+                0.87,
+                0.144,
+                0.622
+              ],
+              "scale": [
+                0.12,
+                0.01,
+                0.11
+              ],
+              "visible": false
+            },
+            {
+              "id": "narrow_side_guard_right",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/NarrowSideGuardRightCollider",
+              "center": [
+                0.87,
+                0.336,
+                0.622
+              ],
+              "scale": [
+                0.12,
+                0.01,
+                0.11
+              ],
+              "visible": false
+            },
+            {
+              "id": "outfeed_bin",
+              "kind": "fixed_cuboid",
+              "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+              "center": [
+                1.14,
+                -0.3,
+                0.5
+              ],
+              "scale": [
+                0.22,
+                0.2,
+                0.05
+              ],
+              "visible": false
+            }
+          ],
+          "safety_probe": {
+            "end_effector_probe_radius": 0.042,
+            "forbidden_fixture_ids": [
+              "workbench",
+              "source_guide_left",
+              "source_guide_right",
+              "narrow_guide_left",
+              "narrow_guide_right",
+              "narrow_backstop",
+              "narrow_slot_ceiling",
+              "narrow_side_guard_left",
+              "narrow_side_guard_right",
+              "outfeed_bin"
+            ],
+            "allowed_support_ids": [
+              "source_tray_plate",
+              "narrow_fixture_plate"
+            ]
+          },
+          "safety_motion_profiles": {
+            "safe": {
+              "expected_outcome": "safe",
+              "description": "Nominal narrow-clearance approach and insertion-adjacent sequence.",
+              "target_sequence": [
+                [
+                  0.12,
+                  -0.88,
+                  0.18,
+                  -2.2,
+                  0.02,
+                  1.72,
+                  0.66
+                ],
+                [
+                  0.26,
+                  -0.6,
+                  0.14,
+                  -2.04,
+                  0.14,
+                  1.54,
+                  0.92
+                ],
+                [
+                  0.42,
+                  -0.46,
+                  0.18,
+                  -1.96,
+                  0.2,
+                  1.4,
+                  1.04
+                ],
+                [
+                  0.5,
+                  -0.34,
+                  0.26,
+                  -1.88,
+                  0.28,
+                  1.28,
+                  1.1
+                ],
+                [
+                  0.18,
+                  -0.72,
+                  0.2,
+                  -1.98,
+                  0.04,
+                  1.8,
+                  0.86
+                ]
+              ]
+            },
+            "joint_limit": {
+              "expected_outcome": "unsafe",
+              "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+              "joint_limit_target": {
+                "joint_index": 1,
+                "bound": "upper",
+                "overrun": 0.35
+              }
+            },
+            "collision_fixture": {
+              "expected_outcome": "unsafe",
+              "description": "Provisional collision profile that narrows the insertion corridor until a side-guide penetration is expected.",
+              "target_sequence": [
+                [
+                  0.46,
+                  -0.3,
+                  0.29,
+                  -1.9,
+                  0.34,
+                  1.24,
+                  1.12
+                ],
+                [
+                  0.52,
+                  -0.24,
+                  0.31,
+                  -1.87,
+                  0.4,
+                  1.18,
+                  1.16
+                ]
+              ]
+            }
+          },
+          "simulation_patch": {
+            "engine": "isaac_sim",
+            "world_ref": "./robot_narrow_clearance_cell.usd",
+            "workspace_limits": [
+              [
+                -0.2,
+                1.34
+              ],
+              [
+                -0.78,
+                0.82
+              ],
+              [
+                0.0,
+                1.48
+              ]
+            ],
+            "joint_limits": {
+              "0": [
+                -2.897,
+                2.897
+              ],
+              "1": [
+                -1.763,
+                1.763
+              ],
+              "2": [
+                -2.897,
+                2.897
+              ],
+              "3": [
+                -3.071,
+                -0.069
+              ],
+              "4": [
+                -2.897,
+                2.897
+              ],
+              "5": [
+                -0.018,
+                3.752
+              ],
+              "6": [
+                -2.897,
+                2.897
+              ]
+            },
+            "torque_limits": [
+              87,
+              87,
+              87,
+              87,
+              12,
+              12,
+              12
+            ]
+          },
+          "default_initial_state": {
+            "joint_positions": [
+              0.0,
+              -0.6,
+              0.0,
+              -2.2,
+              0.0,
+              1.6,
+              0.78
+            ],
+            "joint_velocities": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          "notes": [
+            "This shell is the first single-asset robot-expansion shell beyond the validated v1 release.",
+            "It increases fixture density around the target zone so narrow-clearance approach motions become meaningful DT cases.",
+            "The shell preserves the same Franka fallback runtime contract used by the public robot benchmark."
+          ]
+        },
+        "robot_spawn_position": [
+          0.0,
+          0.0,
+          0.03
+        ],
+        "applied_initial_joint_positions": [
+          0.4200019836425781,
+          -0.45997849106788635,
+          0.18000800907611847,
+          -1.960005521774292,
+          0.20000074803829193,
+          1.399998664855957,
+          1.0399987697601318,
+          1.149422033108749e-07,
+          7.488158360047237e-08
+        ],
+        "current_state": {
+          "joint_positions": [
+            0.4200019836425781,
+            -0.45997849106788635,
+            0.18000800907611847,
+            -1.960005521774292,
+            0.20000074803829193,
+            1.399998664855957,
+            1.0399987697601318,
+            1.149422033108749e-07,
+            7.488158360047237e-08
+          ],
+          "joint_velocities": [
+            -0.0003246043052058667,
+            -0.0022241331171244383,
+            -0.0008261649054475129,
+            0.0005232372204773128,
+            -7.085628021741286e-05,
+            2.8863101761089638e-05,
+            2.6294652343494818e-05,
+            -6.546579811583797e-07,
+            -6.546579243149608e-07
+          ],
+          "joint_efforts": [
+            2.3126602172851562e-05,
+            -10.91147232055664,
+            -2.1855268478393555,
+            20.077367782592773,
+            0.10610014945268631,
+            0.8528776168823242,
+            -1.3737007975578308e-08,
+            -0.012322228401899338,
+            0.012322083115577698
+          ],
+          "ee_position": [
+            0.2896941900253296,
+            0.2570968568325043,
+            0.6163144707679749
+          ],
+          "timestamp": 1774118047.7345212,
+          "runtime_id": "robot_narrow_clearance_cell",
+          "scene_path": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\scene_pack\\robot\\robot_narrow_clearance_cell\\robot_narrow_clearance_cell.usd"
+        },
+        "status": "READY"
+      },
+      "oracle_result": {
+        "verdict": "SAFE",
+        "engine": "isaac_sim",
+        "common": {
+          "first_violation_step": null,
+          "violated_constraint": null,
+          "latency_ms": 470.158,
+          "steps_completed": 1
+        },
+        "details": {
+          "collision_detected": false,
+          "collision_probe_unavailable": false,
+          "collision_objects": [],
+          "joint_limit_exceeded": false,
+          "torque_violation": false,
+          "workspace_violation": false,
+          "trajectory": [
+            {
+              "step": -1,
+              "action": "initial",
+              "joint_positions": [
+                0.42,
+                -0.46,
+                0.18,
+                -1.96,
+                0.2,
+                1.4,
+                1.04,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "step": 0,
+              "action": "move_joint",
+              "target": [
+                0.32,
+                -0.58,
+                0.18,
+                -1.98,
+                0.12,
+                1.54,
+                0.96,
+                0.0,
+                0.0
+              ],
+              "actual": [
+                0.32,
+                -0.58,
+                0.18,
+                -1.98,
+                0.12,
+                1.54,
+                0.96,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "violations": []
+        }
+      },
+      "source_task_family": "pick_place",
+      "shell_role": "retreat",
+      "stratum": "pick_place::retreat::retreat_short"
+    }
+  ]
+}

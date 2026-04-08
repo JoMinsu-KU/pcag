@@ -1,0 +1,236 @@
+{
+  "session_id": "agv-gui-1774117898428871800",
+  "case_id": "PCAG AGV Grid Viewer",
+  "window_title": "PCAG AGV Grid Viewer",
+  "grid": {
+    "width": 12,
+    "height": 10,
+    "obstacles": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        9
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        8,
+        3
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        11,
+        0
+      ],
+      [
+        11,
+        9
+      ]
+    ],
+    "intersections": [
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        5
+      ]
+    ]
+  },
+  "initial_positions": {
+    "agv_01": [
+      2.0,
+      5.0
+    ],
+    "agv_02": [
+      10,
+      8
+    ]
+  },
+  "paths": {
+    "agv_01": [
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        8,
+        5
+      ],
+      [
+        9,
+        5
+      ]
+    ]
+  },
+  "timeline_frames": [
+    {
+      "step": 0,
+      "positions": {
+        "agv_01": [
+          2.0,
+          5.0
+        ],
+        "agv_02": [
+          10,
+          8
+        ]
+      },
+      "violations": []
+    },
+    {
+      "step": 1,
+      "positions": {
+        "agv_01": [
+          3,
+          5
+        ],
+        "agv_02": [
+          10,
+          8
+        ]
+      },
+      "violations": []
+    },
+    {
+      "step": 2,
+      "positions": {
+        "agv_01": [
+          4,
+          5
+        ],
+        "agv_02": [
+          10,
+          8
+        ]
+      },
+      "violations": []
+    },
+    {
+      "step": 3,
+      "positions": {
+        "agv_01": [
+          5,
+          5
+        ],
+        "agv_02": [
+          10,
+          8
+        ]
+      },
+      "violations": []
+    },
+    {
+      "step": 4,
+      "positions": {
+        "agv_01": [
+          6,
+          5
+        ],
+        "agv_02": [
+          10,
+          8
+        ]
+      },
+      "violations": []
+    },
+    {
+      "step": 5,
+      "positions": {
+        "agv_01": [
+          7,
+          5
+        ],
+        "agv_02": [
+          10,
+          8
+        ]
+      },
+      "violations": []
+    },
+    {
+      "step": 6,
+      "positions": {
+        "agv_01": [
+          8,
+          5
+        ],
+        "agv_02": [
+          10,
+          8
+        ]
+      },
+      "violations": []
+    },
+    {
+      "step": 7,
+      "positions": {
+        "agv_01": [
+          9,
+          5
+        ],
+        "agv_02": [
+          10,
+          8
+        ]
+      },
+      "violations": []
+    }
+  ],
+  "verdict": "SAFE",
+  "violations": [],
+  "visualization": {
+    "enabled": true,
+    "mode": "persistent",
+    "cell_px": 56,
+    "step_delay_ms": 250,
+    "hold_final_ms": 1500,
+    "show_paths": true,
+    "show_coordinates": true,
+    "window_title": "PCAG AGV Grid Viewer",
+    "poll_interval_ms": 250,
+    "state_file": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\results\\agv_gui_state_latest.json",
+    "pid_file": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\results\\agv_gui_viewer.pid"
+  }
+}

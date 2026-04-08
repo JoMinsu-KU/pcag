@@ -65,6 +65,7 @@ class ConfigurableMockClient:
         safety_verdict="SAFE",
         prepare_status="LOCK_GRANTED",
         commit_status="ACK",
+        commit_http_status=200,
         commit_reason=None,
         commit_safe_state_executed=True,
         evidence_status_code=200,
@@ -78,6 +79,7 @@ class ConfigurableMockClient:
         self.safety_verdict = safety_verdict
         self.prepare_status = prepare_status
         self.commit_status = commit_status
+        self.commit_http_status = commit_http_status
         self.commit_reason = commit_reason
         self.commit_safe_state_executed = commit_safe_state_executed
         self.evidence_status_code = evidence_status_code
@@ -160,7 +162,8 @@ class ConfigurableMockClient:
                     "executed_at_ms": int(time.time() * 1000),
                     "reason": self.commit_reason,
                     "safe_state_executed": self.commit_safe_state_executed,
-                }
+                },
+                status_code=self.commit_http_status,
             )
         if "/events/append" in url:
             self.evidence_bucket.append(payload)
@@ -325,6 +328,30 @@ def test_commit_execution_failed_returns_aborted_and_records_evidence():
         assert response.json()["reason_code"] == "COMMIT_FAILED"
         stages = [event["stage"] for event in evidence_bucket]
         assert "COMMIT_FAILED" in stages
+        assert "COMMIT_ACK" not in stages
+
+
+def test_commit_transport_error_returns_error_and_records_commit_error_evidence():
+    evidence_bucket = []
+    client_factory = lambda *args, **kwargs: ConfigurableMockClient(
+        commit_http_status=503,
+        commit_reason="ot unavailable",
+        evidence_bucket=evidence_bucket,
+        **kwargs,
+    )
+    with patch("pcag.apps.gateway.routes.httpx.AsyncClient", side_effect=client_factory):
+        client = TestClient(gateway_app)
+        response = client.post(
+            "/v1/control-requests",
+            json={"transaction_id": "tx-007c", "asset_id": "reactor_01", "proof_package": build_proof(DEFAULT_SENSOR_HASH)},
+            headers=HEADERS,
+        )
+        assert response.status_code == 200
+        assert response.json()["status"] == "ERROR"
+        assert response.json()["reason_code"] == "COMMIT_ERROR"
+        stages = [event["stage"] for event in evidence_bucket]
+        assert "COMMIT_ERROR" in stages
+        assert "COMMIT_FAILED" not in stages
         assert "COMMIT_ACK" not in stages
 
 

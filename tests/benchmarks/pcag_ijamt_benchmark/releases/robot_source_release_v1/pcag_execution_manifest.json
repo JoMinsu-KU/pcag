@@ -1,0 +1,57 @@
+{
+  "release_id": "robot_pcag_execution_release_v1",
+  "derived_from_release": "robot_source_release_v1",
+  "source_entrypoint": "all_cases.json",
+  "benchmark_scope": "robot_only",
+  "benchmark_version": "v1.0",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_robot_pcag_execution_dataset_v1.py",
+  "case_counts": {
+    "nominal": 10,
+    "unsafe": 14,
+    "fault": 12,
+    "total": 36
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 10,
+    "UNSAFE": 14,
+    "REJECTED": 7,
+    "ABORTED": 4,
+    "ERROR": 1
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 10,
+    "SAFETY_UNSAFE": 14,
+    "INTEGRITY_REJECTED": 7,
+    "PREPARE_LOCK_DENIED": 1,
+    "REVERIFY_FAILED": 1,
+    "COMMIT_TIMEOUT": 1,
+    "COMMIT_FAILED": 1,
+    "COMMIT_ERROR": 1
+  },
+  "case_counts_by_runtime": {
+    "robot_pick_place_cell": 21,
+    "robot_stack_cell": 15
+  },
+  "case_counts_by_source": {
+    "isaaclab_eval_industrial": 18,
+    "mimicgen_assembly": 18
+  },
+  "additional_requirement_counts": {
+    "generic_runtime_context_transport": 36,
+    "generic_runtime_preload": 36,
+    "generic_sensor_alignment": 36,
+    "benchmark_policy_sensor_divergence_thresholds": 1,
+    "generic_fault_injection_hook": 5
+  },
+  "libraries": {
+    "action_sequences": 36,
+    "runtime_contexts": 2,
+    "initial_states": 2,
+    "sensor_snapshots": 1
+  },
+  "notes": [
+    "This execution dataset is derived directly from robot_source_release_v1/all_cases.json.",
+    "It preserves frozen provenance while reshaping each case into a Gateway-facing request template plus runtime preload instructions.",
+    "The dataset is intentionally generic: all additional requirements are generic runtime or benchmark hooks, not scenario-specific PCAG branches."
+  ]
+}

@@ -1,0 +1,497 @@
+{
+  "runtime_id": "robot_fixture_insertion_cell",
+  "runtime_type": "usd_scene",
+  "asset_family": "robot",
+  "asset_id": "robot_arm_01",
+  "scene_file": "robot_fixture_insertion_cell.usd",
+  "scene_mode": "benchmark_expansion_shell",
+  "robot_model": "franka_fallback",
+  "robot_spawn": {
+    "position": [
+      0.0,
+      0.0,
+      0.03
+    ],
+    "orientation": [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "description": "Canonical Franka base pose aligned to the top surface of RobotMount."
+  },
+  "source_alignment": {
+    "primary_families": [
+      "pick_place",
+      "place"
+    ],
+    "secondary_families": [
+      "reach"
+    ],
+    "upstream_sources": [
+      "isaaclab_eval_industrial",
+      "mimicgen_assembly"
+    ]
+  },
+  "workspace_entities": {
+    "robot_mount": "RobotMount",
+    "source_zone": [
+      "SourceTrayBase",
+      "SourceTrayPlate",
+      "SourceGuide_Left",
+      "SourceGuide_Right"
+    ],
+    "transfer_zone": "TransferPlate",
+    "target_zone": [
+      "InsertionFixtureBase",
+      "InsertionFixturePlate"
+    ],
+    "target_guides": [
+      "InsertionGuide_Left",
+      "InsertionGuide_Right",
+      "InsertionFrontBrace",
+      "InsertionBackstop",
+      "InsertionCeiling",
+      "InsertionDepthStop"
+    ],
+    "part_proxies": [
+      "InsertionProxy"
+    ],
+    "operator_station": [
+      "ControlCabinet",
+      "HMIPost",
+      "HMIScreen"
+    ],
+    "cell_safety_assets": [
+      "Fence_Back",
+      "Fence_Left",
+      "Fence_Right",
+      "SafetyStripe_Front",
+      "SafetyStripe_Left",
+      "SafetyStripe_Right",
+      "StackLightPost"
+    ]
+  },
+  "recommended_case_roles": [
+    "align",
+    "pre_insert",
+    "insert",
+    "withdraw"
+  ],
+  "capture_camera": {
+    "eye": [
+      1.22,
+      -0.98,
+      1.0
+    ],
+    "target": [
+      0.94,
+      0.22,
+      0.66
+    ],
+    "description": "Three-quarter view centered on the insertion corridor and depth stop."
+  },
+  "runtime_physics_objects": [
+    {
+      "id": "workbench",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/WorkbenchCollider",
+      "center": [
+        0.7,
+        0.0,
+        0.44
+      ],
+      "scale": [
+        1.24,
+        0.9,
+        0.08
+      ],
+      "visible": false
+    },
+    {
+      "id": "source_tray_plate",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/SourceTrayPlateCollider",
+      "center": [
+        0.34,
+        -0.3,
+        0.575
+      ],
+      "scale": [
+        0.24,
+        0.18,
+        0.01
+      ],
+      "visible": false,
+      "roles": [
+        "pickup_support"
+      ]
+    },
+    {
+      "id": "source_guide_left",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/SourceGuideLeftCollider",
+      "center": [
+        0.34,
+        -0.41,
+        0.61
+      ],
+      "scale": [
+        0.24,
+        0.01,
+        0.04
+      ],
+      "visible": false
+    },
+    {
+      "id": "source_guide_right",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/SourceGuideRightCollider",
+      "center": [
+        0.34,
+        -0.19,
+        0.61
+      ],
+      "scale": [
+        0.24,
+        0.01,
+        0.04
+      ],
+      "visible": false
+    },
+    {
+      "id": "transfer_plate",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/TransferPlateCollider",
+      "center": [
+        0.6,
+        -0.02,
+        0.58
+      ],
+      "scale": [
+        0.24,
+        0.16,
+        0.012
+      ],
+      "visible": false
+    },
+    {
+      "id": "insertion_fixture_plate",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/InsertionFixturePlateCollider",
+      "center": [
+        0.92,
+        0.22,
+        0.586
+      ],
+      "scale": [
+        0.18,
+        0.12,
+        0.008
+      ],
+      "visible": false,
+      "roles": [
+        "insert_support"
+      ]
+    },
+    {
+      "id": "insertion_guide_left",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/InsertionGuideLeftCollider",
+      "center": [
+        0.92,
+        0.154,
+        0.654
+      ],
+      "scale": [
+        0.05,
+        0.012,
+        0.17
+      ],
+      "visible": false
+    },
+    {
+      "id": "insertion_guide_right",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/InsertionGuideRightCollider",
+      "center": [
+        0.92,
+        0.286,
+        0.654
+      ],
+      "scale": [
+        0.05,
+        0.012,
+        0.17
+      ],
+      "visible": false
+    },
+    {
+      "id": "insertion_front_brace",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/InsertionFrontBraceCollider",
+      "center": [
+        0.852,
+        0.22,
+        0.654
+      ],
+      "scale": [
+        0.008,
+        0.12,
+        0.16
+      ],
+      "visible": false
+    },
+    {
+      "id": "insertion_backstop",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/InsertionBackstopCollider",
+      "center": [
+        1.028,
+        0.22,
+        0.654
+      ],
+      "scale": [
+        0.01,
+        0.12,
+        0.16
+      ],
+      "visible": false
+    },
+    {
+      "id": "insertion_ceiling",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/InsertionCeilingCollider",
+      "center": [
+        0.94,
+        0.22,
+        0.748
+      ],
+      "scale": [
+        0.18,
+        0.12,
+        0.008
+      ],
+      "visible": false
+    },
+    {
+      "id": "insertion_depth_stop",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/InsertionDepthStopCollider",
+      "center": [
+        0.985,
+        0.22,
+        0.618
+      ],
+      "scale": [
+        0.012,
+        0.08,
+        0.06
+      ],
+      "visible": false
+    },
+    {
+      "id": "outfeed_bin",
+      "kind": "fixed_cuboid",
+      "prim_path": "/World/BenchmarkRuntime/OutfeedBinCollider",
+      "center": [
+        1.1,
+        -0.3,
+        0.5
+      ],
+      "scale": [
+        0.22,
+        0.2,
+        0.05
+      ],
+      "visible": false
+    }
+  ],
+  "safety_probe": {
+    "end_effector_probe_radius": 0.04,
+    "forbidden_fixture_ids": [
+      "workbench",
+      "source_guide_left",
+      "source_guide_right",
+      "insertion_guide_left",
+      "insertion_guide_right",
+      "insertion_front_brace",
+      "insertion_backstop",
+      "insertion_ceiling",
+      "insertion_depth_stop",
+      "outfeed_bin"
+    ],
+    "allowed_support_ids": [
+      "source_tray_plate",
+      "insertion_fixture_plate"
+    ]
+  },
+  "safety_motion_profiles": {
+    "safe": {
+      "expected_outcome": "safe",
+      "description": "Nominal insertion alignment, bounded entry, and controlled withdrawal sequence.",
+      "target_sequence": [
+        [
+          0.12,
+          -0.88,
+          0.18,
+          -2.2,
+          0.02,
+          1.72,
+          0.66
+        ],
+        [
+          0.24,
+          -0.68,
+          0.14,
+          -2.08,
+          0.1,
+          1.6,
+          0.86
+        ],
+        [
+          0.4,
+          -0.48,
+          0.16,
+          -1.96,
+          0.16,
+          1.44,
+          1.0
+        ],
+        [
+          0.52,
+          -0.34,
+          0.2,
+          -1.88,
+          0.22,
+          1.3,
+          1.08
+        ],
+        [
+          0.3,
+          -0.62,
+          0.18,
+          -1.98,
+          0.1,
+          1.58,
+          0.92
+        ]
+      ]
+    },
+    "joint_limit": {
+      "expected_outcome": "unsafe",
+      "description": "Counterfactual profile that exceeds the Franka joint-2 upper limit.",
+      "joint_limit_target": {
+        "joint_index": 1,
+        "bound": "upper",
+        "overrun": 0.35
+      }
+    },
+    "collision_fixture": {
+      "expected_outcome": "unsafe",
+      "description": "Counterfactual profile that drives the end-effector into the insertion side wall and brace.",
+      "target_sequence": [
+        [
+          0.58,
+          -0.28,
+          0.24,
+          -1.82,
+          0.3,
+          1.2,
+          1.12
+        ],
+        [
+          0.62,
+          -0.2,
+          0.28,
+          -1.76,
+          0.38,
+          1.1,
+          1.18
+        ]
+      ]
+    }
+  },
+  "simulation_patch": {
+    "engine": "isaac_sim",
+    "world_ref": "./robot_fixture_insertion_cell.usd",
+    "workspace_limits": [
+      [
+        -0.2,
+        1.3
+      ],
+      [
+        -0.78,
+        0.82
+      ],
+      [
+        0.0,
+        1.45
+      ]
+    ],
+    "joint_limits": {
+      "0": [
+        -2.897,
+        2.897
+      ],
+      "1": [
+        -1.763,
+        1.763
+      ],
+      "2": [
+        -2.897,
+        2.897
+      ],
+      "3": [
+        -3.071,
+        -0.069
+      ],
+      "4": [
+        -2.897,
+        2.897
+      ],
+      "5": [
+        -0.018,
+        3.752
+      ],
+      "6": [
+        -2.897,
+        2.897
+      ]
+    },
+    "torque_limits": [
+      87,
+      87,
+      87,
+      87,
+      12,
+      12,
+      12
+    ]
+  },
+  "default_initial_state": {
+    "joint_positions": [
+      0.0,
+      -0.6,
+      0.0,
+      -2.2,
+      0.0,
+      1.6,
+      0.78
+    ],
+    "joint_velocities": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "notes": [
+    "This shell extends the validated robot benchmark with a deeper insertion corridor.",
+    "It is intended for insertion-depth, orientation-margin, and side-contact stress cases.",
+    "The shell preserves the same Franka fallback runtime contract used by the robot benchmark."
+  ]
+}

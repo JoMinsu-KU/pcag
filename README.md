@@ -79,6 +79,7 @@ PCAG currently includes:
 - a `Proof Package` request contract for control submissions
 - `L1 integrity` checks for policy version, timestamp freshness, sensor divergence, and `sensor_snapshot_hash`
 - parallel `Rules + barrier-based validator (CBF-style static margin) + Simulation` safety validation with SIL-aware consensus
+- Isaac-based robot validation for joint limits, workspace limits, torque limits, command divergence, and optional policy-driven fixture collision probes
 - fail-closed `PREPARE -> REVERIFY -> COMMIT/ABORT` execution control
 - `COMMITTED` only after successful execution, never before
 - an append-only evidence ledger with hash-chain verification and fail-hard append semantics
@@ -258,6 +259,9 @@ The public repository should be read as a hybrid validation artifact:
 - live service orchestration and evidence logging
 - live PLC-adapter-backed sensor and actuation paths for reactor and AGV scenarios
 - Isaac-Sim-backed robot validation
+
+For the current robot path, the Isaac validator is best described as a digital-twin safety check rather than a task-success evaluator.
+It is used to detect unsafe execution signals such as joint-limit violations, workspace exit, excessive effort, divergence between commanded and realized joints, and policy-declared forbidden fixture penetration.
 - some mock-backed execution paths that remain intentionally explicit in the reference stack, especially for robot actuation
 
 ## Repository Layout

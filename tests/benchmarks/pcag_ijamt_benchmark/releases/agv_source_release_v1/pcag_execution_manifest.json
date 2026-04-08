@@ -1,0 +1,54 @@
+{
+  "release_id": "agv_pcag_execution_release_v1",
+  "derived_from_release": "agv_source_release_v1",
+  "source_entrypoint": "all_cases.json",
+  "benchmark_scope": "agv_only",
+  "benchmark_version": "v1.0",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_agv_pcag_execution_dataset_v1.py",
+  "case_counts": {
+    "nominal": 12,
+    "unsafe": 12,
+    "fault": 12,
+    "total": 36
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 12,
+    "UNSAFE": 12,
+    "REJECTED": 7,
+    "ABORTED": 4,
+    "ERROR": 1
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 12,
+    "SAFETY_UNSAFE": 12,
+    "INTEGRITY_REJECTED": 7,
+    "PREPARE_LOCK_DENIED": 1,
+    "REVERIFY_FAILED": 1,
+    "COMMIT_TIMEOUT": 1,
+    "COMMIT_FAILED": 1,
+    "COMMIT_ERROR": 1
+  },
+  "case_counts_by_runtime": {
+    "agv_transfer_map": 12,
+    "agv_docking_map": 12,
+    "agv_shared_zone_map": 12
+  },
+  "additional_requirement_counts": {
+    "generic_runtime_context_transport": 36,
+    "generic_runtime_preload": 36,
+    "generic_sensor_alignment": 36,
+    "benchmark_policy_sensor_divergence_thresholds": 1,
+    "generic_fault_injection_hook": 5
+  },
+  "libraries": {
+    "action_sequences": 36,
+    "runtime_contexts": 3,
+    "initial_states": 8,
+    "sensor_snapshots": 1
+  },
+  "notes": [
+    "This execution dataset is derived directly from agv_source_release_v1/all_cases.json.",
+    "Each case is shaped into a Gateway-facing request plus PLC-adapter preload instructions.",
+    "Shared-zone background traffic is expressed through runtime_context rather than scenario-specific PCAG branching."
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "release_id": "agv_source_release_v2",
+  "benchmark_scope": "agv_only",
+  "benchmark_version": "v2.0",
+  "release_date": "2026-03-20",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_agv_source_release_v2.py",
+  "derived_from_release": "agv_source_release_v1",
+  "case_counts": {
+    "nominal": 16,
+    "unsafe": 16,
+    "fault": 12,
+    "total": 44
+  },
+  "case_counts_by_runtime": {
+    "agv_transfer_map": 14,
+    "agv_docking_map": 14,
+    "agv_shared_zone_map": 16
+  },
+  "case_counts_by_task_family": {
+    "station_transfer": 14,
+    "docking_approach": 14,
+    "shared_zone_entry": 14,
+    "intersection_conflict": 2
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 16,
+    "UNSAFE": 16,
+    "REJECTED": 7,
+    "ABORTED": 4,
+    "ERROR": 1
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 16,
+    "SAFETY_UNSAFE": 16,
+    "INTEGRITY_REJECTED": 7,
+    "PREPARE_LOCK_DENIED": 1,
+    "REVERIFY_FAILED": 1,
+    "COMMIT_TIMEOUT": 1,
+    "COMMIT_FAILED": 1,
+    "COMMIT_ERROR": 1
+  },
+  "release_artifacts": [
+    "nominal_dataset.json",
+    "unsafe_dataset.json",
+    "fault_dataset.json",
+    "all_cases.json",
+    "dataset_manifest.json",
+    "qc_report.md"
+  ],
+  "notes": [
+    "AGV release v2 preserves the full v1 outcome-complete benchmark and adds concurrent-motion supplement cases.",
+    "Concurrent supplement cases introduce dynamic background AGV paths, edge-swap conflicts, and deadlock-cycle counterfactuals.",
+    "The public supervisory subset remains move_to and still avoids scenario-specific PCAG branching."
+  ]
+}

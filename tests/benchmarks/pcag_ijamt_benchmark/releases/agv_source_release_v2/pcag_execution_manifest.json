@@ -1,0 +1,54 @@
+{
+  "release_id": "agv_pcag_execution_release_v2",
+  "derived_from_release": "agv_source_release_v2",
+  "source_entrypoint": "all_cases.json",
+  "benchmark_scope": "agv_only",
+  "benchmark_version": "v2.0",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_agv_pcag_execution_dataset_v2.py",
+  "case_counts": {
+    "nominal": 16,
+    "unsafe": 16,
+    "fault": 12,
+    "total": 44
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 16,
+    "UNSAFE": 16,
+    "REJECTED": 7,
+    "ABORTED": 4,
+    "ERROR": 1
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 16,
+    "SAFETY_UNSAFE": 16,
+    "INTEGRITY_REJECTED": 7,
+    "PREPARE_LOCK_DENIED": 1,
+    "REVERIFY_FAILED": 1,
+    "COMMIT_TIMEOUT": 1,
+    "COMMIT_FAILED": 1,
+    "COMMIT_ERROR": 1
+  },
+  "case_counts_by_runtime": {
+    "agv_transfer_map": 14,
+    "agv_docking_map": 14,
+    "agv_shared_zone_map": 16
+  },
+  "additional_requirement_counts": {
+    "generic_runtime_context_transport": 44,
+    "generic_runtime_preload": 44,
+    "generic_sensor_alignment": 44,
+    "benchmark_policy_sensor_divergence_thresholds": 1,
+    "generic_fault_injection_hook": 5
+  },
+  "libraries": {
+    "action_sequences": 44,
+    "runtime_contexts": 3,
+    "initial_states": 10,
+    "sensor_snapshots": 1
+  },
+  "notes": [
+    "This execution dataset is derived directly from agv_source_release_v2/all_cases.json.",
+    "Concurrent-motion supplement cases keep the same Gateway contract and use runtime_context to express dynamic background traffic.",
+    "The same benchmark policy version is reused; no scenario-specific PCAG branching is introduced."
+  ]
+}

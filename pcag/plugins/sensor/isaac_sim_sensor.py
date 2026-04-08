@@ -51,6 +51,8 @@ class IsaacSimSensorSource(ISensorSource):
                 
                 # 1. 원본 데이터 복사
                 for k, v in data.items():
+                    if k == "timestamp":
+                        continue
                     snapshot[k] = v
                 
                 # 2. Joint Positions 전개
@@ -89,6 +91,28 @@ class IsaacSimSensorSource(ISensorSource):
                 if not snapshot:
                     logger.error("[SYSTEM_ERROR] Isaac Sim returned empty snapshot data")
                     raise RuntimeError("Isaac Sim returned empty snapshot data")
+
+                # Provide a stable integrity-hash basis while preserving the
+                # richer dynamic fields for validation and diagnostics.
+                integrity_basis = {}
+                if "joint_positions" in snapshot:
+                    integrity_basis["joint_positions"] = snapshot["joint_positions"]
+                for key in (
+                    "joint_0",
+                    "joint_1",
+                    "joint_2",
+                    "joint_3",
+                    "joint_4",
+                    "joint_5",
+                    "joint_6",
+                    "finger_joint_0",
+                    "finger_joint_1",
+                    "runtime_id",
+                    "scene_path",
+                ):
+                    if key in snapshot:
+                        integrity_basis[key] = snapshot[key]
+                snapshot["__integrity_hash_payload"] = integrity_basis
 
                 return snapshot
             else:

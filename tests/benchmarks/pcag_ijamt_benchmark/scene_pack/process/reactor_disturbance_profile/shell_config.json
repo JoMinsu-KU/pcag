@@ -1,0 +1,79 @@
+{
+  "runtime_id": "reactor_disturbance_profile",
+  "runtime_type": "process_profile",
+  "asset_family": "process",
+  "asset_id": "reactor_01",
+  "profile_file": "reactor_disturbance_profile.json",
+  "source_alignment": {
+    "primary_motifs": [
+      "disturbance_inspired_supervision",
+      "interlock_compatible_recovery"
+    ],
+    "upstream_sources": [
+      "tep_process_curated"
+    ]
+  },
+  "recommended_case_roles": [
+    "disturbance_recovery",
+    "pressure_relief",
+    "stabilization_hold",
+    "unsafe_disturbance_amplification"
+  ],
+  "simulation_patch": {
+    "engine": "ode_solver",
+    "horizon_ms": 6000,
+    "dt_ms": 100,
+    "timeout_ms": 400,
+    "params": {
+      "mass_kg": 1.0,
+      "specific_heat_j_kg_k": 4186.0,
+      "heater_max_power_w": 20000.0,
+      "heat_transfer_coeff_w_k": 90.0,
+      "coolant_temp_c": 20.0,
+      "ambient_temp_c": 25.0,
+      "loss_coeff_w_k": 5.0,
+      "pressure_coeff_atm_k": 0.015
+    }
+  },
+  "default_initial_state": {
+    "temperature": 103.0,
+    "pressure": 2.18,
+    "heater_output": 48.0,
+    "cooling_valve": 22.0,
+    "reactor_status": 1.0
+  },
+  "ruleset_patch": [
+    {
+      "rule_id": "reactor_temperature_safe_range",
+      "type": "range",
+      "target_field": "temperature",
+      "min": 35.0,
+      "max": 118.0
+    },
+    {
+      "rule_id": "reactor_pressure_safe_range",
+      "type": "range",
+      "target_field": "pressure",
+      "min": 0.85,
+      "max": 2.35
+    },
+    {
+      "rule_id": "heater_output_range",
+      "type": "range",
+      "target_field": "heater_output",
+      "min": 0.0,
+      "max": 70.0
+    },
+    {
+      "rule_id": "cooling_valve_range",
+      "type": "range",
+      "target_field": "cooling_valve",
+      "min": 0.0,
+      "max": 100.0
+    }
+  ],
+  "notes": [
+    "This profile represents a disturbed operating condition with reduced pressure margin.",
+    "It is intended for recovery-style COMMITTED traces and pressure-amplifying UNSAFE counterfactuals."
+  ]
+}

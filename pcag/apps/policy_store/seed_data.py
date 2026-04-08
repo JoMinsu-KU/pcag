@@ -164,17 +164,23 @@ REFERENCE_POLICY_DATA = {
                     "unit": "rad",
                 },
             ],
-            "simulation": {
-                "engine": "isaac_sim",
-                "timeout_ms": 10000,
-                "headless": True,
-                "simulation_steps_per_action": 30,
-                "workspace_limits": [
-                    [-0.855, 0.855],
-                    [-0.855, 0.855],
-                    [-0.36, 1.19],
-                ],
-            },
+                "simulation": {
+                    "engine": "isaac_sim",
+                    "timeout_ms": 10000,
+                    "headless": True,
+                    "simulation_steps_per_action": 30,
+                    "workspace_limits": [
+                        [-0.855, 0.855],
+                        [-0.855, 0.855],
+                        [-0.36, 1.19],
+                    ],
+                    "collision": {
+                        "enabled": False,
+                        "mode": "end_effector_sphere",
+                        "probe_radius_m": 0.045,
+                        "forbidden_objects": [],
+                    },
+                },
             "execution": {
                 "lock_ttl_ms": 5000,
                 "commit_ack_timeout_ms": 3000,

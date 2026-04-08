@@ -15,6 +15,27 @@ from pydantic import BaseModel, Field
 from typing import Optional, Literal
 from .common import ConsensusConfig, IntegrityConfig, Rule
 
+
+class CollisionObjectConfig(BaseModel):
+    """
+    Forbidden collision fixture expressed as an axis-aligned box.
+    """
+
+    object_id: str = Field(min_length=1)
+    center: list[float] = Field(min_length=3, max_length=3)
+    scale: list[float] = Field(min_length=3, max_length=3)
+
+
+class CollisionConfig(BaseModel):
+    """
+    Policy-driven collision probe settings for the Isaac validator.
+    """
+
+    enabled: bool = False
+    mode: Literal["end_effector_sphere"] = "end_effector_sphere"
+    probe_radius_m: float = Field(default=0.045, gt=0.0)
+    forbidden_objects: list[CollisionObjectConfig] = Field(default_factory=list)
+
 class SimulationConfig(BaseModel):
     """
     시뮬레이션 검증을 위한 설정.
@@ -24,6 +45,8 @@ class SimulationConfig(BaseModel):
     dt_ms: Optional[int] = None  # 시뮬레이션 시간 단계 (Time step)
     timeout_ms: Optional[int] = 200  # 시뮬레이션 최대 허용 시간 (이 시간 내에 결과가 안 나오면 타임아웃)
     world_ref: Optional[str] = None  # 로드할 시뮬레이션 월드/장면 ID (USD 파일 경로 등)
+
+    collision: CollisionConfig = Field(default_factory=CollisionConfig)
 
 class UnitAction(BaseModel):
     """

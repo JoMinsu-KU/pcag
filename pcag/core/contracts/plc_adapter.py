@@ -47,3 +47,18 @@ class PlcSafeStateResponse(BaseModel):
 class PlcHealthResponse(BaseModel):
     status: str = Field(pattern="^(OK|DEGRADED|ERROR)$")
     connections: list[dict[str, Any]]
+
+
+class PlcRuntimePreloadRequest(BaseModel):
+    asset_id: str
+    runtime_context: dict[str, Any] | None = None
+    initial_state: dict[str, Any] | None = None
+
+
+class PlcRuntimePreloadResponse(BaseModel):
+    asset_id: str
+    status: str = "READY"
+    runtime_id: str | None = None
+    source: str = "virtual_plc"
+    connection_key: str | None = None
+    current_state: dict[str, Any]

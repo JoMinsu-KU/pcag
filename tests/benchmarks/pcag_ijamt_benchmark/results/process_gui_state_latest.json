@@ -1,0 +1,233 @@
+{
+  "session_id": "process-gui-1774117983157819200",
+  "case_id": "PCAG Reactor Viewer",
+  "window_title": "PCAG Reactor Viewer",
+  "trajectory": [
+    {
+      "t_ms": 0,
+      "temperature": 109.0,
+      "pressure": 2.24,
+      "heater_output": 40.0,
+      "cooling_valve": 36.0
+    },
+    {
+      "t_ms": 100,
+      "temperature": 109.135,
+      "pressure": 2.242,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 200,
+      "temperature": 109.269,
+      "pressure": 2.245,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 300,
+      "temperature": 109.404,
+      "pressure": 2.247,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 400,
+      "temperature": 109.538,
+      "pressure": 2.25,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 500,
+      "temperature": 109.672,
+      "pressure": 2.252,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 600,
+      "temperature": 109.806,
+      "pressure": 2.255,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 700,
+      "temperature": 109.94,
+      "pressure": 2.257,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 800,
+      "temperature": 110.074,
+      "pressure": 2.259,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 900,
+      "temperature": 110.208,
+      "pressure": 2.262,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1000,
+      "temperature": 110.341,
+      "pressure": 2.264,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1100,
+      "temperature": 110.474,
+      "pressure": 2.267,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1200,
+      "temperature": 110.608,
+      "pressure": 2.269,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1300,
+      "temperature": 110.741,
+      "pressure": 2.271,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1400,
+      "temperature": 110.874,
+      "pressure": 2.274,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1500,
+      "temperature": 111.006,
+      "pressure": 2.276,
+      "heater_output": 40.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1600,
+      "temperature": 111.013,
+      "pressure": 2.276,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1700,
+      "temperature": 111.019,
+      "pressure": 2.276,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1800,
+      "temperature": 111.026,
+      "pressure": 2.276,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 1900,
+      "temperature": 111.032,
+      "pressure": 2.277,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 2000,
+      "temperature": 111.039,
+      "pressure": 2.277,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 2100,
+      "temperature": 111.045,
+      "pressure": 2.277,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 2200,
+      "temperature": 111.052,
+      "pressure": 2.277,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 2300,
+      "temperature": 111.058,
+      "pressure": 2.277,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 2400,
+      "temperature": 111.065,
+      "pressure": 2.277,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 2500,
+      "temperature": 111.071,
+      "pressure": 2.277,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 2600,
+      "temperature": 111.078,
+      "pressure": 2.277,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    },
+    {
+      "t_ms": 2700,
+      "temperature": 111.084,
+      "pressure": 2.278,
+      "heater_output": 18.0,
+      "cooling_valve": 52.0
+    }
+  ],
+  "verdict": "SAFE",
+  "violations": [],
+  "safe_ranges": {
+    "temperature": {
+      "min": 35.0,
+      "max": 118.0
+    },
+    "pressure": {
+      "min": 0.85,
+      "max": 2.35
+    },
+    "heater_output": {
+      "min": 0.0,
+      "max": 70.0
+    },
+    "cooling_valve": {
+      "min": 0.0,
+      "max": 100.0
+    }
+  },
+  "visualization": {
+    "enabled": true,
+    "mode": "persistent",
+    "step_delay_ms": 200,
+    "hold_final_ms": 1500,
+    "poll_interval_ms": 250,
+    "window_title": "PCAG Reactor Viewer",
+    "state_file": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\results\\process_gui_state_latest.json",
+    "pid_file": "C:\\Users\\choiLee\\Dropbox\\경남대학교\\AI agent 기반으로 물리 환경 제어\\tests\\benchmarks\\pcag_ijamt_benchmark\\results\\process_gui_viewer.pid"
+  }
+}

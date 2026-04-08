@@ -14,6 +14,8 @@ from pcag.core.contracts.plc_adapter import (
     PlcExecuteRequest,
     PlcExecuteResponse,
     PlcHealthResponse,
+    PlcRuntimePreloadRequest,
+    PlcRuntimePreloadResponse,
     PlcSafeStateRequest,
     PlcSafeStateResponse,
     PlcSnapshotResponse,
@@ -54,6 +56,23 @@ def get_latest_snapshot(asset_id: str) -> PlcSnapshotResponse:
         sensor_snapshot=snapshot,
         connection_key=connection_key,
     )
+
+
+@router.post("/runtime/preload", response_model=PlcRuntimePreloadResponse)
+def preload_runtime(request: PlcRuntimePreloadRequest) -> PlcRuntimePreloadResponse:
+    try:
+        preload_result = _service.preload_runtime(
+            asset_id=request.asset_id,
+            runtime_context=request.runtime_context,
+            initial_state=request.initial_state,
+        )
+    except KeyError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except Exception as exc:
+        logger.error("PLC adapter preload failed | asset=%s error=%s", request.asset_id, exc, exc_info=True)
+        raise HTTPException(status_code=500, detail=f"PLC runtime preload failed: {exc}") from exc
+
+    return PlcRuntimePreloadResponse(**preload_result)
 
 
 @router.post("/execute", response_model=PlcExecuteResponse)

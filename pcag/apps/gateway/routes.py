@@ -81,6 +81,30 @@ def _build_divergence_thresholds(raw_thresholds: list[dict] | None) -> list[Dive
     return thresholds
 
 
+def _extract_runtime_context(proof: dict[str, Any]) -> dict[str, Any] | None:
+    runtime_context = proof.get("runtime_context")
+    return runtime_context if isinstance(runtime_context, dict) else None
+
+
+def _extract_fault_injection(proof: dict[str, Any]) -> dict[str, Any] | None:
+    fault_injection = proof.get("fault_injection")
+    return fault_injection if isinstance(fault_injection, dict) else None
+
+
+def _fault_enabled(fault_injection: dict[str, Any] | None, fault_family: str) -> bool:
+    if not fault_injection:
+        return False
+    return fault_injection.get("fault_family") == fault_family
+
+
+def _force_hash_mismatch(sensor_hash: str) -> str:
+    if len(sensor_hash) != 64:
+        return "f" * 64
+    last = sensor_hash[-1].lower()
+    replacement = "0" if last != "0" else "1"
+    return sensor_hash[:-1] + replacement
+
+
 async def _fetch_asset_profile(client: httpx.AsyncClient, policy_version: str, asset_id: str) -> dict:
     resp = await client.get(f"{_get_service_url('policy_store')}/v1/policies/{policy_version}/assets/{asset_id}")
     if resp.status_code != 200:
@@ -122,6 +146,8 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
     tx_id = request.transaction_id
     asset_id = request.asset_id
     proof = request.proof_package.model_dump(exclude_none=True)
+    runtime_context = _extract_runtime_context(proof)
+    fault_injection = _extract_fault_injection(proof)
     evidence_seq = 0
     prev_hash = GENESIS_HASH
     asset_profile: dict | None = None
@@ -288,6 +314,7 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
                     "policy_version_id": active_version,
                     "action_sequence": proof.get("action_sequence", []),
                     "current_sensor_snapshot": current_snapshot,
+                    "runtime_context": runtime_context,
                 },
             )
             if safety_resp.status_code != 200:
@@ -375,15 +402,18 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
         # 여기서 잠금에 실패하면 같은 자산에 대한 다른 트랜잭션과 충돌 중인 상태다.
         t0 = time.time()
         lock_ttl_ms = execution_config.get("lock_ttl_ms", 5000)
-        try:
-            prepare_resp = await client.post(
-                f"{_get_service_url('ot_interface')}/v1/prepare",
-                json={"transaction_id": tx_id, "asset_id": asset_id, "lock_ttl_ms": lock_ttl_ms},
-            )
-            prepare_result = prepare_resp.json()
-        except Exception as exc:
-            logger.error("[SYSTEM_ERROR] OT Interface PREPARE failed: %s", exc, exc_info=True)
-            return _response(tx_id, "ERROR", reason=f"OT Interface error: {exc}", reason_code="OT_INTERFACE_UNREACHABLE")
+        if _fault_enabled(fault_injection, "lock_denied"):
+            prepare_result = {"status": "LOCK_DENIED", "reason": "Injected benchmark lock denial"}
+        else:
+            try:
+                prepare_resp = await client.post(
+                    f"{_get_service_url('ot_interface')}/v1/prepare",
+                    json={"transaction_id": tx_id, "asset_id": asset_id, "lock_ttl_ms": lock_ttl_ms},
+                )
+                prepare_result = prepare_resp.json()
+            except Exception as exc:
+                logger.error("[SYSTEM_ERROR] OT Interface PREPARE failed: %s", exc, exc_info=True)
+                return _response(tx_id, "ERROR", reason=f"OT Interface error: {exc}", reason_code="OT_INTERFACE_UNREACHABLE")
 
         if prepare_result["status"] != "LOCK_GRANTED":
             alternative_actions = generate_alternative_actions(asset_profile, "LOCK_DENIED")
@@ -466,6 +496,9 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
                 alternative_actions=alternative_actions,
             )
 
+        if _fault_enabled(fault_injection, "reverify_hash_mismatch"):
+            reverify_hash = _force_hash_mismatch(current_hash)
+
         if reverify_hash != current_hash:
             alternative_actions = generate_alternative_actions(asset_profile, "REVERIFY_HASH_MISMATCH")
             try:
@@ -528,24 +561,36 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
         # 따라서 ACK는 "실행 확정" 의미이고, 그 외 상태는 모두 중단/오류로 다룬다.
         t0 = time.time()
         try:
-            commit_resp = await client.post(
-                f"{_get_service_url('ot_interface')}/v1/commit",
-                json={
-                    "transaction_id": tx_id,
-                    "asset_id": asset_id,
-                    "action_sequence": proof.get("action_sequence", []),
-                },
-            )
-            if commit_resp.status_code != 200:
-                try:
-                    error_detail = commit_resp.json().get("detail", f"HTTP {commit_resp.status_code}")
-                except Exception:
-                    error_detail = f"HTTP {commit_resp.status_code}"
-                raise RuntimeError(f"OT Interface COMMIT returned {commit_resp.status_code}: {error_detail}")
-            commit_result = commit_resp.json()
+            if _fault_enabled(fault_injection, "commit_timeout"):
+                commit_result = {"status": "TIMEOUT", "reason": "Injected benchmark commit timeout"}
+            elif _fault_enabled(fault_injection, "commit_failed_recovered"):
+                commit_result = {
+                    "status": "EXECUTION_FAILED",
+                    "reason": "Injected benchmark recovered commit failure",
+                    "safe_state_executed": True,
+                }
+            elif _fault_enabled(fault_injection, "ot_interface_error"):
+                raise RuntimeError("Injected benchmark OT interface error")
+            else:
+                commit_resp = await client.post(
+                    f"{_get_service_url('ot_interface')}/v1/commit",
+                    json={
+                        "transaction_id": tx_id,
+                        "asset_id": asset_id,
+                        "action_sequence": proof.get("action_sequence", []),
+                    },
+                )
+                if commit_resp.status_code != 200:
+                    try:
+                        error_detail = commit_resp.json().get("detail", f"HTTP {commit_resp.status_code}")
+                    except Exception:
+                        error_detail = f"HTTP {commit_resp.status_code}"
+                    raise RuntimeError(f"OT Interface COMMIT returned {commit_resp.status_code}: {error_detail}")
+                commit_result = commit_resp.json()
         except Exception as exc:
             logger.error("[SYSTEM_ERROR] OT Interface COMMIT failed: %s", exc, exc_info=True)
-            alternative_actions = generate_alternative_actions(asset_profile, "COMMIT_FAILED")
+            error_reason_code = "OT_INTERFACE_ERROR" if _fault_enabled(fault_injection, "ot_interface_error") else "COMMIT_ERROR"
+            alternative_actions = generate_alternative_actions(asset_profile, "COMMIT_ERROR")
             try:
                 abort_result = await _abort_transaction(client, tx_id, asset_id, str(exc))
             except Exception as abort_exc:
@@ -560,9 +605,10 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
                 client,
                 tx_id,
                 evidence_seq,
-                "COMMIT_FAILED",
+                "COMMIT_ERROR",
                 {
                     "reason": str(exc),
+                    "reason_code": error_reason_code,
                     "abort_status": abort_result.get("status"),
                     "alternative_actions": alternative_actions,
                 },
@@ -573,7 +619,7 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
                 tx_id,
                 "ERROR",
                 reason=f"Commit failed: {exc}",
-                reason_code="COMMIT_FAILED",
+                reason_code=error_reason_code,
                 alternative_actions=alternative_actions,
             )
 

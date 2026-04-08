@@ -30,6 +30,7 @@ test_config_sub.py
 # Design documents (not for public repo)
 BaseDocs/
 plans/
+PPT/
 
 # IDE
 .vscode/
@@ -47,3 +48,18 @@ Thumbs.db
 # Large binary
 *.pptx
 *.docx
+
+# Local temporary artifacts
+.tmp_latest_tx_ids.txt
+tmp_*
+texput.log
+
+# Benchmark external source mirrors (keep local, do not vendor)
+tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/
+tests/benchmarks/pcag_ijamt_benchmark/external_sources/process/tennessee-eastman-reference/
+tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/IsaacLab/
+tests/benchmarks/pcag_ijamt_benchmark/external_sources/robot/mimicgen/
+
+# Benchmark historical run artifacts (keep latest snapshots only)
+tests/benchmarks/pcag_ijamt_benchmark/results/**/*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9].json
+tests/benchmarks/pcag_ijamt_benchmark/smoke/results/**/*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9].json

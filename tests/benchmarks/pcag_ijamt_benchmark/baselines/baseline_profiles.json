@@ -1,0 +1,95 @@
+{
+  "profiles": [
+    {
+      "baseline_id": "B0",
+      "display_name": "Direct Execution",
+      "description": "검증 없이 supervisory command를 바로 execution path로 전달하는 하한선 baseline",
+      "integrity": false,
+      "rules": false,
+      "barrier": false,
+      "simulation": false,
+      "consensus": false,
+      "prepare": false,
+      "reverify": false,
+      "execution_mode": "direct"
+    },
+    {
+      "baseline_id": "B1",
+      "display_name": "Rules-only",
+      "description": "schema/integrity와 rules validator만 사용하고 나머지 레이어는 우회하는 내부 ablation baseline",
+      "integrity": true,
+      "rules": true,
+      "barrier": false,
+      "simulation": false,
+      "consensus": false,
+      "prepare": false,
+      "reverify": false,
+      "execution_mode": "direct"
+    },
+    {
+      "baseline_id": "B2",
+      "display_name": "Rules + Barrier",
+      "description": "rules와 static barrier-style validator까지 사용하는 내부 ablation baseline",
+      "integrity": true,
+      "rules": true,
+      "barrier": true,
+      "simulation": false,
+      "consensus": false,
+      "prepare": false,
+      "reverify": false,
+      "execution_mode": "direct"
+    },
+    {
+      "baseline_id": "B3",
+      "display_name": "Rules + Simulation",
+      "description": "rules와 digital twin simulation을 함께 사용하지만 reverify/2PC는 사용하지 않는 내부 ablation baseline",
+      "integrity": true,
+      "rules": true,
+      "barrier": false,
+      "simulation": true,
+      "consensus": false,
+      "prepare": false,
+      "reverify": false,
+      "execution_mode": "direct"
+    },
+    {
+      "baseline_id": "E1",
+      "display_name": "DT-only Gate",
+      "description": "실무에서 가정 가능한 비트랜잭션 DT gate: simulation verdict만으로 SAFE/UNSAFE를 판정하고 SAFE이면 바로 execution하는 practical comparator",
+      "integrity": false,
+      "rules": false,
+      "barrier": false,
+      "simulation": true,
+      "consensus": false,
+      "prepare": false,
+      "reverify": false,
+      "execution_mode": "direct"
+    },
+    {
+      "baseline_id": "B4",
+      "display_name": "Full Safety Without REVERIFY",
+      "description": "integrity/rules/barrier/simulation/consensus/prepare를 사용하지만 REVERIFY를 제거한 핵심 ablation baseline",
+      "integrity": true,
+      "rules": true,
+      "barrier": true,
+      "simulation": true,
+      "consensus": true,
+      "prepare": true,
+      "reverify": false,
+      "execution_mode": "ot_commit"
+    },
+    {
+      "baseline_id": "B5",
+      "display_name": "Full PCAG",
+      "description": "integrity, multi-validator consensus, 2PC, REVERIFY, evidence chain을 모두 포함하는 full PCAG baseline",
+      "integrity": true,
+      "rules": true,
+      "barrier": true,
+      "simulation": true,
+      "consensus": true,
+      "prepare": true,
+      "reverify": true,
+      "execution_mode": "gateway"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "case_id": "robot_pick_nominal_001",
+  "case_group": "nominal",
+  "asset_id": "robot_arm_01",
+  "scenario_family": "robot_manipulation",
+  "source_benchmark": {
+    "source_id": "isaaclab_eval_industrial",
+    "name": "IsaacLabEvalTasks",
+    "task_family": "industrial_pick_place",
+    "sample_ref": "episode_001",
+    "provenance_note": "Converted from a nominal manipulation episode into a supervisory command case."
+  },
+  "operation_context": {
+    "cell_id": "assembly_cell_a",
+    "station_id": "fixture_station_01",
+    "mission_phase": "pick",
+    "part_id": "part_a",
+    "operator_mode": "autonomous_supervision"
+  },
+  "action_sequence": [
+    {
+      "action_type": "pick",
+      "params": {
+        "object_id": "part_a",
+        "station_id": "fixture_station_01",
+        "grasp_pose_id": "grasp_pose_01"
+      }
+    }
+  ],
+  "proof_hints": {
+    "timestamp_mode": "fresh",
+    "policy_mode": "active",
+    "sensor_hash_mode": "matching",
+    "sensor_divergence_mode": "none"
+  },
+  "label": {
+    "expected_final_status": "COMMITTED",
+    "expected_stop_stage": "COMMIT_ACK",
+    "expected_reason_code": null
+  },
+  "notes": {
+    "is_counterfactual": false,
+    "mutation_rule": null,
+    "benchmark_release": "v1-draft"
+  }
+}

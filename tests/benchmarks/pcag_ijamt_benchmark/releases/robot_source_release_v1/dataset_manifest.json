@@ -1,0 +1,88 @@
+{
+  "release_id": "robot_source_release_v1",
+  "benchmark_scope": "robot_only",
+  "benchmark_version": "v1.0",
+  "release_date": "2026-03-20",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_robot_source_release_v1.py",
+  "source_manifest_version": "v1-pre-acquisition",
+  "task_selection_version": "v1-selection",
+  "construction_procedure_version": "v1-procedure",
+  "case_counts": {
+    "nominal": 10,
+    "unsafe": 14,
+    "fault": 12,
+    "total": 36
+  },
+  "case_counts_by_source": {
+    "isaaclab_eval_industrial": 18,
+    "mimicgen_assembly": 18
+  },
+  "case_counts_by_runtime": {
+    "robot_pick_place_cell": 21,
+    "robot_stack_cell": 15
+  },
+  "case_counts_by_task_family": {
+    "reach": 3,
+    "lift": 3,
+    "pick_place": 12,
+    "place": 3,
+    "stack": 15
+  },
+  "unsafe_case_counts_by_family": {
+    "sim_torque_violation": 2,
+    "joint_limit_violation": 6,
+    "fixture_collision_probe": 6
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 10,
+    "UNSAFE": 14,
+    "REJECTED": 7,
+    "ABORTED": 4,
+    "ERROR": 1
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 10,
+    "SAFETY_UNSAFE": 14,
+    "INTEGRITY_REJECTED": 7,
+    "PREPARE_LOCK_DENIED": 1,
+    "REVERIFY_FAILED": 1,
+    "COMMIT_TIMEOUT": 1,
+    "COMMIT_FAILED": 1,
+    "COMMIT_ERROR": 1
+  },
+  "covered_source_families": [
+    "lift",
+    "pick_place",
+    "place",
+    "reach",
+    "stack"
+  ],
+  "deferred_selected_families": [
+    "deploy/gear_assembly",
+    "nut_assembly",
+    "threading",
+    "three_piece_assembly"
+  ],
+  "outcome_coverage": {
+    "COMMITTED": true,
+    "UNSAFE": true,
+    "REJECTED": true,
+    "ABORTED": true,
+    "ERROR": true
+  },
+  "release_artifacts": [
+    "nominal_dataset.json",
+    "unsafe_dataset.json",
+    "fault_dataset.json",
+    "all_cases.json",
+    "dataset_manifest.json",
+    "qc_report.md"
+  ],
+  "normalization_rule": "All robot cases are lowered to move_joint with target_positions and executed against canonical robot shells.",
+  "notes": [
+    "This release intentionally limits itself to implemented robot shells.",
+    "It uses IsaacLab and MimicGen provenance exactly as frozen in the source manifest.",
+    "Assembly-family sources remain selected at the planning layer but are deferred until robot_gear_assembly_cell is implemented.",
+    "The release is outcome-complete for benchmark drafting: committed, unsafe, rejected, aborted, and infrastructure-error paths are all represented."
+  ]
+}

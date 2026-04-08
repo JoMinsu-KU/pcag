@@ -3,7 +3,7 @@
 import os
 import sys
 import time
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -79,3 +79,29 @@ def test_run_safety_validation_propagates_validator_failures():
                 action_sequence=[],
                 current_sensor_snapshot={"temperature": 150.0, "pressure": 1.5},
             )
+
+
+def test_run_simulation_validator_passes_collision_constraints():
+    backend = MagicMock()
+    backend.validate_trajectory.return_value = {"verdict": "SAFE", "details": {}}
+
+    collision = {
+        "enabled": True,
+        "probe_radius_m": 0.05,
+        "forbidden_objects": [
+            {"object_id": "fixture_a", "center": [0.5, 0.0, 0.5], "scale": [0.1, 0.1, 0.1]}
+        ],
+    }
+
+    with patch.object(service, "_resolve_simulation_backend", return_value=(backend, "isaac_sim")):
+        result = service._run_simulation_validator(
+            current_sensor_snapshot={"joint_positions": [0.0] * 9},
+            action_sequence=[{"action_type": "move_joint", "params": {"target_positions": [0.1] * 9}}],
+            ruleset=[],
+            sim_config={"engine": "isaac_sim", "collision": collision},
+        )
+
+    assert result["verdict"] == "SAFE"
+    sent_constraints = backend.validate_trajectory.call_args.kwargs["constraints"]
+    assert sent_constraints["collision"]["enabled"] is True
+    assert sent_constraints["collision"]["forbidden_objects"][0]["object_id"] == "fixture_a"

@@ -1,0 +1,8 @@
+﻿baseline_id,display_name,exact_match_rate,safe_pass_rate,unsafe_interception_rate,unsafe_commit_count,integrity_reject_rate,transaction_fault_noncommit_rate,execution_fault_noncommit_rate,toctou_catch_rate,median_latency_ms,p95_latency_ms,committed,unsafe,rejected,aborted,error
+B0,Direct Execution,0.3777,1.0,0.0,229,0.0,0.3684,1.0,0.0,191.02,203.59,339,0,0,14,15
+B1,Rules-only,0.5272,1.0,0.0,174,1.0,0.3684,1.0,0.0,189.42,199.42,284,0,55,14,15
+B2,Rules + Barrier,0.5897,1.0,0.1533,151,1.0,0.3684,1.0,0.0,5.84,197.79,261,23,55,14,15
+B3,Rules + Simulation,0.9348,1.0,1.0,24,1.0,0.3684,1.0,0.0,382.61,1287.38,134,150,55,14,15
+E1,DT-only Gate,0.7853,1.0,1.0,78,0.0,0.3684,1.0,0.0,387.98,1294.18,188,151,0,14,15
+B4,Full Safety Without REVERIFY,0.8967,0.8545,1.0,15,1.0,0.6053,1.0,0.0,216.87,1300.26,109,150,55,46,8
+B5,Full PCAG,1.0,1.0,1.0,0,1.0,1.0,1.0,1.0,301.86,1384.56,110,150,55,38,15

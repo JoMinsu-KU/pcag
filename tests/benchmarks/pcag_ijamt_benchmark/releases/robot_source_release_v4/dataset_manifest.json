@@ -1,0 +1,77 @@
+{
+  "release_id": "robot_source_release_v4",
+  "benchmark_scope": "robot_only",
+  "benchmark_version": "v4.0",
+  "release_date": "2026-03-20",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_robot_source_release_v4.py",
+  "parent_release": "robot_source_release_v3",
+  "source_manifest_version": "v1-pre-acquisition",
+  "case_counts": {
+    "nominal": 34,
+    "unsafe": 50,
+    "fault": 36,
+    "total": 120
+  },
+  "case_counts_by_source": {
+    "isaaclab_eval_industrial": 61,
+    "mimicgen_assembly": 59
+  },
+  "case_counts_by_runtime": {
+    "robot_pick_place_cell": 35,
+    "robot_stack_cell": 29,
+    "robot_narrow_clearance_cell": 28,
+    "robot_fixture_insertion_cell": 28
+  },
+  "case_counts_by_task_family": {
+    "reach": 17,
+    "lift": 3,
+    "pick_place": 54,
+    "place": 17,
+    "stack": 29
+  },
+  "unsafe_case_counts_by_family": {
+    "sim_torque_violation": 2,
+    "joint_limit_violation": 28,
+    "fixture_collision_probe": 20
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 34,
+    "UNSAFE": 50,
+    "REJECTED": 19,
+    "ABORTED": 10,
+    "ERROR": 7
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 34,
+    "SAFETY_UNSAFE": 50,
+    "INTEGRITY_REJECTED": 19,
+    "PREPARE_LOCK_DENIED": 1,
+    "REVERIFY_FAILED": 7,
+    "COMMIT_TIMEOUT": 1,
+    "COMMIT_FAILED": 1,
+    "COMMIT_ERROR": 7
+  },
+  "expansion_family_counts": {
+    "narrow_clearance_approach": 28,
+    "fixture_insertion": 28,
+    "conveyor_timing_pick": 28
+  },
+  "release_artifacts": [
+    "nominal_dataset.json",
+    "unsafe_dataset.json",
+    "fault_dataset.json",
+    "all_cases.json",
+    "dataset_manifest.json",
+    "qc_report.md",
+    "pcag_execution_dataset.json",
+    "pcag_execution_manifest.json",
+    "pcag_execution_qc.md"
+  ],
+  "normalization_rule": "All robot cases remain lowered to move_joint with target_positions. Release v4 preserves validated v3 cases and adds the expanded fixture-insertion family plus the conveyor-timing single-asset family.",
+  "notes": [
+    "This release keeps the generated robot_source_release_v3 cases intact as inherited robot coverage.",
+    "The fixture-insertion family is expanded from 12 to 28 cases on top of `robot_fixture_insertion_cell`.",
+    "A new `conveyor_timing_pick` family is added by reusing `robot_stack_cell` and `robot_pick_place_cell` with timing-window variants.",
+    "The release reaches the planned 120-case robot target for the current single-asset expansion phase."
+  ]
+}

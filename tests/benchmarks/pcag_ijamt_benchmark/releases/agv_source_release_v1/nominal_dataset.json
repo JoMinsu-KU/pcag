@@ -1,0 +1,1398 @@
+[
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_transfer_source_to_mid_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_transfer_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_transfer_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_transfer_map/agv_transfer_map.json",
+      "shell_role": "transfer_nominal",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv"
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "station_transfer",
+      "source_unit": "station_transfer::source_load_to_transfer_mid",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world station transfer motif lowered into a source-to-mid-lane AGV command.",
+      "source_semantics": {
+        "motif": "station_transfer",
+        "semantic_role": "station transfer through the main transfer lane",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_transfer_map",
+      "station_id": "transfer_mid",
+      "mission_phase": "transfer",
+      "task_family": "station_transfer",
+      "shell_role": "transfer_nominal",
+      "load_id": "carrier_alpha",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 1,
+      "position_y": 1,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 6,
+          "target_y": 3,
+          "path": [
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              6,
+              3
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_transfer_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_transfer_mid_to_drop_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_transfer_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_transfer_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_transfer_map/agv_transfer_map.json",
+      "shell_role": "transfer_with_path_variant",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv"
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "station_transfer",
+      "source_unit": "station_transfer::transfer_mid_to_target_drop",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world transfer motif lowered into a mid-lane to target-drop AGV command.",
+      "source_semantics": {
+        "motif": "station_transfer",
+        "semantic_role": "dropoff lane approach",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_transfer_map",
+      "station_id": "target_drop",
+      "mission_phase": "dropoff",
+      "task_family": "station_transfer",
+      "shell_role": "transfer_with_path_variant",
+      "load_id": "carrier_alpha",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 6,
+      "position_y": 3,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 12,
+          "target_y": 7,
+          "path": [
+            [
+              7,
+              3
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              10,
+              3
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_transfer_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_transfer_drop_to_mid_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_transfer_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_transfer_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_transfer_map/agv_transfer_map.json",
+      "shell_role": "transfer_nominal",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv"
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "station_transfer",
+      "source_unit": "station_transfer::target_drop_to_transfer_mid",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world transfer-return motif lowered into a target-drop to mid-lane AGV command.",
+      "source_semantics": {
+        "motif": "station_transfer",
+        "semantic_role": "return lane traversal",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_transfer_map",
+      "station_id": "transfer_mid",
+      "mission_phase": "return",
+      "task_family": "station_transfer",
+      "shell_role": "transfer_nominal",
+      "load_id": "empty_carrier_alpha",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 12,
+      "position_y": 7,
+      "heading": 180.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 6,
+          "target_y": 3,
+          "path": [
+            [
+              12,
+              6
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              3
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              6,
+              3
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_transfer_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_transfer_lane_variant_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_transfer_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_transfer_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_transfer_map/agv_transfer_map.json",
+      "shell_role": "transfer_with_path_variant",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv"
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "station_transfer",
+      "source_unit": "station_transfer::source_load_to_target_drop_long_lane",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world long-lane transfer motif lowered into a full source-to-drop AGV command.",
+      "source_semantics": {
+        "motif": "station_transfer",
+        "semantic_role": "long corridor transfer",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_transfer_map",
+      "station_id": "target_drop",
+      "mission_phase": "transfer",
+      "task_family": "station_transfer",
+      "shell_role": "transfer_with_path_variant",
+      "load_id": "carrier_beta",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 1,
+      "position_y": 1,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 12,
+          "target_y": 7,
+          "path": [
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              1
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              7,
+              3
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              9,
+              3
+            ],
+            [
+              10,
+              3
+            ],
+            [
+              10,
+              4
+            ],
+            [
+              10,
+              5
+            ],
+            [
+              10,
+              6
+            ],
+            [
+              11,
+              6
+            ],
+            [
+              12,
+              6
+            ],
+            [
+              12,
+              7
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_transfer_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_docking_queue_to_gate_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_docking_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_docking_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_docking_map/agv_docking_map.json",
+      "shell_role": "dock_nominal",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv"
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "docking_approach",
+      "source_unit": "docking_approach::queue_to_alignment_gate",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world docking motif lowered into a queue-to-alignment-gate AGV command.",
+      "source_semantics": {
+        "motif": "docking_approach",
+        "semantic_role": "docking queue approach",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_docking_map",
+      "station_id": "alignment_gate",
+      "mission_phase": "dock_approach",
+      "task_family": "docking_approach",
+      "shell_role": "dock_nominal",
+      "load_id": "carrier_gamma",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 1,
+      "position_y": 5,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 8,
+          "target_y": 4,
+          "path": [
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              4
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_docking_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_docking_gate_to_dock_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_docking_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_docking_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_docking_map/agv_docking_map.json",
+      "shell_role": "dock_alignment_variant",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv"
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "docking_approach",
+      "source_unit": "docking_approach::alignment_gate_to_handoff_dock",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world docking motif lowered into a gate-to-dock final-approach AGV command.",
+      "source_semantics": {
+        "motif": "docking_approach",
+        "semantic_role": "final docking alignment",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_docking_map",
+      "station_id": "handoff_dock",
+      "mission_phase": "dock_align",
+      "task_family": "docking_approach",
+      "shell_role": "dock_alignment_variant",
+      "load_id": "carrier_gamma",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 8,
+      "position_y": 4,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 9,
+          "target_y": 2,
+          "path": [
+            [
+              8,
+              3
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              9,
+              2
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_docking_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_docking_dock_to_clearance_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_docking_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_docking_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_docking_map/agv_docking_map.json",
+      "shell_role": "dock_nominal",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv"
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "docking_approach",
+      "source_unit": "docking_approach::handoff_dock_to_clearance",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world docking-release motif lowered into a dock-to-clearance AGV command.",
+      "source_semantics": {
+        "motif": "docking_approach",
+        "semantic_role": "dock clearance release",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_docking_map",
+      "station_id": "dock_clearance",
+      "mission_phase": "dock_release",
+      "task_family": "docking_approach",
+      "shell_role": "dock_nominal",
+      "load_id": "empty_carrier_gamma",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 9,
+      "position_y": 2,
+      "heading": 180.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 9,
+          "target_y": 3,
+          "path": [
+            [
+              9,
+              3
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_docking_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_docking_alignment_hold_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_docking_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_docking_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_docking_map/agv_docking_map.json",
+      "shell_role": "dock_alignment_variant",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv"
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "docking_approach",
+      "source_unit": "docking_approach::queue_to_handoff_dock_full_approach",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world full docking motif lowered into a queue-to-dock AGV command.",
+      "source_semantics": {
+        "motif": "docking_approach",
+        "semantic_role": "full final-approach docking",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_docking_map",
+      "station_id": "handoff_dock",
+      "mission_phase": "dock_approach",
+      "task_family": "docking_approach",
+      "shell_role": "dock_alignment_variant",
+      "load_id": "carrier_delta",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 1,
+      "position_y": 5,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 9,
+          "target_y": 2,
+          "path": [
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              8,
+              4
+            ],
+            [
+              8,
+              3
+            ],
+            [
+              8,
+              2
+            ],
+            [
+              9,
+              2
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_docking_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_shared_zone_west_to_east_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_shared_zone_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_shared_zone_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_shared_zone_map/agv_shared_zone_map.json",
+      "shell_role": "shared_zone_nominal",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv",
+      "simulation_override": {
+        "agvs": {
+          "agv_02": {
+            "position": [
+              10,
+              8
+            ],
+            "speed": 1.0
+          }
+        }
+      },
+      "sensor_state_overlay": {
+        "agv_02": {
+          "x": 10,
+          "y": 8
+        }
+      }
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "shared_zone_entry",
+      "source_unit": "shared_zone_entry::west_entry_to_east_exit",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world shared-zone motif lowered into a west-to-east AGV crossing command.",
+      "source_semantics": {
+        "motif": "shared_zone_entry",
+        "semantic_role": "shared-zone crossing",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_shared_zone_map",
+      "station_id": "east_exit",
+      "mission_phase": "zone_entry",
+      "task_family": "shared_zone_entry",
+      "shell_role": "shared_zone_nominal",
+      "load_id": "carrier_theta",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 2,
+      "position_y": 5,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 9,
+          "target_y": 5,
+          "path": [
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              7,
+              5
+            ],
+            [
+              8,
+              5
+            ],
+            [
+              9,
+              5
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_shared_zone_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_shared_zone_clear_crossing_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_shared_zone_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_shared_zone_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_shared_zone_map/agv_shared_zone_map.json",
+      "shell_role": "shared_zone_clear_crossing",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv",
+      "simulation_override": {
+        "agvs": {
+          "agv_02": {
+            "position": [
+              10,
+              8
+            ],
+            "speed": 1.0
+          }
+        }
+      },
+      "sensor_state_overlay": {
+        "agv_02": {
+          "x": 10,
+          "y": 8
+        }
+      }
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "shared_zone_entry",
+      "source_unit": "shared_zone_entry::west_entry_short_crossing",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world shared-zone motif lowered into a short west-entry crossing command.",
+      "source_semantics": {
+        "motif": "shared_zone_entry",
+        "semantic_role": "short shared-zone entry",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_shared_zone_map",
+      "station_id": "shared_zone",
+      "mission_phase": "zone_entry",
+      "task_family": "shared_zone_entry",
+      "shell_role": "shared_zone_clear_crossing",
+      "load_id": "carrier_theta",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 2,
+      "position_y": 5,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 7,
+          "target_y": 5,
+          "path": [
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              7,
+              5
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_shared_zone_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_shared_zone_north_to_west_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_shared_zone_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_shared_zone_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_shared_zone_map/agv_shared_zone_map.json",
+      "shell_role": "shared_zone_nominal",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv",
+      "simulation_override": {
+        "agvs": {
+          "agv_02": {
+            "position": [
+              10,
+              8
+            ],
+            "speed": 1.0
+          }
+        }
+      },
+      "sensor_state_overlay": {
+        "agv_02": {
+          "x": 10,
+          "y": 8
+        }
+      }
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "shared_zone_entry",
+      "source_unit": "shared_zone_entry::north_queue_to_west_lane",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world shared-zone motif lowered into a north-queue to west-lane AGV command.",
+      "source_semantics": {
+        "motif": "shared_zone_entry",
+        "semantic_role": "north-lane shared-zone crossing",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_shared_zone_map",
+      "station_id": "west_entry",
+      "mission_phase": "zone_exit",
+      "task_family": "shared_zone_entry",
+      "shell_role": "shared_zone_nominal",
+      "load_id": "carrier_sigma",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 6,
+      "position_y": 8,
+      "heading": 270.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 2,
+          "target_y": 5,
+          "path": [
+            [
+              6,
+              7
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              5,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              2,
+              5
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_shared_zone_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  },
+  {
+    "benchmark_release": "agv_source_release_v1",
+    "benchmark_version": "v1.0",
+    "case_id": "agv_nominal_warehouse_shared_zone_west_hold_short_001",
+    "case_group": "nominal",
+    "asset_id": "agv_01",
+    "scenario_family": "agv_logistics",
+    "runtime_context": {
+      "runtime_id": "agv_shared_zone_map",
+      "runtime_type": "map_config",
+      "shell_config_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_shared_zone_map/shell_config.json",
+      "map_ref": "tests/benchmarks/pcag_ijamt_benchmark/scene_pack/agv/agv_shared_zone_map/agv_shared_zone_map.json",
+      "shell_role": "shared_zone_clear_crossing",
+      "executable_action_subset": "move_to",
+      "asset_family": "agv",
+      "simulation_override": {
+        "agvs": {
+          "agv_02": {
+            "position": [
+              10,
+              8
+            ],
+            "speed": 1.0
+          }
+        }
+      },
+      "sensor_state_overlay": {
+        "agv_02": {
+          "x": 10,
+          "y": 8
+        }
+      }
+    },
+    "source_benchmark": {
+      "source_id": "warehouse_world_curated",
+      "source_name": "RoboticWarehouse",
+      "task_family": "shared_zone_entry",
+      "source_unit": "shared_zone_entry::west_entry_to_intersection_hold",
+      "local_ref": "tests/benchmarks/pcag_ijamt_benchmark/external_sources/agv/robotic-warehouse-reference/rware/warehouse.py",
+      "upstream_ref": "96fbc64e3eae5fee915e0d390f864fa06ddccd47",
+      "provenance_note": "Warehouse-world shared-zone motif lowered into an intersection-hold AGV command.",
+      "source_semantics": {
+        "motif": "shared_zone_entry",
+        "semantic_role": "shared-zone staged hold",
+        "selection_reason": "selected in source_task_selection.md as an AGV release-v1 logistics motif"
+      },
+      "runtime_normalization": "Warehouse-world logistics motifs normalized into the canonical AGV move_to supervisory subset."
+    },
+    "operation_context": {
+      "cell_id": "agv_shared_zone_map",
+      "station_id": "shared_zone",
+      "mission_phase": "zone_hold",
+      "task_family": "shared_zone_entry",
+      "shell_role": "shared_zone_clear_crossing",
+      "load_id": "carrier_sigma",
+      "operator_mode": "autonomous_supervision"
+    },
+    "initial_state": {
+      "position_x": 2,
+      "position_y": 5,
+      "heading": 0.0,
+      "speed": 0.0
+    },
+    "action_sequence": [
+      {
+        "action_type": "move_to",
+        "params": {
+          "agv_id": "agv_01",
+          "target_x": 5,
+          "target_y": 5,
+          "path": [
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              5
+            ]
+          ]
+        }
+      }
+    ],
+    "proof_hints": {
+      "policy_profile": "pcag_benchmark_v1",
+      "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+      "timestamp_expectation": "fresh",
+      "sensor_hash_strategy": "matching",
+      "sensor_divergence_strategy": "none",
+      "runtime_id": "agv_shared_zone_map",
+      "executor_mode": "plc_backed_commit",
+      "simulation_expectation": "safe"
+    },
+    "label": {
+      "expected_final_status": "COMMITTED",
+      "expected_stop_stage": "COMMIT_ACK",
+      "expected_reason_code": null
+    },
+    "notes": {
+      "is_counterfactual": false,
+      "derived_from_case_id": null,
+      "mutation_rule": null,
+      "qc_status": "drafted_from_frozen_source",
+      "paper_role": "agv_nominal_safe"
+    }
+  }
+]

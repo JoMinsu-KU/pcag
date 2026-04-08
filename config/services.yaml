@@ -28,6 +28,12 @@ dashboard:
   max_assets: 8
   log_tail_lines: 120
 
+benchmark_runtime:
+  enable_isaac: true
+  enable_benchmark_twin_guis: true
+  enable_agv_gui: false
+  enable_process_gui: false
+
 logging:
   level: INFO        # DEBUG/INFO/WARNING/ERROR
   format: human      # human or json
@@ -57,3 +63,5 @@ auth:
   internal_key: "${PCAG_INTERNAL_KEY:pcag-internal-key}"
   # 인증 활성화 여부
   enabled: true
+
+

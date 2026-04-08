@@ -1,0 +1,58 @@
+{
+  "release_id": "pcag_integrated_execution_release_v2",
+  "benchmark_version": "v2.0",
+  "benchmark_scope": "robot_agv_process_integrated",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_integrated_benchmark_release_v2.py",
+  "policy_profile": "pcag_benchmark_v1",
+  "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+  "derived_from_execution_releases": {
+    "robot": "tests/benchmarks/pcag_ijamt_benchmark/releases/robot_source_release_v4/pcag_execution_dataset.json",
+    "agv": "tests/benchmarks/pcag_ijamt_benchmark/releases/agv_source_release_v3/pcag_execution_dataset.json",
+    "process": "tests/benchmarks/pcag_ijamt_benchmark/releases/process_source_release_v2/pcag_execution_dataset.json"
+  },
+  "case_counts": {
+    "total": 368,
+    "nominal": 110,
+    "unsafe": 150,
+    "fault": 108
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 110,
+    "UNSAFE": 150,
+    "REJECTED": 55,
+    "ABORTED": 38,
+    "ERROR": 15
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 110,
+    "SAFETY_UNSAFE": 150,
+    "INTEGRITY_REJECTED": 55,
+    "PREPARE_LOCK_DENIED": 9,
+    "REVERIFY_FAILED": 15,
+    "COMMIT_TIMEOUT": 8,
+    "COMMIT_FAILED": 6,
+    "COMMIT_ERROR": 15
+  },
+  "case_counts_by_asset": {
+    "robot_arm_01": 120,
+    "agv_01": 128,
+    "reactor_01": 120
+  },
+  "case_counts_by_scenario_family": {
+    "robot_manipulation": 120,
+    "agv_logistics": 128,
+    "process_interlock": 120
+  },
+  "libraries": {
+    "action_sequences": 368,
+    "runtime_contexts": 10,
+    "initial_states": 368,
+    "sensor_snapshots": 5
+  },
+  "notes": [
+    "This integrated execution dataset merges the expanded robot v4, AGV v3, and process v2 execution datasets.",
+    "Every case references the unified benchmark policy version so asset switching still does not require policy reseeding.",
+    "Integrity policy-mismatch fault cases intentionally preserve their mismatched explicit policy version ids.",
+    "Per-case runtime preload targets remain intact and are still driven entirely by dataset data rather than scenario-specific PCAG branching."
+  ]
+}

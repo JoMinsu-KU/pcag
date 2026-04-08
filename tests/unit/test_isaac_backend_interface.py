@@ -18,6 +18,7 @@ import pytest
 from pcag.core.ports.simulation_backend import ISimulationBackend
 from pcag.plugins.simulation.isaac_backend import IsaacSimBackend
 from pcag.apps.safety_cluster.isaac_proxy import IsaacSimProxy
+from pcag.plugins.simulation.isaac_collision import evaluate_collision_probe
 
 # ==========================================
 # 1. IsaacSimBackend (Worker Logic) Tests
@@ -171,6 +172,82 @@ def test_is_initialized_method():
     # After manual flag set
     backend._initialized = True
     assert backend.is_initialized() == True
+
+
+def test_collision_probe_detects_forbidden_fixture():
+    result = evaluate_collision_probe(
+        ee_position=[0.5, 0.0, 0.5],
+        collision_config={
+            "enabled": True,
+            "probe_radius_m": 0.05,
+            "forbidden_objects": [
+                {"object_id": "fixture_a", "center": [0.5, 0.0, 0.5], "scale": [0.1, 0.1, 0.1]}
+            ],
+        },
+    )
+    assert result["collision_detected"] is True
+    assert result["collided_object_ids"] == ["fixture_a"]
+
+
+def test_collision_probe_disabled_is_safe():
+    result = evaluate_collision_probe(
+        ee_position=[0.5, 0.0, 0.5],
+        collision_config={"enabled": False},
+    )
+    assert result["collision_detected"] is False
+    assert result["collided_object_ids"] == []
+
+
+def test_backend_marks_fixture_collision_as_unsafe():
+    class MockEndEffector:
+        def get_world_pose(self):
+            return [0.5, 0.0, 0.5], [1.0, 0.0, 0.0, 0.0]
+
+    class MockRobot:
+        end_effector = MockEndEffector()
+
+        def __init__(self):
+            self._positions = [0.0] * 9
+
+        def set_joint_positions(self, pos):
+            self._positions = list(pos)
+
+        def get_joint_positions(self):
+            return list(self._positions)
+
+    class MockWorld:
+        def reset(self):
+            return None
+
+        def step(self, render=True):
+            return None
+
+    backend = IsaacSimBackend()
+    backend._initialized = True
+    backend._joint_count = 9
+    backend._config = {"headless": True, "simulation_steps_per_action": 3, "timeout_ms": 5000}
+    backend._world = MockWorld()
+    backend._robot = MockRobot()
+
+    result = backend.validate_trajectory(
+        current_state={"joint_positions": [0.0] * 9},
+        action_sequence=[{"action_type": "move_joint", "params": {"target_positions": [0.1] * 9}}],
+        constraints={
+            "joint_limits": {},
+            "ruleset": [],
+            "collision": {
+                "enabled": True,
+                "probe_radius_m": 0.05,
+                "forbidden_objects": [
+                    {"object_id": "fixture_a", "center": [0.5, 0.0, 0.5], "scale": [0.1, 0.1, 0.1]}
+                ],
+            },
+        },
+    )
+
+    assert result["verdict"] == "UNSAFE"
+    assert result["details"]["collision_detected"] is True
+    assert result["details"]["collision_objects"] == ["fixture_a"]
 
 
 # ==========================================

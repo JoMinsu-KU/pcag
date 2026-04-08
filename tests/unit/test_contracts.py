@@ -36,6 +36,7 @@ from pcag.core.contracts.safety import (
     SafetyValidateResponse,
     ValidatorVerdictResponse,
 )
+from pcag.core.models.policy import AssetPolicyProfile
 from pcag.core.contracts.sensor import SensorSnapshotResponse
 
 
@@ -131,6 +132,31 @@ def test_policy_contracts():
         profile={"sil_level": 2},
     )
     assert active.policy_version_id == document.policy_version_id == asset.policy_version_id
+
+
+def test_policy_model_accepts_collision_config():
+    profile = AssetPolicyProfile(
+        asset_id="robot_arm_01",
+        sil_level=2,
+        sensor_source="isaac_sim_sensor",
+        ot_executor="mock_executor",
+        consensus={"mode": "WEIGHTED"},
+        integrity={"timestamp_max_age_ms": 5000},
+        ruleset=[],
+        simulation={
+            "engine": "isaac_sim",
+            "collision": {
+                "enabled": True,
+                "probe_radius_m": 0.05,
+                "forbidden_objects": [
+                    {"object_id": "fixture_a", "center": [0.5, 0.0, 0.5], "scale": [0.1, 0.1, 0.1]}
+                ],
+            },
+        },
+        execution={},
+    )
+    assert profile.simulation.collision.enabled is True
+    assert profile.simulation.collision.forbidden_objects[0].object_id == "fixture_a"
 
 
 def test_sensor_snapshot_response():

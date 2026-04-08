@@ -1,0 +1,58 @@
+{
+  "release_id": "pcag_integrated_execution_release_v1",
+  "benchmark_version": "v1.0",
+  "benchmark_scope": "robot_agv_process_integrated",
+  "generator_script": "tests/benchmarks/pcag_ijamt_benchmark/generation/generate_integrated_benchmark_release_v1.py",
+  "policy_profile": "pcag_benchmark_v1",
+  "policy_version_id": "v2026-03-20-pcag-benchmark-v1",
+  "derived_from_execution_releases": {
+    "robot": "tests/benchmarks/pcag_ijamt_benchmark/releases/robot_source_release_v1/pcag_execution_dataset.json",
+    "agv": "tests/benchmarks/pcag_ijamt_benchmark/releases/agv_source_release_v2/pcag_execution_dataset.json",
+    "process": "tests/benchmarks/pcag_ijamt_benchmark/releases/process_source_release_v1/pcag_execution_dataset.json"
+  },
+  "case_counts": {
+    "total": 116,
+    "nominal": 38,
+    "unsafe": 42,
+    "fault": 36
+  },
+  "case_counts_by_expected_status": {
+    "COMMITTED": 38,
+    "UNSAFE": 42,
+    "REJECTED": 21,
+    "ABORTED": 12,
+    "ERROR": 3
+  },
+  "case_counts_by_stop_stage": {
+    "COMMIT_ACK": 38,
+    "SAFETY_UNSAFE": 42,
+    "INTEGRITY_REJECTED": 21,
+    "PREPARE_LOCK_DENIED": 3,
+    "REVERIFY_FAILED": 3,
+    "COMMIT_TIMEOUT": 3,
+    "COMMIT_FAILED": 3,
+    "COMMIT_ERROR": 3
+  },
+  "case_counts_by_asset": {
+    "robot_arm_01": 36,
+    "agv_01": 44,
+    "reactor_01": 36
+  },
+  "case_counts_by_scenario_family": {
+    "robot_manipulation": 36,
+    "agv_logistics": 44,
+    "process_interlock": 36
+  },
+  "libraries": {
+    "action_sequences": 116,
+    "runtime_contexts": 8,
+    "initial_states": 15,
+    "sensor_snapshots": 3
+  },
+  "notes": [
+    "This integrated execution dataset merges the validated robot v1, AGV v2, and process v1 execution datasets.",
+    "Every case now references the unified benchmark policy version so asset switching no longer requires policy reseeding.",
+    "Integrity policy-mismatch fault cases intentionally preserve their mismatched explicit policy version ids.",
+    "Per-case runtime preload targets remain intact and are still driven entirely by dataset data rather than scenario-specific PCAG branching."
+  ]
+}
