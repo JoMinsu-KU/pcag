@@ -8,7 +8,7 @@ conda pcag 환경에서 실행.
 """
 from sqlalchemy import (
     Column, String, BigInteger, Boolean, Integer, DateTime,
-    UniqueConstraint, Index, JSON
+    UniqueConstraint, Index, JSON, CheckConstraint
 )
 from sqlalchemy.sql import func
 from pcag.core.database.engine import Base
@@ -106,4 +106,64 @@ class TransactionRecord(Base):
     
     __table_args__ = (
         Index('idx_transactions_asset_status', 'asset_id', 'status'),
+    )
+
+
+class OperationReceiptRecord(Base):
+    """Revision schema v2: durable command identity and executor observations.
+
+    This is an additive table: no columns in the submitted ``transactions``
+    table are changed. ``Base.metadata.create_all`` installs both revision
+    tables on a stopped/isolated database. Existing in-flight legacy rows must
+    be reconciled or explicitly aborted before revision traffic is enabled.
+    A COMMITTED legacy row without a receipt is never silently redispatched.
+
+    ACCEPTED/COMPLETED are statements made by the selected executor boundary,
+    not a claim of exactly-once physical actuation.
+    """
+    __tablename__ = "operation_receipts"
+
+    transaction_id = Column(String, primary_key=True)
+    asset_id = Column(String, nullable=False)
+    schema_version = Column(Integer, nullable=False, default=2)
+    state = Column(String, nullable=False, default="PREPARED")
+    payload_digest = Column(String(64), nullable=True)
+    action_sequence = Column(JSON, nullable=True)
+    fencing_token = Column(BigInteger, nullable=False, default=0)
+    claim_token = Column(String, nullable=True)
+    dispatch_count = Column(Integer, nullable=False, default=0)
+    created_at_ms = Column(BigInteger, nullable=False)
+    updated_at_ms = Column(BigInteger, nullable=False)
+    dispatched_at_ms = Column(BigInteger, nullable=True)
+    accepted_at_ms = Column(BigInteger, nullable=True)
+    completed_at_ms = Column(BigInteger, nullable=True)
+    ack_boundary = Column(String, nullable=True)
+    reason = Column(String, nullable=True)
+    receipt = Column(JSON, nullable=True)
+    __table_args__ = (
+        CheckConstraint("state IN ('PREPARED','DISPATCHING','UNKNOWN','RECONCILING','ACCEPTED','COMPLETED','FAILED','ABORTED')", name="ck_operation_state_v2"),
+        CheckConstraint("dispatch_count >= 0", name="ck_operation_dispatch_count_v2"),
+        Index("idx_operation_asset_state_v2", "asset_id", "state"),
+    )
+
+
+class AssetExecutionLockRecord(Base):
+    """One row per asset, used by conditional UPSERT/CAS in PostgreSQL/SQLite.
+
+    The primary key enforces a single ownership slot. Expired reservations may
+    be replaced, but DISPATCHING/UNKNOWN slots cannot be stolen on TTL expiry.
+    Fencing prevents an expired owner from committing after a newer prepare.
+    """
+    __tablename__ = "asset_execution_locks"
+
+    asset_id = Column(String, primary_key=True)
+    transaction_id = Column(String, nullable=True)
+    phase = Column(String, nullable=False, default="FREE")
+    fencing_token = Column(BigInteger, nullable=False, default=0)
+    lease_expires_at_ms = Column(BigInteger, nullable=True)
+    updated_at_ms = Column(BigInteger, nullable=False)
+    __table_args__ = (
+        CheckConstraint("phase IN ('FREE','RESERVED','DISPATCHING','UNKNOWN')", name="ck_asset_execution_phase_v2"),
+        CheckConstraint("fencing_token >= 0", name="ck_asset_execution_fence_v2"),
+        Index("idx_asset_execution_owner_v2", "transaction_id"),
     )

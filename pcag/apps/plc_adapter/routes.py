@@ -6,8 +6,10 @@ from __future__ import annotations
 
 import logging
 import time
+import os
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from pcag.core.middleware.auth import verify_api_key
 
 from pcag.apps.plc_adapter.service import PlcAdapterService
 from pcag.core.contracts.plc_adapter import (
@@ -25,6 +27,25 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/v1", tags=["PlcAdapter"])
 
 _service = PlcAdapterService()
+
+
+def _revision_guard():
+    if os.environ.get("PCAG_REVISION_MODE", "").lower() != "true":
+        raise HTTPException(status_code=403, detail="Revision mode disabled")
+
+
+@router.post("/revision/execute")
+def revision_execute(request: PlcExecuteRequest, _key: str = Depends(verify_api_key)):
+    _revision_guard()
+    from pcag.revision.plc_execution import execute
+    return execute(_service, request.transaction_id, request.asset_id, request.action_sequence)
+
+
+@router.get("/revision/operation")
+def revision_operation(transaction_id: str, asset_id: str, _key: str = Depends(verify_api_key)):
+    _revision_guard()
+    from pcag.revision.plc_execution import query
+    return query(transaction_id, asset_id)
 
 
 def initialize_plc_adapter() -> None:

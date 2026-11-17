@@ -84,7 +84,7 @@ def on_startup():
         _isaac_proxy = IsaacSimProxy()
         _isaac_proxy.initialize(
             {
-                "headless": False,
+                "headless": os.environ.get("PCAG_ISAAC_HEADLESS", "false").lower() == "true",
                 "timeout_ms": 30000,
                 "simulation_steps_per_action": 30,
             }

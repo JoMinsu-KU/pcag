@@ -86,6 +86,9 @@ class ExecutorManager:
         
         if etype == "plc_adapter":
             executor = PLCAdapterExecutor()
+        elif etype == "isaac_persistent":
+            from pcag.plugins.executor.isaac_executor import IsaacExecutor
+            executor = IsaacExecutor()
         elif etype == "modbus":
             executor = ModbusExecutor()
         elif etype == "mock":
