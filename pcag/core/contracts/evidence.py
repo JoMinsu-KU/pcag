@@ -28,6 +28,15 @@ class EvidenceAppendRequest(BaseModel):
         "COMMIT_ERROR",
         "ABORTED",
         "ESTOP_TRIGGERED",
+        # Explicit revision-stage omissions and auditable experimental hooks.
+        "INTEGRITY_BYPASSED",
+        "SAFETY_BYPASSED",
+        "PREPARE_BYPASSED",
+        "REVERIFY_BYPASSED",
+        "SAFETY_CONFIGURATION_ERROR",
+        "REVISION_PREPARE_PAUSE",
+        # Also used by the normal path for an unresolved executor receipt.
+        "COMMIT_OUTCOME_UNKNOWN",
     ]
     timestamp_ms: int
     payload: dict[str, Any]

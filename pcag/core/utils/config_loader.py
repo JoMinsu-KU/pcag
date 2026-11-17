@@ -17,7 +17,7 @@ import yaml
 logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-CONFIG_DIR = os.path.join(PROJECT_ROOT, "config")
+CONFIG_DIR = os.environ.get("PCAG_CONFIG_DIR") or os.path.join(PROJECT_ROOT, "config")
 _cache: dict[str, dict] = {}
 
 

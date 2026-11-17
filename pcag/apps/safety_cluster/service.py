@@ -183,7 +183,7 @@ def _run_simulation_validator(
     action_sequence: list[dict[str, Any]],
     ruleset: list[Rule | dict[str, Any]],
     sim_config: dict[str, Any],
-    runtime_context: dict[str, Any] | None,
+    runtime_context: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     # Simulation 검증은 가장 비용이 큰 단계다.
     # 하지만 trajectory 수준의 위험을 잡을 수 있어서, Rules/CBF와 성격이 다르다.
@@ -232,22 +232,26 @@ def _run_validators_parallel(
     cbf_state_mappings: list[dict[str, Any]],
     sim_config: dict[str, Any],
     runtime_context: dict[str, Any] | None,
+    enabled_validators: tuple[str, ...] = ("rules", "cbf", "simulation"),
 ) -> dict[str, dict[str, Any]]:
     # fan-out / fan-in 구조:
     # - 세 검증기를 동시에 시작해 전체 지연을 줄이고
     # - 하나라도 내부 예외가 나면 결과를 조합하지 않고 즉시 fail-hard 처리한다.
-    with ThreadPoolExecutor(max_workers=3, thread_name_prefix=f"pcag-safety-{asset_id}") as executor:
+    calls = {
+        "rules": (_run_rules_validator, (current_sensor_snapshot, action_sequence, ruleset)),
+        "cbf": (_run_cbf_validator, (current_sensor_snapshot, action_sequence, ruleset, cbf_state_mappings)),
+        "simulation": (_run_simulation_validator, (current_sensor_snapshot, action_sequence, ruleset, sim_config, runtime_context)),
+    }
+
+    def timed_call(name: str) -> dict[str, Any]:
+        fn, args = calls[name]
+        started = time.perf_counter()
+        result = fn(*args)
+        return {**result, "duration_ms": (time.perf_counter() - started) * 1000}
+
+    with ThreadPoolExecutor(max_workers=len(enabled_validators), thread_name_prefix=f"pcag-safety-{asset_id}") as executor:
         futures = {
-            "rules": executor.submit(_run_rules_validator, current_sensor_snapshot, action_sequence, ruleset),
-            "cbf": executor.submit(_run_cbf_validator, current_sensor_snapshot, action_sequence, ruleset, cbf_state_mappings),
-            "simulation": executor.submit(
-                _run_simulation_validator,
-                current_sensor_snapshot,
-                action_sequence,
-                ruleset,
-                sim_config,
-                runtime_context,
-            ),
+            name: executor.submit(timed_call, name) for name in enabled_validators
         }
 
         results: dict[str, dict[str, Any]] = {}
@@ -304,6 +308,7 @@ def run_safety_validation(
     action_sequence: list[dict[str, Any]],
     current_sensor_snapshot: dict[str, Any],
     runtime_context: dict[str, Any] | None = None,
+    revision_enabled_validators: list[str] | None = None,
 ) -> dict[str, Any]:
     """
     Run safety validation and return a Gateway-facing response payload.
@@ -314,7 +319,17 @@ def run_safety_validation(
       3. Run rules, CBF, and simulation validators in parallel.
       4. Apply SIL-based consensus to the collected verdicts.
     """
-    start_time = time.time()
+    start_time = time.perf_counter()
+    all_validators = ("rules", "cbf", "simulation")
+    if revision_enabled_validators is not None:
+        if os.environ.get("PCAG_REVISION_MODE", "").lower() not in {"true", "1", "yes"}:
+            raise PermissionError("Validator subsets require PCAG_REVISION_MODE")
+        if (not revision_enabled_validators or len(set(revision_enabled_validators)) != len(revision_enabled_validators)
+                or set(revision_enabled_validators) - set(all_validators)):
+            raise ValueError("Invalid revision validator subset")
+        enabled_validators = tuple(name for name in all_validators if name in revision_enabled_validators)
+    else:
+        enabled_validators = all_validators
 
     try:
         asset_profile = _fetch_asset_profile(policy_version_id, asset_id)
@@ -343,6 +358,9 @@ def run_safety_validation(
                         "mode": "FAIL_CLOSED",
                         "explanation": f"Invalid action_type '{action_type}'. Allowed: {allowed_actions}",
                     },
+                    "enabled_validators": list(enabled_validators),
+                    "validator_runtime_ms": {},
+                    "validation_wall_ms": (time.perf_counter() - start_time) * 1000,
                 }
 
     sil_level = asset_profile.get("sil_level", 2)
@@ -352,11 +370,14 @@ def run_safety_validation(
 
     # CBF state mapping은 센서 필드를 barrier 상태벡터에 매핑하는 계약이다.
     # 이 설정이 없으면 CBF 결과 자체가 의미 없어지므로 바로 중단한다.
-    cbf_state_mappings = _get_cbf_state_mappings()
-    if not cbf_state_mappings:
+    cbf_state_mappings = _get_cbf_state_mappings() if "cbf" in enabled_validators else []
+    if "cbf" in enabled_validators and not cbf_state_mappings:
         logger.critical("[SYSTEM_ERROR] CBF mappings not found in config")
         raise RuntimeError("CBF mappings configuration missing")
 
+    parallel_kwargs = {}
+    if revision_enabled_validators is not None:
+        parallel_kwargs["enabled_validators"] = enabled_validators
     validators = _run_validators_parallel(
         asset_id=asset_id,
         current_sensor_snapshot=current_sensor_snapshot,
@@ -365,7 +386,23 @@ def run_safety_validation(
         cbf_state_mappings=cbf_state_mappings,
         sim_config=sim_config,
         runtime_context=runtime_context,
+        **parallel_kwargs,
     )
+
+    if enabled_validators != all_validators:
+        is_safe = all(value["verdict"] == "SAFE" for value in validators.values())
+        return {
+            "transaction_id": transaction_id,
+            "final_verdict": "SAFE" if is_safe else "UNSAFE",
+            "validators": validators,
+            "consensus_details": {
+                "mode": "REVISION_ENABLED_AND", "score": 1.0 if is_safe else 0.0,
+                "explanation": "Only the explicitly enabled revision validators executed; all must return SAFE.",
+            },
+            "enabled_validators": list(enabled_validators),
+            "validator_runtime_ms": {name: value["duration_ms"] for name, value in validators.items()},
+            "validation_wall_ms": (time.perf_counter() - start_time) * 1000,
+        }
 
     # 개별 validator 결과를 공통 계약(ValidatorVerdict)으로 다시 감싼 뒤
     # consensus 엔진에 넘긴다.
@@ -382,7 +419,7 @@ def run_safety_validation(
         sim_verdict=sim_vv,
     )
 
-    total_time = (time.time() - start_time) * 1000
+    total_time = (time.perf_counter() - start_time) * 1000
     logger.info(
         "Consensus: %s (score=%.2f) | %s",
         consensus_result.final_verdict,
@@ -413,6 +450,9 @@ def run_safety_validation(
             "threshold": consensus_result.threshold,
             "explanation": consensus_result.explanation,
         },
+        "enabled_validators": list(enabled_validators),
+        "validator_runtime_ms": {name: value.get("duration_ms", 0.0) for name, value in validators.items()},
+        "validation_wall_ms": total_time,
     }
 
 

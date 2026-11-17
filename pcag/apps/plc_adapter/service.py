@@ -11,6 +11,8 @@ PLC/Modbus 단일 진입점 서비스.
 from __future__ import annotations
 
 import logging
+import math
+import os
 import struct
 import threading
 import time
@@ -25,6 +27,13 @@ except ImportError:
     ModbusTcpClient = None
 
 logger = logging.getLogger(__name__)
+
+
+class CommandEncodingRejected(ValueError):
+    """A complete command plan failed validation before any write was attempted."""
+    def __init__(self, path: str, value: Any, expected: str, detail: str):
+        self.validation = {"path": path, "value": repr(value), "expected_bounds": expected, "detail": detail}
+        super().__init__(f"{path}: {detail}; expected {expected}, observed {value!r}")
 
 
 @dataclass
@@ -62,6 +71,7 @@ class PlcAdapterService:
         self._sensor_asset_connections: dict[str, str] = {}
         self._executor_assets: dict[str, dict[str, Any]] = {}
         self._virtual_assets: dict[str, VirtualAssetRuntime] = {}
+        self._revision_contexts: dict[str, dict] = {}
         self._initialized = False
 
     def initialize(self) -> None:
@@ -151,6 +161,19 @@ class PlcAdapterService:
             for offset, raw_value in enumerate(encoded):
                 register_image[mapping["register"] + offset] = raw_value
 
+        if os.environ.get("PCAG_REVISION_MODE", "").lower() == "true" and os.environ.get("PCAG_REVISION_PLC_TRANSPORT") == "tcp":
+            connection = self._get_connection(self._sensor_asset_connections[asset_id])
+            def _preload_tcp():
+                for register, value in register_image.items():
+                    result = connection.client.write_register(address=register, value=int(value))
+                    if result.isError():
+                        raise RuntimeError(f"Modbus preload write failed at {register}: {result}")
+            self._run_with_recovery(connection, operation="revision_preload", context={"asset_id": asset_id}, fn=_preload_tcp)
+            self._virtual_assets.pop(asset_id, None)
+            self._revision_contexts[asset_id] = dict(runtime_context or {})
+            snapshot, connection_key = self.read_snapshot(asset_id)
+            return {"asset_id": asset_id, "status": "READY", "runtime_id": (runtime_context or {}).get("runtime_id"), "source": "modbus_tcp", "connection_key": connection_key, "current_state": snapshot}
+
         runtime = VirtualAssetRuntime(
             asset_id=asset_id,
             register_image=register_image,
@@ -220,6 +243,11 @@ class PlcAdapterService:
             context={"asset_id": asset_id},
             fn=_perform,
         )
+        context = self._revision_contexts.get(asset_id, {})
+        if "position_x" in snapshot and "position_y" in snapshot:
+            snapshot.setdefault("agv_01", {"x": snapshot["position_x"], "y": snapshot["position_y"]})
+        if isinstance(context.get("sensor_state_overlay"), dict):
+            snapshot = self._merge_dicts(snapshot, context["sensor_state_overlay"])
         logger.info(
             "PLC snapshot read | asset=%s connection=%s field_count=%s",
             asset_id,
@@ -227,6 +255,120 @@ class PlcAdapterService:
             len(snapshot),
         )
         return snapshot, connection.key
+
+    @staticmethod
+    def _revision_uint16(value: Any, path: str) -> int:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise CommandEncodingRejected(path, value, "integral uint16 [0, 65535]", "Expected a numeric integer, excluding booleans")
+        if isinstance(value, float) and (not math.isfinite(value) or not value.is_integer()):
+            raise CommandEncodingRejected(path, value, "integral uint16 [0, 65535]", "Value is non-finite or fractional")
+        if not 0 <= value <= 65535:
+            raise CommandEncodingRejected(path, value, "integral uint16 [0, 65535]", "Value is outside the Modbus encoding range")
+        return int(value)
+
+    def prepare_revision_plan(self, asset_id: str, action_sequence: list[dict[str, Any]]) -> dict:
+        """Normalize and validate every write without connecting or writing.
+
+        Mapped high-level values retain the configured historical conversion:
+        finite float times finite scale, then truncate toward zero. Explicit
+        low-level values must already be integral. Neither path clamps/wraps.
+        """
+        if not self._initialized:
+            self.initialize()
+        config = self._executor_assets.get(asset_id)
+        if not config:
+            raise CommandEncodingRejected("asset_id", asset_id, "configured PLC executor asset", "No executor mapping")
+        if not isinstance(action_sequence, list):
+            raise CommandEncodingRejected("action_sequence", action_sequence, "list of actions", "Invalid command container")
+        writes, validation = [], []
+        mappings = config["action_mappings"]
+        for action_index, action in enumerate(action_sequence):
+            base = f"action_sequence[{action_index}]"
+            if not isinstance(action, dict):
+                raise CommandEncodingRejected(base, action, "action object", "Invalid action")
+            if "type" in action and "register" in action:
+                candidates = [dict(action)]
+                encoding = "explicit_integral_uint16"
+            else:
+                action_type = action.get("action_type", "")
+                params = action.get("params") or {}
+                selected = mappings.get(action_type)
+                if not selected or not isinstance(params, dict):
+                    raise CommandEncodingRejected(base, action_type, "configured action mapping and params object", "Unsupported action grammar")
+                candidates = []
+                encoding = "finite_float_times_scale_then_truncate_toward_zero"
+                for mapping in selected:
+                    param = mapping["param"]
+                    path = f"{base}.params.{param}"
+                    if param not in params or isinstance(params.get(param), bool):
+                        raise CommandEncodingRejected(path, params.get(param), "finite numeric mapped parameter", "Missing or invalid parameter")
+                    try:
+                        source, scale = float(params[param]), float(mapping.get("scale", 1.0))
+                        scaled = source * scale
+                    except (TypeError, ValueError, OverflowError) as exc:
+                        raise CommandEncodingRejected(path, params[param], "finite numeric mapped parameter", "Parameter conversion failed") from exc
+                    if not all(math.isfinite(x) for x in (source, scale, scaled)):
+                        raise CommandEncodingRejected(path, params[param], "finite source, scale and product", "Non-finite mapped value")
+                    candidates.append({"type":"write_register", "register":mapping["register"], "value":int(scaled)})
+            for write_index, candidate in enumerate(candidates):
+                path = f"{base}.writes[{write_index}]"
+                kind = candidate.get("type")
+                register = self._revision_uint16(candidate.get("register"), path + ".register")
+                if kind == "write_register":
+                    normalized = {"type":kind, "register":register,
+                                  "value":self._revision_uint16(candidate.get("value"), path + ".value")}
+                elif kind == "write_registers":
+                    values = candidate.get("values")
+                    if not isinstance(values, list) or not 1 <= len(values) <= 123:
+                        raise CommandEncodingRejected(path + ".values", values, "list containing 1..123 uint16 elements", "Invalid FC16 register count")
+                    if register + len(values) - 1 > 65535:
+                        raise CommandEncodingRejected(path + ".register", register, "start + count - 1 <= 65535", "FC16 address span exceeds uint16")
+                    normalized = {"type":kind, "register":register,
+                                  "values":[self._revision_uint16(v, f"{path}.values[{i}]") for i,v in enumerate(values)]}
+                else:
+                    raise CommandEncodingRejected(path + ".type", kind, "write_register or write_registers", "Unsupported write type")
+                writes.append(normalized)
+                validation.append({"path":path, "encoding":encoding, "expected_bounds":"uint16 address/value [0,65535]; FC16 count 1..123 and bounded address span"})
+        return {"schema":"pcag.plc-write-plan.v1", "asset_id":asset_id,
+                "connection_key":config["connection_key"], "writes":writes, "validation":validation}
+
+    def execute_revision_plan(self, transaction_id: str, asset_id: str, plan: dict,
+                              progress_callback: Callable[[dict], None] | None = None) -> tuple[bool, str | None, str]:
+        """Run an already validated plan; counters describe Python boundaries only.
+
+        Intent is persisted immediately before invoking a client write. A crash
+        between that persistence and the call cannot prove a packet was sent.
+        An ACK count only includes normal, non-error write responses.
+        """
+        if plan.get("asset_id") != asset_id:
+            raise ValueError("Validated PLC plan belongs to another asset")
+        connection = self._get_connection(plan["connection_key"])
+        counters = {"write_call_intent_count":0, "write_call_returned_count":0, "write_ack_count":0}
+        def observe(phase, index=None):
+            if progress_callback:
+                progress_callback({**counters, "phase":phase, "write_index":index})
+        def perform():
+            for index, action in enumerate(plan["writes"]):
+                counters["write_call_intent_count"] += 1
+                observe("write_call_intent", index)
+                try:
+                    self._execute_low_level_action(connection, asset_id, transaction_id, action)
+                except Exception:
+                    counters["write_call_returned_count"] += 1
+                    observe("write_call_raised", index)
+                    raise
+                counters["write_call_returned_count"] += 1
+                counters["write_ack_count"] += 1
+                observe("write_response_received", index)
+            return True
+        try:
+            self._run_with_recovery(connection, operation="execute_revision_plan",
+                                    context={"transaction_id":transaction_id,"asset_id":asset_id}, fn=perform)
+            observe("all_write_responses_received")
+            return True, None, connection.key
+        except Exception as exc:
+            observe("outcome_unknown")
+            return False, str(exc), connection.key
 
     def execute_actions(self, transaction_id: str, asset_id: str, action_sequence: list[dict[str, Any]]) -> tuple[bool, str | None, str]:
         if not self._initialized:
@@ -441,7 +583,8 @@ class PlcAdapterService:
             except Exception:
                 logger.debug("PLC adapter close before reconnect ignored | connection=%s", connection.key, exc_info=True)
 
-        connection.client = ModbusTcpClient(connection.host, port=connection.port)
+        client_options = {"retries": 0} if os.environ.get("PCAG_REVISION_MODE", "").lower() == "true" else {}
+        connection.client = ModbusTcpClient(connection.host, port=connection.port, **client_options)
         connection.connected = bool(connection.client.connect())
         if not connection.connected:
             connection.last_error = f"Failed to connect to {connection.key}"
@@ -492,6 +635,10 @@ class PlcAdapterService:
             except Exception as first_error:
                 # 첫 실패는 "연결이 죽었을 가능성"으로 해석하고, 연결을 폐기한 뒤 한 번 재시도한다.
                 self._mark_connection_failed(connection, operation=operation, context=context, error=first_error)
+                if operation == "execute_revision_plan" or (operation == "execute_actions" and os.environ.get("PCAG_REVISION_MODE", "").lower() == "true"):
+                    # A lost write ACK can follow a successful write. Do not replay
+                    # a partially executed multi-register operation automatically.
+                    raise first_error
                 logger.warning(
                     "PLC operation retry after reconnect | connection=%s operation=%s context=%s",
                     connection.key,

@@ -1,284 +1,219 @@
+"""OT request boundary: durable dispatch claims, receipts and reconciliation.
+
+ACK means the explicitly reported executor boundary, not universal physical
+completion. A missing ACK becomes UNKNOWN, never a fabricated non-execution.
 """
-OT 인터페이스 노드 (OT Interface Node) — 실제 구현
-====================================================
-2PC(Two-Phase Commit) 상태머신을 사용하여 제어 명령을 실행합니다.
+from __future__ import annotations
 
-입력 억제 잠금(Input Suppression Lock):
-  - PREPARE: 자산별 독점 잠금 획득 (다른 입력 차단)
-  - COMMIT: 잠금 상태에서 명령 실행 + ACK
-  - ABORT: 잠금 해제 + 안전 상태 전환
-  - E-Stop: 모든 잠금 무시, 즉시 비상정지
-
-Idempotency 보장:
-  - 같은 tx_id로 COMMIT 재호출 → ALREADY_COMMITTED (재실행 안 함)
-  - 같은 tx_id로 ABORT 재호출 → ALREADY_ABORTED
-
-API:
-  POST /v1/prepare  — 입력 억제 잠금 획득
-  POST /v1/commit   — 장비에서 동작 실행
-  POST /v1/abort    — 트랜잭션 중단 + 안전 상태
-  POST /v1/estop    — 비상정지 (최우선)
-
-conda pcag 환경에서 실행.
-"""
-import time
 import logging
-from fastapi import APIRouter, HTTPException
+import os
+import time
+from typing import Any
+
+from fastapi import APIRouter, Depends, HTTPException
+
 from pcag.core.contracts.ot_interface import (
-    PrepareRequest, PrepareResponse,
-    CommitRequest, CommitResponse,
-    AbortRequest, AbortResponse,
-    EstopRequest, EstopResponse
+    PrepareRequest, PrepareResponse, CommitRequest, CommitResponse,
+    AbortRequest, AbortResponse, EstopRequest, EstopResponse,
+    ReconcileRequest, RevisionResetRequest,
 )
-# from pcag.core.services.tx_state_machine import TxStateMachine
-from pcag.apps.ot_interface.service import PersistentTxStateMachine
+from pcag.core.middleware.auth import verify_api_key
+from pcag.apps.ot_interface.service import PersistentTxStateMachine, compute_operation_digest
 from pcag.apps.ot_interface.executor_manager import ExecutorManager
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/v1", tags=["OTInterface"])
-
-# 2PC 상태머신 인스턴스 (Persistent)
-# DB 기반 Persistent Transaction State Machine 사용
 _state_machine = PersistentTxStateMachine()
 
 
 def _execute_safe_state(asset_id: str) -> bool:
-    # 장비 실행 실패 후에도 현장을 안전 상태로 되돌릴 수 있도록
-    # executor별 safe_state 경로를 공통 함수로 묶는다.
     try:
-        executor = ExecutorManager.get_executor(asset_id)
-        logger.warning(
-            "SAFE_STATE dispatch | asset=%s executor_id=%s executor_type=%s",
-            asset_id,
-            id(executor),
-            executor.__class__.__name__,
-        )
-        result = executor.safe_state(asset_id)
-        logger.warning(
-            "SAFE_STATE result | asset=%s executor_id=%s success=%s",
-            asset_id,
-            id(executor),
-            result,
-        )
+        result = bool(ExecutorManager.get_executor(asset_id).safe_state(asset_id))
+        logger.warning("SAFE_STATE asset=%s success=%s", asset_id, result)
         return result
     except Exception as exc:
-        logger.error("Safe state execution failed for asset=%s: %s", asset_id, exc, exc_info=True)
+        logger.error("Safe-state attempt failed for %s: %s", asset_id, exc)
         return False
+
+
+def _commit_response(transaction_id: str, result: dict[str, Any], **extra) -> CommitResponse:
+    result = {**result, **extra, "transaction_id":transaction_id}
+    if result.get("status") == "COMMITTED":
+        result["status"] = "ACK"
+    return CommitResponse(**result)
+
+
+def _executor_receipt(executor, result: Any, request: CommitRequest) -> dict:
+    """Prefer an explicit receipt; a legacy bool must retain its limited boundary."""
+    receipt = result if isinstance(result, dict) else getattr(executor, "last_execution_receipt", None)
+    if not isinstance(receipt, dict):
+        receipt = getattr(executor, "last_receipt", None)
+    now = int(time.time() * 1000)
+    if not isinstance(receipt, dict):
+        if bool(result):
+            mock = executor.__class__.__name__ == "MockExecutor"
+            receipt = {"status":"COMPLETED" if mock else "ACCEPTED", "accepted":True,
+                       "completed":mock, "execution_confirmed":False,
+                       "ack_boundary":"mock_ack" if mock else "legacy_executor_ack",
+                       "accepted_at_ms":now}
+            if mock:
+                receipt["completed_at_ms"] = now
+        else:
+            receipt = {"status":"FAILED", "completed":False,
+                       "reason":getattr(executor, "last_error", None) or "Executor reported failure",
+                       "ack_boundary":"executor_failure_report", "effects_may_have_occurred":True}
+    receipt = dict(receipt)
+    receipt["status"] = str(receipt.get("status", "UNKNOWN")).upper()
+    receipt.setdefault("transaction_id", request.transaction_id)
+    receipt.setdefault("asset_id", request.asset_id)
+    receipt.setdefault("payload_digest", compute_operation_digest(request.asset_id, request.action_sequence))
+    if receipt["status"] in {"ACCEPTED", "COMPLETED"}:
+        receipt.setdefault("accepted", True)
+        receipt.setdefault("completed", receipt["status"] == "COMPLETED")
+    return receipt
 
 
 @router.post("/prepare")
 def prepare(request: PrepareRequest):
-    """
-    입력 억제 잠금 획득 (PREPARE)
-    
-    PCAG 파이프라인 [130-1]:
-    - 자산별 독점 잠금을 획득합니다
-    - 다른 트랜잭션이 잠금 중이면 LOCK_DENIED
-    - E-Stop은 잠금과 무관하게 항상 실행됩니다
-    - 잠금에는 TTL이 있어 만료 시 자동 해제
-    
-    Idempotency: 같은 tx_id로 재호출 시 LOCK_GRANTED (재잠금 아님)
-    """
-    # PREPARE는 "실행 전에 자산 점유권을 확보"하는 단계다.
-    result = _state_machine.prepare(
-        transaction_id=request.transaction_id,
-        asset_id=request.asset_id,
-        lock_ttl_ms=request.lock_ttl_ms
-    )
-    
-    raw_status = result.get("status", "LOCK_DENIED")
-    status = "LOCK_GRANTED" if raw_status == "LOCK_GRANTED" else "LOCK_DENIED"
-    logger.info(f"PREPARE tx={request.transaction_id} asset={request.asset_id} -> {status}")
-    
-    return PrepareResponse(
-        transaction_id=request.transaction_id,
-        status=status,
-        lock_expires_at_ms=result.get("lock_expires_at_ms"),
-        reason=result.get("reason")
-    )
+    kwargs = {"transaction_id":request.transaction_id, "asset_id":request.asset_id, "lock_ttl_ms":request.lock_ttl_ms}
+    if request.action_sequence is not None:
+        kwargs["action_sequence"] = request.action_sequence
+    if request.payload_digest is not None:
+        kwargs["payload_digest"] = request.payload_digest
+    result = _state_machine.prepare(**kwargs)
+    return PrepareResponse(transaction_id=request.transaction_id,
+        status="LOCK_GRANTED" if result.get("status") == "LOCK_GRANTED" else "LOCK_DENIED",
+        lock_expires_at_ms=result.get("lock_expires_at_ms"), reason=result.get("reason"),
+        lock_token=result.get("lock_token"), payload_digest=result.get("payload_digest"),
+        operation_state=result.get("operation_state"))
+
+
+def _dispatch_claimed(request: CommitRequest, readiness: dict) -> CommitResponse:
+    status = readiness.get("status", "REJECTED")
+    if status in {"ALREADY_COMMITTED", "TIMEOUT", "IN_PROGRESS", "UNKNOWN", "EXECUTION_FAILED"}:
+        return _commit_response(request.transaction_id, readiness)
+    if status != "READY":
+        raise HTTPException(status_code=409, detail=readiness.get("reason", "Commit rejected"))
+    claim_token = readiness.get("claim_token")
+    try:
+        executor = ExecutorManager.get_executor(request.asset_id)
+        result = executor.execute(transaction_id=request.transaction_id, asset_id=request.asset_id,
+                                  action_sequence=request.action_sequence)
+        receipt = _executor_receipt(executor, result, request)
+    except Exception as exc:
+        # Failure after a dispatch claim can mean a lost ACK after acceptance.
+        unknown = _state_machine.mark_unknown(request.transaction_id, request.asset_id,
+                                              f"EXECUTION_OUTCOME_UNKNOWN: {exc}", claim_token=claim_token)
+        safe = _execute_safe_state(request.asset_id)
+        _state_machine.record_safe_state(request.transaction_id, safe)
+        return _commit_response(request.transaction_id, {**unknown, "status":"UNKNOWN"},
+                                safe_state_executed=safe)
+    if receipt["status"] not in {"ACCEPTED", "COMPLETED", "FAILED", "REJECTED"}:
+        unknown = _state_machine.mark_unknown(request.transaction_id, request.asset_id,
+                                              receipt.get("reason") or "Executor outcome is unknown", claim_token=claim_token)
+        return _commit_response(request.transaction_id, {**unknown, "status":"UNKNOWN"})
+    if receipt["status"] in {"FAILED", "REJECTED"}:
+        failure = _state_machine.finalize_failure(request.transaction_id, request.asset_id,
+                                                  claim_token=claim_token, executor_receipt=receipt)
+        if failure.get("status") == "UNKNOWN":
+            return _commit_response(request.transaction_id, failure)
+        # This is an explicit failure report. Partial effects remain possible;
+        # ABORTED bookkeeping is not evidence that no dispatch ever occurred.
+        _state_machine.abort(request.transaction_id, request.asset_id)
+        safe = _execute_safe_state(request.asset_id)
+        _state_machine.record_safe_state(request.transaction_id, safe)
+        return _commit_response(request.transaction_id, {"status":"EXECUTION_FAILED",
+            "reason":receipt.get("reason"), "safe_state_executed":safe,
+            "operation_state":"FAILED", "effects_may_have_occurred":True,
+            "ack_boundary":receipt.get("ack_boundary"), "receipt":receipt,
+            "dispatch_count":readiness.get("dispatch_count")})
+    finalize_kwargs = {"transaction_id":request.transaction_id, "asset_id":request.asset_id}
+    if claim_token is not None:
+        finalize_kwargs.update(claim_token=claim_token, executor_receipt=receipt)
+    finalized = _state_machine.finalize_commit(**finalize_kwargs)
+    if finalized.get("status") not in {"COMMITTED", "ALREADY_COMMITTED"}:
+        unknown = _state_machine.mark_unknown(request.transaction_id, request.asset_id,
+                                              finalized.get("reason") or "Receipt persistence is unresolved", claim_token=claim_token)
+        return _commit_response(request.transaction_id, {**unknown, "status":"UNKNOWN"})
+    # executed_at_ms is a retained legacy ACK timestamp. Completion is explicit.
+    return _commit_response(request.transaction_id, {**receipt, **finalized},
+                            executed_at_ms=receipt.get("completed_at_ms") or receipt.get("accepted_at_ms") or int(time.time()*1000))
 
 
 @router.post("/commit")
 def commit(request: CommitRequest):
-    """
-    장비에서 동작 실행 (COMMIT)
-    
-    PCAG 파이프라인 [130-3]:
-    - PREPARE로 잠금을 획득한 트랜잭션만 COMMIT 가능
-    - 명령 실행 후 ACK 반환
-    - 잠금이 자동 해제됩니다
-    
-    Idempotency: 같은 tx_id로 재호출 시 ALREADY_COMMITTED (재실행 안 함!)
-    
-    실제 장비 제어는 IOTExecutor 플러그인이 담당합니다.
-    현재는 Mock Executor (로깅만) 사용.
-    """
-    # COMMIT은 세 단계로 읽으면 이해가 쉽다.
-    # 1) 아직 커밋 가능한 상태인지 확인
-    # 2) executor로 실제 장비 실행
-    # 3) 성공 시에만 COMMITTED finalize
     readiness = _state_machine.check_commit_ready(
-        transaction_id=request.transaction_id,
-        asset_id=request.asset_id
-    )
-    readiness_status = readiness.get("status", "REJECTED")
+        transaction_id=request.transaction_id, asset_id=request.asset_id,
+        action_sequence=request.action_sequence, lock_token=request.lock_token)
+    return _dispatch_claimed(request, readiness)
 
-    if readiness_status == "ALREADY_COMMITTED":
-        logger.info("COMMIT tx=%s asset=%s -> ALREADY_COMMITTED", request.transaction_id, request.asset_id)
-        return CommitResponse(
-            transaction_id=request.transaction_id,
-            status="ALREADY_COMMITTED",
-            reason=readiness.get("reason"),
-        )
 
-    if readiness_status == "TIMEOUT":
-        logger.warning("COMMIT tx=%s asset=%s -> TIMEOUT", request.transaction_id, request.asset_id)
-        return CommitResponse(
-            transaction_id=request.transaction_id,
-            status="TIMEOUT",
-            reason=readiness.get("reason"),
-        )
+@router.get("/operations/{transaction_id}")
+def operation_status(transaction_id: str):
+    result = _state_machine.get_operation_status(transaction_id)
+    if result.get("status") == "NOT_FOUND":
+        raise HTTPException(status_code=404, detail=result.get("reason"))
+    return result
 
-    if readiness_status != "READY":
-        detail = readiness.get("reason", "Commit rejected")
-        logger.error("COMMIT tx=%s asset=%s rejected: %s", request.transaction_id, request.asset_id, detail)
-        raise HTTPException(status_code=409, detail=detail)
 
+@router.post("/reconcile")
+def reconcile(request: ReconcileRequest):
+    stored = _state_machine.get_operation_status(request.transaction_id)
+    if stored.get("status") == "NOT_FOUND":
+        raise HTTPException(status_code=404, detail=stored.get("reason"))
+    if stored.get("asset_id") != request.asset_id:
+        raise HTTPException(status_code=409, detail="ASSET_MISMATCH")
+    if stored.get("operation_state") in {"COMPLETED", "FAILED", "ABORTED", "PREPARED"}:
+        return stored
     try:
-        # 자산별 executor 선택 결과를 남겨 두면 장애 분석 시 어느 경로를 탔는지 바로 알 수 있다.
         executor = ExecutorManager.get_executor(request.asset_id)
-        logger.info(
-            "COMMIT executor selected | tx=%s asset=%s executor_id=%s executor_type=%s action_count=%s",
-            request.transaction_id,
-            request.asset_id,
-            id(executor),
-            executor.__class__.__name__,
-            len(request.action_sequence),
-        )
-        exec_success = executor.execute(
-            transaction_id=request.transaction_id,
-            asset_id=request.asset_id,
-            action_sequence=request.action_sequence
-        )
+        query = getattr(executor, "query_operation", None)
+        receipt = query(transaction_id=request.transaction_id, asset_id=request.asset_id) if callable(query) else None
     except Exception as exc:
-        logger.critical("[SYSTEM_ERROR] Executor error for tx=%s: %s", request.transaction_id, exc, exc_info=True)
-        abort_result = _state_machine.abort(request.transaction_id, request.asset_id)
-        if abort_result.get("status") not in {"ABORTED", "ALREADY_ABORTED"}:
-            raise HTTPException(
-                status_code=500,
-                detail=f"Execution failed and transaction could not be aborted: {abort_result.get('reason', 'unknown')}",
-            )
-
-        safe_state_executed = _execute_safe_state(request.asset_id)
-        return CommitResponse(
-            transaction_id=request.transaction_id,
-            status="EXECUTION_FAILED",
-            reason=str(exc),
-            safe_state_executed=safe_state_executed,
-        )
-
-    if not exec_success:
-        # 예외가 아니더라도 executor가 False를 반환하면 장비 적용 실패로 취급한다.
-        # 이 경우에도 abort + safe_state 복구 절차를 동일하게 적용한다.
-        failure_reason = getattr(executor, "last_error", None) or "Executor returned unsuccessful result"
-        logger.error("COMMIT execution failed for tx=%s asset=%s: %s", request.transaction_id, request.asset_id, failure_reason)
-        abort_result = _state_machine.abort(request.transaction_id, request.asset_id)
-        if abort_result.get("status") not in {"ABORTED", "ALREADY_ABORTED"}:
-            raise HTTPException(
-                status_code=500,
-                detail=f"Execution failed and transaction could not be aborted: {abort_result.get('reason', 'unknown')}",
-            )
-
-        safe_state_executed = _execute_safe_state(request.asset_id)
-        return CommitResponse(
-            transaction_id=request.transaction_id,
-            status="EXECUTION_FAILED",
-            reason=failure_reason,
-            safe_state_executed=safe_state_executed,
-        )
-
-    # finalize 단계는 executor 성공 이후에만 호출된다.
-    # 따라서 여기서 COMMITTED가 되면 "실제로 장비 적용이 끝났다"는 의미를 갖는다.
-    finalize_result = _state_machine.finalize_commit(
-        transaction_id=request.transaction_id,
-        asset_id=request.asset_id,
-    )
-    finalize_status = finalize_result.get("status", "REJECTED")
-
-    if finalize_status == "COMMITTED":
-        logger.info("COMMIT tx=%s asset=%s -> ACK", request.transaction_id, request.asset_id)
-        return CommitResponse(
-            transaction_id=request.transaction_id,
-            status="ACK",
-            executed_at_ms=int(time.time() * 1000),
-        )
-
-    if finalize_status == "ALREADY_COMMITTED":
-        logger.info("COMMIT tx=%s asset=%s -> ALREADY_COMMITTED", request.transaction_id, request.asset_id)
-        return CommitResponse(
-            transaction_id=request.transaction_id,
-            status="ALREADY_COMMITTED",
-            reason=finalize_result.get("reason"),
-        )
-
-    detail = finalize_result.get("reason", "Finalize commit rejected")
-    logger.error("Finalize COMMIT failed for tx=%s asset=%s: %s", request.transaction_id, request.asset_id, detail)
-    raise HTTPException(status_code=409, detail=detail)
+        return _state_machine.mark_unknown(request.transaction_id, request.asset_id, f"Executor query failed: {exc}")
+    return _state_machine.reconcile(request.transaction_id, request.asset_id, receipt)
 
 
 @router.post("/abort")
 def abort(request: AbortRequest):
-    """
-    트랜잭션 중단 (ABORT)
-    
-    PCAG 파이프라인 [130-ABORT]:
-    - 잠금 해제 + 안전 상태(Safe State)로 전환
-    - 물리 장비에서는 롤백이 불가능하므로 사전 정의된 안전 동작 실행
-    - 예: 히터 OFF, 냉각 밸브 OPEN, 로봇 정지+홀드
-    
-    Idempotency: 같은 tx_id로 재호출 시 ALREADY_ABORTED
-    """
-    # ABORT는 논리 상태(잠금/트랜잭션)와 물리 상태(safe_state)를 함께 정리하는 경로다.
-    result = _state_machine.abort(
-        transaction_id=request.transaction_id,
-        asset_id=request.asset_id
-    )
-
+    result = _state_machine.abort(transaction_id=request.transaction_id, asset_id=request.asset_id)
     status = result.get("status", "ABORT_REJECTED")
-    logger.info(f"ABORT tx={request.transaction_id} asset={request.asset_id} -> {status}")
-
-    safe_state_executed = False
-    if status in {"ABORTED", "ALREADY_ABORTED"}:
-        safe_state_executed = _execute_safe_state(request.asset_id)
-
-    return AbortResponse(
-        transaction_id=request.transaction_id,
-        status=status,
-        safe_state_executed=safe_state_executed,
-        reason=result.get("reason"),
-    )
+    safe = _execute_safe_state(request.asset_id) if status in {"ABORTED", "ALREADY_ABORTED"} else False
+    return AbortResponse(transaction_id=request.transaction_id, status=status,
+                         safe_state_executed=safe, reason=result.get("reason"))
 
 
 @router.post("/estop")
 def estop(request: EstopRequest):
-    """
-    비상정지 (E-Stop)
-    
-    최우선 명령 — 모든 잠금과 트랜잭션을 무시하고 즉시 실행됩니다.
-    - 해당 자산의 모든 잠금을 강제 해제
-    - 진행 중인 트랜잭션을 강제 중단
-    - E-Stop은 절대 거부되지 않습니다
-    """
-    result = _state_machine.estop(asset_id=request.asset_id)
-    
-    # E-Stop은 일반 실패 여부와 무관하게 safe_state를 즉시 시도한다.
+    try:
+        _state_machine.estop(asset_id=request.asset_id)
+    except Exception as exc:
+        logger.error("E-Stop bookkeeping failed: %s", exc)
     _execute_safe_state(request.asset_id)
-    
-    status = result.get("status", "ESTOP_EXECUTED")
-    logger.info(f"E-STOP asset={request.asset_id} reason={request.reason} -> {status}")
-    
-    return EstopResponse(
-        asset_id=request.asset_id,
-        status="ESTOP_EXECUTED",
-        timestamp_ms=int(time.time() * 1000)
-    )
+    return EstopResponse(asset_id=request.asset_id, status="ESTOP_EXECUTED", timestamp_ms=int(time.time()*1000))
+
+
+def _require_revision_mode():
+    if os.environ.get("PCAG_REVISION_MODE", "false").lower() != "true":
+        raise HTTPException(status_code=404, detail="Revision controls are disabled")
+
+
+@router.get("/revision/state", dependencies=[Depends(_require_revision_mode), Depends(verify_api_key)])
+def revision_state(asset_id: str | None = None):
+    return _state_machine.revision_state(asset_id)
+
+
+@router.post("/revision/reset", dependencies=[Depends(_require_revision_mode), Depends(verify_api_key)])
+def revision_reset(request: RevisionResetRequest):
+    result = _state_machine.reset_prepared_asset(request.asset_id, request.reason)
+    if result.get("status") != "RESET":
+        raise HTTPException(status_code=409, detail=result)
+    return result
+
+
+@router.post("/revision/direct-execute", dependencies=[Depends(_require_revision_mode), Depends(verify_api_key)])
+def revision_direct_execute(request: CommitRequest):
+    # Admission/asset reservations are bypassed; durable execution identity and
+    # payload binding are common to all revision comparators, explicitly.
+    return _dispatch_claimed(request, _state_machine.claim_direct(
+        request.transaction_id, request.asset_id, request.action_sequence))

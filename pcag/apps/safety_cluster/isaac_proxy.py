@@ -11,7 +11,9 @@ from __future__ import annotations
 import logging
 import multiprocessing as mp
 import os
+import queue
 import threading
+import time
 import uuid
 
 from pcag.core.ports.simulation_backend import ISimulationBackend
@@ -187,7 +189,28 @@ class IsaacSimProxy(ISimulationBackend):
         """
         with self._rpc_lock:
             self._req_q.put(request)
-            return self._res_q.get(timeout=timeout_s)
+            deadline = time.monotonic() + timeout_s
+            while True:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError(f"Worker reply deadline expired for {request.get('job_id')}")
+                try:
+                    reply = self._res_q.get(timeout=remaining)
+                except queue.Empty as exc:
+                    raise TimeoutError(f"Worker reply deadline expired for {request.get('job_id')}") from exc
+                if reply.get("job_id") == request.get("job_id"):
+                    return reply
+                logger.warning("Discarding late worker reply job_id=%s while waiting for %s", reply.get("job_id"), request.get("job_id"))
+
+    def revision_rpc(self, operation: str, payload: dict) -> dict:
+        if os.environ.get("PCAG_REVISION_MODE", "").lower() != "true":
+            raise RuntimeError("Revision RPC is disabled")
+        if not self.is_initialized():
+            raise RuntimeError("Isaac Sim worker not ready")
+        reply = self._round_trip(request={**payload, "type": operation, "job_id": uuid.uuid4().hex}, timeout_s=max(self._timeout_s, 60.0))
+        if not reply.get("ok"):
+            raise RuntimeError(reply.get("error") or "Revision RPC failed")
+        return reply["result"]
 
     @staticmethod
     def _indeterminate_result(reason: str) -> dict:

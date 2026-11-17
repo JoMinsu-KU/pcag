@@ -78,6 +78,26 @@ def isaac_worker_main(request_queue, result_queue, init_config: dict):
                     result_queue.put({"job_id": job_id, "ok": True, "result": preload_result})
                     continue
 
+                if job_type in {"REVISION_EXECUTE", "REVISION_QUERY"}:
+                    import os
+                    if os.environ.get("PCAG_REVISION_MODE", "").lower() != "true":
+                        raise RuntimeError("Revision execution disabled")
+                    from pcag.revision.isaac_execution import execute_operation, query_operation
+                    result = query_operation(job["transaction_id"], job["asset_id"]) if job_type == "REVISION_QUERY" else execute_operation(world, robot, job, headless)
+                    result_queue.put({"job_id": job_id, "ok": True, "result": result})
+                    continue
+
+                if job_type == "REVISION_SET_STATE":
+                    import os
+                    if os.environ.get("PCAG_REVISION_MODE", "").lower() != "true":
+                        raise RuntimeError("Revision state mutation disabled")
+                    initial = job.get("initial_state") or {}
+                    robot.set_joint_positions(_extract_joint_positions(initial, joint_count))
+                    if hasattr(robot, "set_joint_velocities"):
+                        robot.set_joint_velocities(np.zeros(joint_count))
+                    result_queue.put({"job_id": job_id, "ok": True, "result": {"applied_at_ms": int(time.time()*1000), "current_state": _get_current_state(world, robot, current_runtime_meta)}})
+                    continue
+
                 runtime_context = (job.get("constraints") or {}).get("runtime_context") or job.get("runtime_context")
                 if runtime_context:
                     desired_runtime_id = runtime_context.get("runtime_id")
@@ -315,6 +335,7 @@ def _validate_trajectory(world, robot, job, joint_count: int, steps_per_action: 
     collision_config = constraints.get("collision") or {}
 
     trajectory = []
+    raw_samples = []
     violations = []
     first_violation_step = None
     collision_detected = False
@@ -337,6 +358,9 @@ def _validate_trajectory(world, robot, job, joint_count: int, steps_per_action: 
         world.step(render=not headless)
 
     try:
+        if constraints.get("revision_collect_trace"):
+            from pcag.revision.isaac_execution import collect_sample
+            raw_samples.append(collect_sample(robot, 0, 0.0))
         actual_pos = robot.get_joint_positions()
         trajectory.append({"step": -1, "action": "initial", "joint_positions": [round(float(p), 4) for p in actual_pos]})
 
@@ -364,6 +388,9 @@ def _validate_trajectory(world, robot, job, joint_count: int, steps_per_action: 
 
             for _ in range(steps_per_action):
                 world.step(render=not headless)
+                if constraints.get("revision_collect_trace"):
+                    from pcag.revision.isaac_execution import collect_sample
+                    raw_samples.append(collect_sample(robot, len(raw_samples), len(raw_samples) / 60.0))
                 if collision_config.get("enabled"):
                     collision_eval = evaluate_collision_probe(get_end_effector_position(robot), collision_config)
                     if collision_eval["probe_unavailable"] and not collision_probe_unavailable:
@@ -487,6 +514,7 @@ def _validate_trajectory(world, robot, job, joint_count: int, steps_per_action: 
             "workspace_violation": any("workspace" in v.get("constraint", "") for v in violations),
             "trajectory": trajectory[:10],
             "violations": violations[:5],
+            "raw_trace": ({"schema": "pcag.raw-trace.v1", "asset_family": "robot", "complete": True, "expected_samples": len(raw_samples), "samples": raw_samples, "scope": "policy_end_effector_sphere_vs_AABB", "contact_observer": "not_instrumented"} if constraints.get("revision_collect_trace") else None),
         },
     }
 

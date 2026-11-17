@@ -12,12 +12,16 @@ Gateway Core의 주 실행 파이프라인.
 즉, PCAG 전체의 "안전 실행 게이트" 역할을 하는 가장 핵심적인 엔트리포인트다.
 """
 
+import asyncio
+import hashlib
+import json
 import logging
+import os
 import time
 from typing import Any
 
 import httpx
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from pcag.core.contracts.gateway import ControlRequest, ControlResponse
 from pcag.core.middleware.auth import verify_api_key
@@ -38,6 +42,65 @@ for svc in _REQUIRED_SERVICES:
         raise RuntimeError(f"Required service '{svc}' URL is missing in services.yaml")
 
 router = APIRouter(prefix="/v1", tags=["Gateway"])
+
+# Revision comparators share this HTTP boundary and the same downstream
+# executors. Disabled stages are never executed merely to discard their result.
+_REVISION_PROFILES = {
+    "B0": {"integrity": False, "validators": [], "prepare": False, "reverify": False},
+    "B1": {"integrity": True, "validators": ["rules"], "prepare": False, "reverify": False},
+    "B2": {"integrity": True, "validators": ["rules", "cbf"], "prepare": False, "reverify": False},
+    "B3": {"integrity": True, "validators": ["rules", "simulation"], "prepare": False, "reverify": False},
+    "E1": {"integrity": False, "validators": ["simulation"], "prepare": False, "reverify": False},
+    "B4": {"integrity": True, "validators": ["rules", "cbf", "simulation"], "prepare": True, "reverify": False},
+    "B5": {"integrity": True, "validators": ["rules", "cbf", "simulation"], "prepare": True, "reverify": True},
+}
+
+
+def _require_revision_mode() -> None:
+    if os.environ.get("PCAG_REVISION_MODE", "false").lower() not in {"true", "1", "yes"}:
+        raise HTTPException(status_code=403, detail="Revision controls are disabled")
+
+
+def _revision_clean(state: dict) -> bool:
+    if state.get("schema_version", 0) >= 3:
+        # A bounded list can omit a blocking orphan lock. The complete counts
+        # and explicit observation verdict must agree before declaring clean.
+        if not (state.get("clean") is True
+                and state.get("active_operation_count") == 0
+                and state.get("legacy_locked_count") == 0
+                and state.get("unresolved_asset_lock_count") == 0):
+            return False
+    return (state.get("active_operations") == 0
+            and all(slot.get("phase") == "FREE" and slot.get("transaction_id") is None
+                    for slot in state.get("asset_locks", [])))
+
+
+@router.get("/revision/state", dependencies=[Depends(_require_revision_mode), Depends(verify_api_key)])
+async def revision_state(asset_id: str | None = None, api_key: str = Depends(verify_api_key)):
+    async with httpx.AsyncClient(timeout=30.0, headers={"X-API-Key": api_key}) as client:
+        result = await client.get(f"{_get_service_url('ot_interface')}/v1/revision/state", params={"asset_id": asset_id} if asset_id else {})
+        if result.status_code != 200:
+            raise HTTPException(status_code=result.status_code, detail=result.text)
+        state = result.json()
+        return {**state, "revision_mode": True, "clean": _revision_clean(state)}
+
+
+@router.post("/revision/reset", dependencies=[Depends(_require_revision_mode), Depends(verify_api_key)])
+async def revision_reset(payload: dict, api_key: str = Depends(verify_api_key)):
+    if not payload.get("asset_id") or not str(payload.get("reason", "")).strip():
+        raise HTTPException(status_code=422, detail="asset_id and explicit cleanup reason are required")
+    async with httpx.AsyncClient(timeout=30.0, headers={"X-API-Key": api_key}) as client:
+        url = f"{_get_service_url('ot_interface')}/v1/revision"
+        before_resp = await client.get(f"{url}/state", params={"asset_id": payload["asset_id"]})
+        before_resp.raise_for_status()
+        result = await client.post(f"{url}/reset", json=payload)
+        if result.status_code != 200:
+            raise HTTPException(status_code=result.status_code, detail=result.text)
+        after_resp = await client.get(f"{url}/state", params={"asset_id": payload["asset_id"]})
+        after_resp.raise_for_status()
+        after = after_resp.json()
+        return {"revision_mode": True, "before": before_resp.json(), "reset": result.json(),
+                "after": {**after, "clean": _revision_clean(after)}, "clean": _revision_clean(after)}
 
 
 def _get_service_url(service_name: str) -> str:
@@ -133,6 +196,213 @@ async def _abort_transaction(client: httpx.AsyncClient, tx_id: str, asset_id: st
     return payload
 
 
+async def _submit_revision_control_request(request: ControlRequest, api_key: str) -> ControlResponse:
+    """Explicit experimental admission ablations; normal admission is unchanged.
+
+    Execution identity, evidence writes and transport overhead are common to all
+    profiles. Legacy synthetic failures remain tagged as such in the evidence.
+    """
+    _require_revision_mode()
+    proof = request.proof_package.model_dump(exclude_none=True)
+    profile_id = proof.get("revision_profile")
+    if profile_id not in _REVISION_PROFILES:
+        raise HTTPException(status_code=422, detail="Unknown revision_profile")
+    profile = _REVISION_PROFILES[profile_id]
+    test_control = proof.get("revision_test_control") or {}
+    if not isinstance(test_control, dict):
+        raise HTTPException(status_code=422, detail="revision_test_control must be an object")
+    pause_ms = test_control.get("pause_after_prepare_ms", 0)
+    if isinstance(pause_ms, bool) or not isinstance(pause_ms, int) or not 0 <= pause_ms <= 3000:
+        raise HTTPException(status_code=422, detail="pause_after_prepare_ms must be an integer in 0..3000")
+    tx_id, asset_id = request.transaction_id, request.asset_id
+    actions = proof.get("action_sequence", [])
+    fault = _extract_fault_injection(proof)
+    runtime_context = _extract_runtime_context(proof)
+    prepared = False
+    dispatched = False
+    seq, previous = 0, GENESIS_HASH
+    async with httpx.AsyncClient(timeout=120.0, headers={"X-API-Key": api_key}) as client:
+        async def emit(stage: str, payload: dict) -> None:
+            nonlocal seq, previous
+            previous = await _log_evidence(client, tx_id, seq, stage, payload, previous)
+            seq += 1
+
+        async def abort_reserved(reason: str) -> dict:
+            nonlocal prepared
+            result = await _abort_transaction(client, tx_id, asset_id, reason)
+            prepared = False
+            return result
+
+        async def post_json(service: str, path: str, payload: dict) -> dict:
+            response = await client.post(f"{_get_service_url(service)}{path}", json=payload)
+            response.raise_for_status()
+            return response.json()
+
+        try:
+            # A retry never restarts evidence at sequence zero or issues a new
+            # physical command. Resolve an existing receipt explicitly first.
+            operation_resp = await client.get(f"{_get_service_url('ot_interface')}/v1/operations/{tx_id}")
+            evidence_resp = await client.get(f"{_get_service_url('evidence_ledger')}/v1/transactions/{tx_id}")
+            if operation_resp.status_code not in {200, 404} or evidence_resp.status_code not in {200, 404}:
+                return _response(tx_id, "ERROR", reason="Cannot inspect durable retry state", reason_code="DURABLE_STATE_UNAVAILABLE")
+            operation = operation_resp.json() if operation_resp.status_code == 200 else None
+            existing = evidence_resp.json() if evidence_resp.status_code == 200 else {}
+            existing_events = existing.get("events", [])
+            if operation:
+                payload_digest = hashlib.sha256(json.dumps({"asset_id":asset_id, "action_sequence":actions},
+                    ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")).hexdigest()
+                if operation.get("asset_id") != asset_id or operation.get("payload_digest") != payload_digest:
+                    return _response(tx_id, "ERROR", reason="Transaction identity is bound to another payload", reason_code="PAYLOAD_CONFLICT")
+                state = operation.get("operation_state")
+                if state in {"UNKNOWN", "DISPATCHING", "RECONCILING", "ACCEPTED"}:
+                    return _response(tx_id, "ERROR", reason="Existing executor outcome needs reconciliation", reason_code="EXECUTION_OUTCOME_UNKNOWN")
+                if state == "COMPLETED" and existing.get("chain_valid") is True and existing_events and existing_events[-1].get("stage") == "COMMIT_ACK":
+                    return _response(tx_id, "COMMITTED", evidence_ref=f"/v1/transactions/{tx_id}")
+                return _response(tx_id, "ERROR", reason="Existing durable transaction is retained; reconcile instead of restarting", reason_code="REVISION_RECONCILIATION_REQUIRED")
+            if existing_events:
+                return _response(tx_id, "ERROR", reason="Existing evidence is retained; transaction cannot restart", reason_code="EVIDENCE_TRANSACTION_EXISTS")
+
+            await emit("RECEIVED", {"proof_package_hash":compute_sensor_hash(proof), "revision_profile":profile_id,
+                "enabled_stages":profile, "schema_version":proof["schema_version"], "policy_version_id":proof["policy_version_id"]})
+            await emit("SCHEMA_VALIDATED", {"revision_profile":profile_id, "schema_model":"ProofPackage"})
+            active_resp = await client.get(f"{_get_service_url('policy_store')}/v1/policies/active")
+            active_resp.raise_for_status()
+            version = active_resp.json()["policy_version_id"]
+            asset_profile = await _fetch_asset_profile(client, version, asset_id)
+            sensor_resp = await client.get(f"{_get_service_url('sensor_gateway')}/v1/assets/{asset_id}/snapshots/latest")
+            sensor_resp.raise_for_status()
+            sensor = sensor_resp.json()
+            snapshot, current_hash = sensor["sensor_snapshot"], sensor["sensor_snapshot_hash"]
+            integrity_config = asset_profile.get("integrity") or {}
+            if profile["integrity"]:
+                began = time.perf_counter()
+                ok, reason = check_integrity(proof_policy_version=proof["policy_version_id"], active_policy_version=version,
+                    proof_timestamp_ms=proof["timestamp_ms"], current_timestamp_ms=int(time.time()*1000),
+                    timestamp_max_age_ms=integrity_config.get("timestamp_max_age_ms", 5000),
+                    proof_sensor_snapshot=proof.get("sensor_snapshot") or {}, current_sensor_snapshot=snapshot,
+                    divergence_thresholds=_build_divergence_thresholds(integrity_config.get("sensor_divergence_thresholds")) if proof.get("sensor_snapshot") else [],
+                    proof_sensor_snapshot_hash=proof.get("sensor_snapshot_hash"), current_sensor_snapshot_hash=current_hash)
+                await emit("INTEGRITY_PASSED" if ok else "INTEGRITY_REJECTED", {"reason":reason,
+                    "policy_version":version, "sensor_hash":current_hash, "duration_ms":(time.perf_counter()-began)*1000})
+                if not ok:
+                    return _response(tx_id, "REJECTED", reason=f"Integrity verification failed: {reason}", reason_code=reason)
+            else:
+                await emit("INTEGRITY_BYPASSED", {"revision_profile":profile_id, "executed":False})
+
+            validators = profile["validators"]
+            if validators:
+                began = time.perf_counter()
+                safety = await post_json("safety_cluster", "/v1/validate", {"transaction_id":tx_id, "asset_id":asset_id,
+                    "policy_version_id":version, "action_sequence":actions, "current_sensor_snapshot":snapshot,
+                    "runtime_context":runtime_context, "revision_enabled_validators":validators})
+                # Fail closed if a misconfigured server silently ran a different
+                # subset. The selected runtime must be auditable, not inferred.
+                if safety.get("enabled_validators") != validators or set(safety.get("validators", {})) != set(validators):
+                    await emit("SAFETY_CONFIGURATION_ERROR", {"expected_validators":validators, "details":safety})
+                    return _response(tx_id, "ERROR", reason="Safety validator subset differs from frozen profile", reason_code="REVISION_VALIDATOR_MISMATCH")
+                safe = safety.get("final_verdict") == "SAFE"
+                await emit("SAFETY_PASSED" if safe else "SAFETY_UNSAFE", {"verdict":safety.get("final_verdict"), "details":safety,
+                    "enabled_validators":validators, "duration_ms":(time.perf_counter()-began)*1000})
+                if not safe:
+                    return _response(tx_id, "UNSAFE", reason="Safety validation failed", reason_code="SAFETY_UNSAFE",
+                                     alternative_actions=generate_alternative_actions(asset_profile, "SAFETY_UNSAFE"))
+            else:
+                await emit("SAFETY_BYPASSED", {"revision_profile":profile_id, "enabled_validators":[], "executed":False})
+
+            prepare_result = {}
+            if profile["prepare"]:
+                ttl = (asset_profile.get("execution") or {}).get("lock_ttl_ms", 5000)
+                if _fault_enabled(fault, "lock_denied"):
+                    prepare_result = {"status":"LOCK_DENIED", "reason":"Injected legacy benchmark lock denial", "synthetic":True}
+                else:
+                    prepare_result = await post_json("ot_interface", "/v1/prepare", {"transaction_id":tx_id, "asset_id":asset_id,
+                                                                                  "lock_ttl_ms":ttl, "action_sequence":actions})
+                if prepare_result.get("status") != "LOCK_GRANTED":
+                    await emit("PREPARE_LOCK_DENIED", prepare_result)
+                    return _response(tx_id, "ABORTED", reason="Lock denied", reason_code="LOCK_DENIED")
+                prepared = True
+                await emit("PREPARE_LOCK_GRANTED", {**prepare_result, "case_token":test_control.get("case_token"),
+                    "prepared_at_ms":int(time.time()*1000), "prepared_monotonic_ns":time.monotonic_ns()})
+                if pause_ms:
+                    await emit("REVISION_PREPARE_PAUSE", {"case_token":test_control.get("case_token"), "pause_ms":pause_ms,
+                        "started_at_ms":int(time.time()*1000), "started_monotonic_ns":time.monotonic_ns()})
+                    await asyncio.sleep(pause_ms / 1000.0)
+            else:
+                await emit("PREPARE_BYPASSED", {"revision_profile":profile_id, "executed":False})
+
+            if profile["reverify"]:
+                try:
+                    reverify_resp = await client.get(f"{_get_service_url('sensor_gateway')}/v1/assets/{asset_id}/snapshots/latest")
+                    reverify_resp.raise_for_status()
+                    reverify_hash = reverify_resp.json()["sensor_snapshot_hash"]
+                except Exception as exc:
+                    aborted = await abort_reserved(f"TOCTOU reverify failed: {exc}")
+                    await emit("REVERIFY_FAILED", {"error":str(exc), "abort_status":aborted.get("status")})
+                    return _response(tx_id, "ABORTED", reason=str(exc), reason_code="TOCTOU_REVERIFY_FAILED")
+                if _fault_enabled(fault, "reverify_hash_mismatch"):
+                    reverify_hash = _force_hash_mismatch(current_hash)
+                reverify_payload = {"original_hash":current_hash, "reverify_hash":reverify_hash,
+                    "case_token":test_control.get("case_token"), "reverified_at_ms":int(time.time()*1000),
+                    "reverified_monotonic_ns":time.monotonic_ns(), "synthetic":_fault_enabled(fault, "reverify_hash_mismatch")}
+                if reverify_hash != current_hash:
+                    aborted = await abort_reserved("TOCTOU reverify hash mismatch")
+                    await emit("REVERIFY_FAILED", {**reverify_payload, "reason":"REVERIFY_HASH_MISMATCH", "abort_status":aborted.get("status")})
+                    return _response(tx_id, "ABORTED", reason="Sensor state changed after PREPARE", reason_code="REVERIFY_HASH_MISMATCH")
+                await emit("REVERIFY_PASSED", reverify_payload)
+            else:
+                await emit("REVERIFY_BYPASSED", {"revision_profile":profile_id, "executed":False,
+                    "case_token":test_control.get("case_token"), "bypassed_at_ms":int(time.time()*1000)})
+
+            # Synthetic commit faults only exist in the preregistered legacy
+            # subset. They do not claim a real dispatch or physical recovery.
+            if any(_fault_enabled(fault, family) for family in ("commit_timeout", "commit_failed_recovered", "ot_interface_error")):
+                family = fault["fault_family"]
+                aborted = await abort_reserved(f"Legacy synthetic fault: {family}") if prepared else {}
+                stage, status, code = {"commit_timeout":("COMMIT_TIMEOUT", "ABORTED", "COMMIT_TIMEOUT"),
+                    "commit_failed_recovered":("COMMIT_FAILED", "ABORTED", "COMMIT_FAILED"),
+                    "ot_interface_error":("COMMIT_ERROR", "ERROR", "OT_INTERFACE_ERROR")}[family]
+                await emit(stage, {"synthetic":True, "fault_family":family, "dispatch_attempted":False,
+                    "physical_recovery_observed":False, "abort_status":aborted.get("status")})
+                return _response(tx_id, status, reason=f"Injected legacy benchmark {family}", reason_code=code)
+
+            endpoint = "/v1/commit" if profile["prepare"] else "/v1/revision/direct-execute"
+            dispatch_payload = {"transaction_id":tx_id, "asset_id":asset_id, "action_sequence":actions}
+            if profile["prepare"]:
+                dispatch_payload["lock_token"] = prepare_result.get("lock_token")
+            # Set before the transport call: a lost reply does not prove the
+            # executor never accepted this command.
+            dispatched = True
+            try:
+                result = await post_json("ot_interface", endpoint, dispatch_payload)
+            except Exception as exc:
+                await emit("COMMIT_OUTCOME_UNKNOWN", {"error":str(exc), "dispatch_attempted":True})
+                return _response(tx_id, "ERROR", reason="Dispatch outcome requires receipt reconciliation", reason_code="EXECUTION_OUTCOME_UNKNOWN")
+            outcome = result.get("status")
+            if outcome in {"UNKNOWN", "IN_PROGRESS"}:
+                await emit("COMMIT_OUTCOME_UNKNOWN", result)
+                return _response(tx_id, "ERROR", reason=result.get("reason") or "Execution outcome unknown", reason_code="EXECUTION_OUTCOME_UNKNOWN")
+            if outcome == "EXECUTION_FAILED":
+                await emit("COMMIT_FAILED", result)
+                return _response(tx_id, "ABORTED" if result.get("safe_state_executed") else "ERROR", reason=result.get("reason"), reason_code="COMMIT_FAILED")
+            if outcome not in {"ACK", "ALREADY_COMMITTED"}:
+                # A known pre-dispatch timeout can release its reservation.
+                if prepared:
+                    await abort_reserved(f"Commit rejected before dispatch: {outcome}")
+                await emit("COMMIT_TIMEOUT", result)
+                return _response(tx_id, "ABORTED", reason=f"Commit status: {outcome}", reason_code="COMMIT_TIMEOUT")
+            await emit("COMMIT_ACK", result)
+            return _response(tx_id, "COMMITTED", evidence_ref=f"/v1/transactions/{tx_id}")
+        except Exception as exc:
+            logger.exception("Revision request %s failed", tx_id)
+            return _response(tx_id, "ERROR", reason=str(exc), reason_code="REVISION_PIPELINE_ERROR")
+        finally:
+            if prepared and not dispatched:
+                try:
+                    await abort_reserved("Revision request exited before dispatch")
+                except Exception:
+                    logger.critical("Revision PREPARE cleanup failed for %s", tx_id, exc_info=True)
+
+
 @router.post("/control-requests", response_model=ControlResponse)
 async def submit_control_request(request: ControlRequest, api_key: str = Depends(verify_api_key)):
     """
@@ -146,6 +416,8 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
     tx_id = request.transaction_id
     asset_id = request.asset_id
     proof = request.proof_package.model_dump(exclude_none=True)
+    if "revision_profile" in proof or "revision_test_control" in proof:
+        return await _submit_revision_control_request(request, api_key)
     runtime_context = _extract_runtime_context(proof)
     fault_injection = _extract_fault_injection(proof)
     evidence_seq = 0
@@ -408,7 +680,8 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
             try:
                 prepare_resp = await client.post(
                     f"{_get_service_url('ot_interface')}/v1/prepare",
-                    json={"transaction_id": tx_id, "asset_id": asset_id, "lock_ttl_ms": lock_ttl_ms},
+                    json={"transaction_id": tx_id, "asset_id": asset_id, "lock_ttl_ms": lock_ttl_ms,
+                          "action_sequence": proof.get("action_sequence", [])},
                 )
                 prepare_result = prepare_resp.json()
             except Exception as exc:
@@ -578,6 +851,7 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
                         "transaction_id": tx_id,
                         "asset_id": asset_id,
                         "action_sequence": proof.get("action_sequence", []),
+                        "lock_token": prepare_result.get("lock_token"),
                     },
                 )
                 if commit_resp.status_code != 200:
@@ -624,6 +898,17 @@ async def submit_control_request(request: ControlRequest, api_key: str = Depends
             )
 
         commit_status = commit_result["status"]
+
+        if commit_status in {"UNKNOWN", "IN_PROGRESS"}:
+            await _log_evidence(client, tx_id, evidence_seq, "COMMIT_OUTCOME_UNKNOWN", commit_result, prev_hash)
+            return _response(tx_id, "ERROR", reason=commit_result.get("reason") or "Execution outcome needs reconciliation",
+                             reason_code="EXECUTION_OUTCOME_UNKNOWN")
+
+        if _fault_enabled(fault_injection, "commit_timeout") or _fault_enabled(fault_injection, "commit_failed_recovered"):
+            try:
+                await _abort_transaction(client, tx_id, asset_id, "Synthetic benchmark result; release unused PREPARE reservation")
+            except Exception as exc:
+                return _response(tx_id, "ERROR", reason=str(exc), reason_code="OT_ABORT_FAILED")
 
         if commit_status == "EXECUTION_FAILED":
             alternative_actions = generate_alternative_actions(asset_profile, "COMMIT_FAILED")

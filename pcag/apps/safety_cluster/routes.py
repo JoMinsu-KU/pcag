@@ -4,7 +4,10 @@ Safety Cluster HTTP routes.
 
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException
+import os
+
+from fastapi import APIRouter, Depends, HTTPException
+from pcag.core.middleware.auth import verify_api_key
 from pcag.apps.safety_cluster.service import run_safety_validation
 from pcag.core.contracts.safety import (
     ConsensusDetailsResponse,
@@ -20,6 +23,8 @@ router = APIRouter(prefix="/v1", tags=["SafetyCluster"])
 
 @router.post("/validate")
 def validate(request: SafetyValidateRequest) -> SafetyValidateResponse:
+    if request.revision_enabled_validators is not None and os.environ.get("PCAG_REVISION_MODE", "").lower() not in {"true", "1", "yes"}:
+        raise HTTPException(status_code=403, detail="Validator subsets require PCAG_REVISION_MODE")
     action_seq = []
     if request.action_sequence:
         for action in request.action_sequence:
@@ -30,6 +35,9 @@ def validate(request: SafetyValidateRequest) -> SafetyValidateResponse:
             else:
                 action_seq.append(action)
 
+    revision_kwargs = {}
+    if request.revision_enabled_validators is not None:
+        revision_kwargs["revision_enabled_validators"] = request.revision_enabled_validators
     result = run_safety_validation(
         transaction_id=request.transaction_id,
         asset_id=request.asset_id,
@@ -37,6 +45,7 @@ def validate(request: SafetyValidateRequest) -> SafetyValidateResponse:
         action_sequence=action_seq,
         current_sensor_snapshot=request.current_sensor_snapshot,
         runtime_context=request.runtime_context,
+        **revision_kwargs,
     )
 
     return SafetyValidateResponse(
@@ -56,6 +65,9 @@ def validate(request: SafetyValidateRequest) -> SafetyValidateResponse:
             threshold=result["consensus_details"].get("threshold"),
             explanation=result["consensus_details"].get("explanation", ""),
         ),
+        enabled_validators=result.get("enabled_validators", ["rules", "cbf", "simulation"]),
+        validator_runtime_ms=result.get("validator_runtime_ms", {}),
+        validation_wall_ms=result.get("validation_wall_ms"),
     )
 
 
@@ -99,3 +111,58 @@ def get_simulation_state():
     if not isaac.is_initialized():
         return {"error": "Isaac Sim worker not ready"}
     return isaac.get_current_state()
+
+
+def _revision_backend():
+    if os.environ.get("PCAG_REVISION_MODE", "").lower() not in {"true", "1", "yes"}:
+        raise HTTPException(status_code=403, detail="Revision execution is disabled")
+    from pcag.apps.safety_cluster.main import get_isaac_backend
+
+    backend = get_isaac_backend()
+    if not backend or not backend.is_initialized():
+        raise HTTPException(status_code=503, detail="Isaac revision worker is not ready")
+    return backend
+
+
+@router.post("/revision/execute")
+def revision_execute(payload: dict, _key: str = Depends(verify_api_key)):
+    """Dedicated revision plant-execution path, distinct from validation rollout."""
+    backend = _revision_backend()
+    return backend.revision_rpc("REVISION_EXECUTE", payload)
+
+
+@router.get("/revision/operation")
+def revision_operation(transaction_id: str, asset_id: str = "robot_arm_01", _key: str = Depends(verify_api_key)):
+    backend = _revision_backend()
+    return backend.revision_rpc("REVISION_QUERY", {"transaction_id": transaction_id, "asset_id": asset_id})
+
+
+@router.post("/revision/state")
+def revision_set_state(payload: dict, _key: str = Depends(verify_api_key)):
+    backend = _revision_backend()
+    return backend.revision_rpc("REVISION_SET_STATE", payload)
+
+
+@router.post("/revision/rollout")
+def revision_rollout(payload: dict, _key: str = Depends(verify_api_key)):
+    """Collect full step samples for the independent revision evaluator."""
+    backend = _revision_backend()
+    constraints = dict(payload.get("constraints") or {})
+    context = payload.get("runtime_context") or constraints.get("runtime_context")
+    if context is not None:
+        constraints["runtime_context"] = context
+    if payload.get("simulation_config") is not None:
+        from pcag.plugins.simulation.isaac_runtime_shell import build_runtime_sim_config
+        effective = build_runtime_sim_config(payload["simulation_config"], context)
+        for field in ["world_ref", "workspace_limits", "torque_limits", "joint_limits", "collision"]:
+            if field not in constraints and field in effective:
+                constraints[field] = effective[field]
+    if payload.get("restore_after", True) is not True:
+        raise HTTPException(status_code=422, detail="Revision validation rollout must restore plant state")
+    constraints["revision_collect_trace"] = True
+    result = backend.validate_trajectory(
+        current_state=payload["current_state"],
+        action_sequence=payload["action_sequence"],
+        constraints=constraints,
+    )
+    return {"trace": (result.get("details") or {}).get("raw_trace"), "result": result}
